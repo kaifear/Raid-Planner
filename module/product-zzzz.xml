@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<product productid="zzzz" active="1">
+	<title>Test</title>
+	<description>test</description>
+	<version>0.1</version>
+	<url />
+	<versioncheckurl />
+	<dependencies>
+	</dependencies>
+	<codes>
+		<code version="*">
+			<installcode><![CDATA[$queries = array();
+$queries[] = sprintf('CREATE TABLE `%sraid_guilds` (`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` VARCHAR(64) NOT NULL) ENGINE = MyISAM', TABLE_PREFIX);
+$queries[] = sprintf('CREATE TABLE `%sraid_roster` (`uid` BIGINT UNSIGNED NOT NULL, UNIQUE (`uid`)) ENGINE = MyISAM', TABLE_PREFIX);
+
+foreach ($queries as $query)
+    $db->query_write($query);]]></installcode>
+			<uninstallcode><![CDATA[$queries = array();
+$queries[] = sprintf('DROP TABLE IF EXISTS `%sraid_guilds`', TABLE_PREFIX);
+$queries[] = sprintf('DROP TABLE IF EXISTS `%sraid_roster`', TABLE_PREFIX);
+
+foreach ($queries as $query)
+    $db->query_write($query);]]></uninstallcode>
+		</code>
+	</codes>
+	<templates>
+	</templates>
+	<stylevardfns>
+	</stylevardfns>
+	<stylevars>
+	</stylevars>
+	<plugins>
+		<plugin active="1" executionorder="5">
+			<title>test_admin</title>
+			<hookname>admin_index_navigation</hookname>
+			<phpcode><![CDATA[if ($_REQUEST['do'] == 'nav') {
+   $navigation[-1] = array(
+       'Ðåéä ïëàííåð' => array(
+            'options' => array(
+                 array(
+                     'Roster' => array(
+                           'displayorder'=>0,
+                           'phrase'=>'roster',
+                           'link'=>'raid_admin.php?raid_action=roster',
+                           'text'=>'Roster',
+                      )
+                 ),
+                 array(
+                     'Ãèëüäèè' => array(
+                           'displayorder'=>1,
+                           'phrase'=>'guilds',
+                           'link'=>'raid_admin.php?raid_action=guilds',
+                           'text'=>'Ãèëüäèè',
+                      )
+                 ),
+             ),
+            'group' => array(
+                  'phrase' => 'settings',
+                  'permissions' => 'canadminsettings',
+                  'hr' => 'true',
+                  'displayorder' => 10,
+                  'nav_file' => 'vbulletin',
+                  'text' => 'Ðåéä ïëàííåð'
+            ),
+        )
+   );
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>test</title>
+			<hookname>process_templates_complete</hookname>
+			<phpcode><![CDATA[if ($vbulletin->userinfo['userid'] > 0) {
+    $raid_tab = sprintf('<li%s><a class="navtab" href="raid.php">Ðåéä ïëàííåð</a></li>', THIS_SCRIPT == 'raid' ? ' class="selected"' : null);
+    $template_hook['navtab_end'] .= $raid_tab;
+}]]></phpcode>
+		</plugin>
+	</plugins>
+	<phrases>
+	</phrases>
+	<options>
+	</options>
+	<helptopics>
+	</helptopics>
+	<cronentries>
+	</cronentries>
+	<faqentries>
+	</faqentries>
+</product>

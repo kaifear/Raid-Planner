@@ -1,0 +1,2709 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<style name="Newtype v0.5" vbversion="4.1.8" product="vbulletin" type="custom">
+	<templategroup name="íàâèãàöèè">
+		<template name="navbar" templatetype="template" date="1324376379" username="ZyFran" version="4.1.8"><![CDATA[<div id="navbar" class="navbar">
+	<ul id="navtabs" class="navtabs floatcontainer<vb:if condition="$show['member'] AND $notifications_total"> notify</vb:if>">
+		{vb:raw template_hook.navtab_start}
+		<vb:if condition="!$vboptions['selectednavtab'] AND THIS_SCRIPT != 'search' AND THIS_SCRIPT != 'raid'">
+			<li class="selected"><a class="navtab" href="{vb:link forumhome}">{vb:rawphrase forum}</a>
+				<ul class="floatcontainer">
+					{vb:raw template_hook.navbar_start}
+					<vb:if condition="$show['searchbuttons']">
+						<vb:if condition="$show['member']">
+						<li><a href="search.php?{vb:raw session.sessionurl}do=getnew&amp;contenttype=vBForum_Post">{vb:rawphrase new_posts_nav}</a></li>
+						<vb:else />
+						<li><a href="search.php?{vb:raw session.sessionurl}do=getdaily&amp;contenttype=vBForum_Post">{vb:rawphrase todays_posts}</a></li>
+						</vb:if>
+					</vb:if>
+					{vb:raw template_hook.navbar_after_getnew}
+					<vb:if condition="$show['pmmainlink']">
+						<li><a href="private.php{vb:raw session.sessionurl_q}" rel="nofollow">{vb:rawphrase private_messages}</a></li>
+					</vb:if>
+					{vb:raw template_hook.navbar_after_pm}
+					<li><a rel="help" href="faq.php{vb:raw session.sessionurl_q}" accesskey="5">{vb:rawphrase faq}</a></li>
+					{vb:raw template_hook.navbar_after_faq}
+					<vb:if condition="$show['canviewcalendar']">
+						<li><a href="calendar.php{vb:raw session.sessionurl_q}">{vb:rawphrase calendar}</a></li>
+					</vb:if>
+					{vb:raw template_hook.navbar_after_calendar}
+					<vb:if condition="$show['communitylink']">
+					<li class="popupmenu">
+						<a href="javascript://" class="popupctrl" accesskey="6">{vb:rawphrase community}</a>
+						<ul class="popupbody popuphover">
+							{vb:raw template_hook.navbar_community_menu_start}
+							<vb:if condition="$show['quick_links_groups']">
+								<li><a href="{vb:link grouphome}">{vb:rawphrase social_groups}</a></li>
+							</vb:if>
+							<vb:if condition="$show['quick_links_albums']">
+								<li><a href="album.php{vb:raw session.sessionurl_q}">{vb:rawphrase pictures_and_albums}</a></li>
+							</vb:if>
+							<vb:if condition="$bbuserinfo['userid']">
+								<li><a href="profile.php?{vb:raw session.sessionurl}do=buddylist"><vb:if condition="$show['friends_and_contacts']">{vb:rawphrase contacts_and_friends}<vb:else />{vb:rawphrase contacts}</vb:if></a></li>
+							</vb:if>
+							<vb:if condition="$show['memberslist']">
+								<li><a href="memberlist.php{vb:raw session.sessionurl_q}">{vb:rawphrase members_list}</a></li>
+							</vb:if>
+							{vb:raw template_hook.navbar_community_menu_end}
+						</ul>
+					</li>
+					</vb:if>
+					{vb:raw template_hook.navbar_after_community}
+					<vb:if condition="$show['canviewforums']">
+					<li class="popupmenu">
+						<a href="javascript://" class="popupctrl">{vb:rawphrase forum_actions}</a>
+						<ul class="popupbody popuphover">
+							<li>
+								<a href="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}forumdisplay.php?{vb:raw session.sessionurl}do=markread&amp;markreadhash={vb:raw bbuserinfo.securitytoken}">{vb:rawphrase mark_forums_read}</a>
+							</li>
+                                                        <vb:if condition="$show['member']">
+							<li>
+								<a href="profile.php?{vb:raw session.sessionurl}do=editoptions">{vb:rawphrase edit_options}</a>
+							</li>
+							<li>
+								<a href="profile.php?{vb:raw session.sessionurl}do=editprofile">{vb:rawphrase edit_your_details}</a>
+							</li>
+							</vb:if>
+						</ul>
+					</li>
+					</vb:if>
+					<li class="popupmenu">
+						<a href="javascript://" class="popupctrl" accesskey="3">{vb:rawphrase quick_links}</a>
+						<ul class="popupbody popuphover">
+							<vb:if condition="$show['member']">
+								<li><a href="search.php?{vb:raw session.sessionurl}do=getdaily&amp;contenttype=vBForum_Post">{vb:rawphrase todays_posts}</a></li>
+								<li><a href="{vb:link subscription}" rel="nofollow">{vb:rawphrase subscribed_threads}</a></li>
+								<li><a href="javascript://" onclick="window.open(getBaseUrl() + 'misc.php?{vb:raw session.sessionurl}do=buddylist&amp;focus=1','buddylist','statusbar=no,menubar=no,toolbar=no,scrollbars=yes,resizable=yes,width=250,height=300'); return false;">{vb:rawphrase open_contacts}</a></li>
+							</vb:if>
+							<vb:if condition="$vboptions['forumleaders']">
+							<li><a href="showgroups.php{vb:raw session.sessionurl_q}" rel="nofollow">
+								<vb:if condition="$vb_suite_installed">
+									{vb:rawphrase view_site_leaders}
+								<vb:else />
+									{vb:rawphrase view_forum_leaders}
+								</vb:if>
+							</a></li>
+							</vb:if>
+							{vb:raw template_hook.navbar_quick_links_menu_pos1}
+							{vb:raw template_hook.navbar_quick_links_menu_pos2}
+							{vb:raw template_hook.navbar_quick_links_menu_pos3}
+							<vb:if condition="$show['wollink']">
+								<li><a href="online.php{vb:raw session.sessionurl_q}">{vb:rawphrase whos_online}</a></li>
+							</vb:if>
+							{vb:raw template_hook.navbar_quick_links_menu_pos4}
+						</ul>
+					</li>
+					{vb:raw template_hook.navbar_end}
+				</ul>
+
+			</li>
+		<vb:else />
+			<li><a class="navtab" href="{vb:link forumhome}">{vb:rawphrase forum}</a></li>
+		</vb:if>
+		{vb:raw template_hook.navtab_middle}
+		<vb:if condition="!$vboptions['selectednavtab'] AND THIS_SCRIPT == 'search'">
+			<vb:if condition="$show['member']">
+			<li  class="selected"><a class="navtab" href="search.php?{vb:raw session.sessionurl}do=getnew&amp;contenttype=vBForum_Post" accesskey="2">{vb:rawphrase getnew_tab}</a>
+				<ul class="floatcontainer">
+					<li><a href="search.php?{vb:raw session.sessionurl}do=getnew&amp;contenttype=vBForum_Post">{vb:rawphrase new_posts_nav}</a></li>
+					<li><a href="search.php?{vb:raw session.sessionurl}do=getnew&amp;contenttype=vBForum_SocialGroupMessage">{vb:rawphrase new_group_messages_nav}</a></li>
+					<li><a href="search.php?{vb:raw session.sessionurl}do=getnew&amp;contenttype=vBForum_Event">{vb:rawphrase new_events_nav}</a></li>
+					{vb:raw template_hook.navbar_getnew_menu}
+					<li><a href="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}forumdisplay.php?{vb:raw session.sessionurl}do=markread&amp;markreadhash={vb:raw bbuserinfo.securitytoken}">{vb:rawphrase mark_forums_read}</a></li>
+				</ul>
+			</li>
+			<vb:else />
+			<li  class="selected"><a class="navtab" href="search.php?{vb:raw session.sessionurl}do=getdaily&amp;contenttype=vBForum_Post" accesskey="2">{vb:rawphrase getnew_tab}</a>
+				<ul class="floatcontainer">
+					<li><a href="search.php?{vb:raw session.sessionurl}do=getdaily&amp;contenttype=vBForum_Post">{vb:rawphrase todays_posts}</a></li>
+					<li><a href="search.php?{vb:raw session.sessionurl}do=getdaily&amp;contenttype=vBForum_SocialGroupMessage">{vb:rawphrase daily_group_message}</a></li>
+					<li><a href="search.php?{vb:raw session.sessionurl}do=getdaily&amp;contenttype=vBForum_Event">{vb:rawphrase daily_events}</a></li>
+					{vb:raw template_hook.navbar_getdaily_menu}
+					<li><a href="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}forumdisplay.php?{vb:raw session.sessionurl}do=markread&amp;markreadhash={vb:raw bbuserinfo.securitytoken}">{vb:rawphrase mark_forums_read}</a></li>
+				</ul>
+			</li>
+			</vb:if>
+		<vb:elseif condition="$show['member']" />
+			<li><a class="navtab" href="search.php?{vb:raw session.sessionurl}do=getnew&amp;contenttype=vBForum_Post" accesskey="2">{vb:rawphrase getnew_tab}</a></li>
+		<vb:else />
+			<li><a class="navtab" href="search.php?{vb:raw session.sessionurl}do=getdaily&amp;contenttype=vBForum_Post" accesskey="2">{vb:rawphrase getnew_tab}</a></li>
+		</vb:if>
+		{vb:raw template_hook.navtab_end}
+	</ul>
+
+	<vb:if condition="$vboptions['enablesearches']">
+	<div id="globalsearch" class="globalsearch">
+		<form action="search.php?{vb:raw session.sessionurl}do=process" method="post" id="navbar_search" class="navbar_search">
+			<vb:comment><input type="hidden" name="s" value="{vb:raw session.sessionurl}" /></vb:comment>
+			<input type="hidden" name="securitytoken" value="{vb:raw bbuserinfo.securitytoken}" />
+			<input type="hidden" name="do" value="process" />
+			<span class="textboxcontainer"><span><input type="text" value="" name="query" class="textbox" tabindex="99"/></span></span>
+			<span class="buttoncontainer"><span><input type="image" class="searchbutton" src="{vb:stylevar imgdir_button}/search<vb:if condition="$stylevar['textdirection'] == 'rtl'">_rtl</vb:if>.<vb:if condition="is_browser('ie') AND !is_browser('ie', 7)">gif<vb:else />png</vb:if>" name="submit" onclick="document.getElementById('navbar_search').submit;" tabindex="100"/></span></span>
+		</form>
+		<ul class="navbar_advanced_search">
+			<li><a href="search.php{vb:raw session.sessionurl_q}" accesskey="4">{vb:rawphrase advanced_search}</a></li>
+		</ul>
+	</div>
+	</vb:if>
+</div>
+</div><!-- closing div for above_body -->
+
+<div class="body_wrapper">
+
+{vb:raw ad_location.ad_navbar_below}
+{vb:raw ad_location.global_below_navbar}
+
+<vb:if condition="$show['notices'] AND THIS_SCRIPT != 'register'">
+	<form action="profile.php?do=dismissnotice" method="post" id="notices" class="notices">
+		<input type="hidden" name="do" value="dismissnotice" />
+		<input type="hidden" name="s" value="{vb:raw session.sessionurl}" />
+		<input type="hidden" name="securitytoken" value="{vb:raw bbuserinfo.securitytoken}" />
+		<input type="hidden" id="dismiss_notice_hidden" name="dismiss_noticeid" value="" />
+		<input type="hidden" name="url" value="{vb:raw return_link}" />
+		<ol>
+			{vb:raw notices}
+		</ol>
+	</form>
+</vb:if>]]></template>
+	</templategroup>
+	<templategroup name="Øàáëîíû áåç ãðóïï 1">
+		<template name="test_admin" templatetype="template" date="1324390071" username="ZyFran" version="4.1.8"><![CDATA[raid]]></template>
+		<template name="test_template" templatetype="template" date="1324376602" username="ZyFran" version="4.1.8"><![CDATA[{vb:stylevar htmldoctype}
+<html xmlns="http://www.w3.org/1999/xhtml"<vb:if condition="$vboptions['enablefacebookconnect']"> xmlns:fb="http://www.facebook.com/2008/fbml"</vb:if> dir="{vb:stylevar textdirection}" lang="{vb:stylevar languagecode}" id="vbulletin_html">
+<head>
+	{vb:raw headinclude}
+	<title>{vb:raw vboptions.bbtitle}</title>
+	<script type="text/javascript" src="clientscript/vbulletin_read_marker.js?v={vb:raw vboptions.simpleversion}"></script>
+	<vb:if condition="$vboptions['storecssasfile']">
+	{vb:cssfile forumhome-rollup.css}
+	<vb:else />
+	{vb:cssfile forumbits.css,forumhome.css,widgets.css,sidebar.css,options.css,tagcloud.css}
+	</vb:if>
+	<!--[if lt IE 8]>{vb:cssfile forumbits-ie.css,sidebar-ie.css,options-ie.css}<![endif]-->
+	<vb:if condition="$show['sidebar']">
+	<script type="text/javascript" src="{vb:stylevar yuipath}/animation/animation-min.js?v={vb:raw vboptions.simpleversion}"></script>
+	<script type="text/javascript">
+		var sidebar_align = '{vb:raw show.sidebarposition}';
+		var content_container_margin = parseInt('{vb:math {vb:stylevar forum_sidebar_width}+{vb:math {vb:stylevar padding}*2}}');
+		var sidebar_width = parseInt('{vb:stylevar forum_sidebar_width}');
+	</script>
+	<script type="text/javascript" src="{vb:raw vboptions.bburl}/clientscript/vbulletin-sidebar.js?v={vb:raw vboptions.simpleversion}"></script>
+	</vb:if>
+	{vb:raw headinclude_bottom}
+</head>
+	<body>
+
+	{vb:raw header}
+
+	{vb:raw navbar}
+
+	<!-- main -->
+        {vb:raw raid}
+	<!-- /main -->
+
+	<!-- what's going on box -->
+	<div id="wgo" class="collapse wgo_block block">
+		<h2 class="blockhead">{vb:rawphrase whats_going_on}</h2>
+		<div class="blockbody formcontrols floatcontainer">
+			{vb:raw template_hook.forumhome_wgo_pos1}
+			<vb:if condition="$show['loggedinusers']">
+			<!-- logged-in users -->
+			<div id="wgo_onlineusers" class="wgo_subblock section">
+				<h3 class="blocksubhead"><img src="{vb:stylevar imgdir_misc}/users_online.png" alt="{vb:rawphrase currently_active_users}" />{vb:rawphrase currently_active_users}</h3>
+				<div>
+					<p>{vb:rawphrase there_are_x_y_online_link, {vb:raw totalonline}, {vb:raw session.sessionurl_q}} <span class="shade">{vb:rawphrase x_members_and_y_guests, {vb:raw numberregistered}, {vb:raw numberguest}}</span></p>
+					<p>{vb:rawphrase most_users_ever_online_was_x_y_at_z, {vb:raw recordusers}, {vb:raw recorddate}, {vb:raw recordtime}}</p>
+					<vb:if condition="$activeusers">
+					<ol class="commalist" id="wgo_onlineusers_list">
+						<vb:each from="activeusers" value="loggedin">
+							<li>{vb:stylevar dirmark}<a class="username" href="{vb:link member, {vb:raw loggedin}}">{vb:raw loggedin.musername}</a>{vb:raw loggedin.invisiblemark}{vb:raw loggedin.buddymark}{vb:raw loggedin.comma}</li>
+						</vb:each>
+					</ol>
+					</vb:if>
+				</div>
+			</div>
+			<!-- end logged-in users -->
+			</vb:if>
+			{vb:raw template_hook.forumhome_wgo_pos2}
+			<vb:if condition="$show['upcomingevents']">
+			<div id="wgo_events" class="wgo_subblock section">
+				<h3 class="blocksubhead"><img src="{vb:stylevar imgdir_misc}/event.png" alt="{vb:rawphrase todays_events}" /><vb:if condition="$show['todaysevents']">{vb:rawphrase todays_events}<vb:else />{vb:rawphrase upcoming_events_for_the_next_x_days, {vb:raw vboptions.showevents}}</vb:if></h3>
+				<ol>
+					{vb:raw upcomingevents}
+				</ol>
+			</div>
+			</vb:if>
+			{vb:raw template_hook.forumhome_wgo_pos3}
+			<vb:if condition="$show['birthdays']">
+			<!-- today's birthdays -->
+			<div id="wgo_birthdays" class="wgo_subblock section">
+				<h3 class="blocksubhead"><img src="{vb:stylevar imgdir_misc}/birthday.png" alt="{vb:rawphrase todays_birthdays}" />{vb:rawphrase todays_birthdays}</h3>
+				<ol class="commalist">
+					<vb:each from="birthdays" value="row">
+						<li><a href="{vb:link member, {vb:raw row}}">{vb:raw row.username}</a><vb:if condition="$row['age']"> ({vb:raw row.age})</vb:if>{vb:raw row.comma}</li>
+					</vb:each>
+				</ol>
+			</div>
+			<!-- end today's birthdays -->
+			</vb:if>
+			{vb:raw template_hook.forumhome_wgo_pos4}
+			<div id="wgo_stats" class="wgo_subblock section">
+				<h3 class="blocksubhead"><img src="{vb:stylevar imgdir_misc}/forum_stats.png" alt="{vb:rawphrase x_statistics, {vb:raw vboptions.bbtitle}}" />{vb:rawphrase x_statistics, {vb:raw vboptions.bbtitle}}</h3>
+				<div>
+					<dl>
+						<dt>{vb:rawphrase threads}</dt>
+							<dd>{vb:raw totalthreads}</dd>
+						<dt>{vb:rawphrase posts}</dt>
+							<dd>{vb:raw totalposts}</dd>
+						<dt>{vb:rawphrase members}</dt>
+							<dd>{vb:raw numbermembers}</dd>
+						<vb:if condition="$show['activemembers']">
+                                                <dt>{vb:rawphrase active_members}</dt>
+                                                         <dd>{vb:raw activemembers}</dd>
+                                                </vb:if>
+					</dl>
+					<p>{vb:rawphrase welcome_to_our_newest_member_x, {vb:link member, {vb:raw newuserinfo}}, {vb:raw newuserinfo.username}}</p>
+					{vb:raw template_hook.forumhome_wgo_stats}
+				</div>
+			</div>
+			{vb:raw template_hook.forumhome_wgo_pos5}
+		</div>
+	</div>
+	<!-- end what's going on box -->
+
+	{vb:raw ad_location.board_below_whats_going_on}
+	<vb:if condition="$show['sidebar']">
+		</div>
+	</div>
+
+	<div id="sidebar_container"<vb:if condition="$show['sidebarposition'] == 'left'"> class="sidebarleft"</vb:if>>
+		<a id="sidebar_button_link" href="#">
+			<vb:if condition="$show['sidebarposition'] == 'left'">
+			<img id="sidebar_button" src="{vb:stylevar imgdir_misc}/tab-collapsed-left.png" alt="" />
+			<vb:else />
+			<img id="sidebar_button" src="{vb:stylevar imgdir_misc}/tab-collapsed.png" alt="" />
+			</vb:if>
+		</a>
+		<ul id="sidebar">
+			{vb:raw sidebar}
+		</ul>
+	</div>
+	</vb:if>
+	<script type="text/javascript">
+	<!--
+	vbphrase['doubleclick_forum_markread'] = "{vb:rawphrase doubleclick_forum_markread}";
+	init_forum_readmarker_system();
+	//-->
+	</script>
+	{vb:raw footer}
+</body>
+</html>]]></template>
+		<template name="test_template_raid" templatetype="template" date="1324376570" username="ZyFran" version="4.1.8"><![CDATA[raid]]></template>
+		<template name="vbulletin-chrome.css" templatetype="template" date="1324003529" username="Kai" version="4.1.9"><![CDATA[@charset "UTF-8";
+/* CSS Document */
+
+/**
+* CHROME: HEADER, NAVBAR, BREADCRUMB, FOOTER
+*/
+
+/*************************************************/
+/* HEADER */
+
+.above_body {
+	background:{vb:stylevar header_background};
+	_background-image: none;
+	margin: {vb:stylevar bodyheader_margin};
+	padding: {vb:stylevar header_padding};
+	-moz-border-radius-bottom{vb:stylevar left}:{vb:stylevar border_radius};
+	-moz-border-radius-bottom{vb:stylevar right}:{vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar left}-radius:{vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	border-bottom-{vb:stylevar left}-radius:{vb:stylevar border_radius};
+	border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+}
+
+.doc_header {
+	_background-image:none;
+	border:{vb:stylevar header_border};
+	color:{vb:stylevar header_color};
+	font:{vb:stylevar header_font};
+	position:relative;
+	min-height:35px;
+	/*padding-bottom:{vb:math {vb:stylevar padding}/2};*/
+	/*margin-bottom:{vb:math 2 * {vb:stylevar navbar_tab_size.height}}px;*/
+}
+.doc_header a { color:{vb:stylevar header_link_color}; }
+.doc_header a:hover { color:{vb:stylevar header_linkhover_color}; }
+.doc_header hr { display: none; }
+.logo-image {
+        float: {vb:stylevar left};
+        clear: {vb:stylevar right};
+        min-height: 2em;
+        height: auto !important;
+        padding: {vb:stylevar titleimage_padding};
+}
+
+.toplinks {
+	position:absolute;
+	{vb:stylevar right}:{vb:math {vb:stylevar padding}*2};
+	top:0;
+	color:{vb:stylevar toplinks_link_color};
+	font: {vb:stylevar header_font};
+	text-align:{vb:stylevar right};
+	background:{vb:stylevar toplinks_background};
+}
+
+.toplinks ul.isuser li#fb_headerbox.hidden,
+.toplinks ul.nouser li#fb_headerbox.hidden {
+	display: none;
+}
+.toplinks ul.isuser li#fb_headerbox a,
+.toplinks ul.nouser li#fb_headerbox a {
+	padding-top: 0;
+	background: none;
+	cursor: pointer;
+}
+	li#fb_headerbox a#fb_link {
+		position: relative;
+	}
+	li#fb_headerbox a#fb_link #fb_squarepic{
+		position:absolute;
+		right:-6px;
+		top:5px;
+		z-index:1;
+		border:1px solid #B3CCE7;
+		padding:1px;
+	}
+	li#fb_headerbox a#fb_link #fb_icon{
+		position:absolute;
+		right:10px;
+		top:1px;
+		z-index:2;
+	}
+
+.toplinks ul.isuser, .toplinks ul.nouser {
+	display:block;
+	float: {vb:stylevar right};
+	clear: {vb:stylevar left};
+	list-style: none;
+}
+
+.toplinks ul.isuser li {
+	display:inline;
+	position: relative; 
+	color: {vb:stylevar header_color};
+	float: {vb:stylevar right};
+	clear: {vb:stylevar left};
+	padding-{vb:stylevar right}: 10px;
+        background:{vb:stylevar toplinks_background.backgroundColor};
+}
+
+.toplinks ul.isuser .popupbody li {
+	display:block;
+	float: none;
+	clear: none;
+	padding:0;
+	margin:0;
+}
+
+.toplinks ul.isuser li.welcomelink {
+	display: block;
+	float: {vb:stylevar right};
+	clear: {vb:stylevar left};
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-{vb:stylevar left}: 4px;
+	padding-{vb:stylevar right}: 4px;
+	color: {vb:stylevar toplinks_text};
+}
+
+.toplinks ul.isuser li.logoutlink {
+	top: 0;
+}
+
+.toplinks ul.isuser li a {
+	display: block;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-{vb:stylevar left}: 4px;
+	padding-{vb:stylevar right}: 4px;
+	font-weight:bold;
+	color:{vb:stylevar toplinks_link_color};
+}
+
+.toplinks ul.isuser li li a {
+	float: none;
+	margin-{vb:stylevar left}: 0;
+}
+
+.toplinks ul.isuser li.welcomelink a {
+	display:inline;
+	float: none;
+	clear: none;
+	margin-{vb:stylevar left}: 0;
+}
+
+.toplinks ul.isuser li a:hover {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-{vb:stylevar left}: 4px;
+	padding-{vb:stylevar right}: 4px;
+	background: {vb:stylevar navbar_tab_background.backgroundColor};
+	color:{vb:stylevar toplinks_linkhover_color};
+}
+
+.toplinks ul.nouser li {
+	display:inline;
+}
+
+.toplinks ul.nouser li a {
+	float:{vb:stylevar left};
+	clear:{vb:stylevar right};
+	color:{vb:stylevar toplinks_link_color};
+}
+
+.toplinks ul.nouser li a{
+	display: block;
+	float: {vb:stylevar right};
+	clear: {vb:stylevar left};
+	color:{vb:stylevar toplinks_link_color};
+	position: relative;
+	padding: 6px {vb:stylevar padding} 0 {vb:stylevar padding};
+	background: {vb:stylevar navbar_tab_background.backgroundColor};
+	-moz-border-radius-bottom{vb:stylevar left}: {vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar left}-radius: {vb:stylevar border_radius};
+	border-bottom-{vb:stylevar left}-radius: {vb:stylevar border_radius};
+	-moz-border-radius-bottom{vb:stylevar right}:{vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	height:{vb:math 8px + {vb:math {vb:stylevar font.fontSize}-1}};
+	font-weight:bold;
+	font-size:{vb:stylevar mid_fontSize};
+	margin-{vb:stylevar right}: 10px;
+}
+
+.toplinks ul.nouser li a:hover {
+	background: {vb:stylevar navbar_tab_background.backgroundColor};
+	color:{vb:stylevar toplinks_linkhover_color};
+}
+
+.toplinks ul.isuser li.popupmenu, .toplinks ul.isuser .notifications, .toplinks ul.isuser .nonotifications  {
+	color: {vb:stylevar navbar_selected_popup_body_a_Color};
+	position: relative;
+}
+
+.toplinks ul.isuser li.popupmenu ul li {
+	position: relative;
+	top: 0;
+	margin: 0;
+	text-align: {vb:stylevar left};
+}
+
+.toplinks ul.isuser .notifications .popupbody {
+	background: {vb:stylevar navbar_tab_background.backgroundColor};
+	border: 1px solid {vb:stylevar navbar_tab_background.backgroundColor}; /* makes it look consistent with the popup background */
+}
+
+.toplinks ul.isuser .notifications .popupbody li a{
+	color: {vb:stylevar navbar_selected_popup_body_a_Color};
+	padding: 0 {vb:math {vb:stylevar padding}/2};
+	font-weight: normal;
+	background:{vb:stylevar navbar_popup_link_background};
+	border-top:1px solid {vb:stylevar navbar_tab_background.backgroundColor}; /* makes it look consistent with the popup background */
+	/*position: relative;*/
+	text-align: {vb:stylevar left};
+	padding-{vb:stylevar left}: 30px;
+	line-height: {vb:stylevar navbar_tab_size.height}px;
+}
+
+.toplinks ul.isuser .notifications .popupbody li a span {
+	position: absolute;
+	line-height: {vb:stylevar navbar_tab_size.height}px;
+	{vb:stylevar left}: {vb:math {vb:stylevar padding}/2};
+}
+
+.toplinks ul.isuser .notifications .popupbody li a:hover {
+	background:{vb:stylevar imodhilite_backgroundColor};
+	color: {vb:stylevar navbar_selected_popup_body_a_Color};
+	text-decoration: underline;
+}
+
+.toplinks form {
+	min-width: 220px;
+	display:block;
+	margin-{vb:stylevar right}: 10px;
+	text-align: {vb:stylevar left};
+	float: {vb:stylevar right};
+	clear: {vb:stylevar left};
+	_width:20%;
+}
+
+.toplinks .logindetails {
+	padding: 0 {vb:stylevar padding};
+	text-align: center;
+	background: {vb:stylevar navbar_tab_background.backgroundColor};
+	-moz-border-radius-bottom{vb:stylevar left}: {vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar left}-radius: {vb:stylevar border_radius};
+	border-bottom-{vb:stylevar left}-radius: {vb:stylevar border_radius};
+	-moz-border-radius-bottom{vb:stylevar right}:{vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	height: {vb:stylevar navbar_tab_size.height}px;
+}
+
+.toplinks form input {
+	margin: 3px 0 0;
+	vertical-align: baseline;
+	font-size: {vb:math {vb:stylevar font.fontSize}-2}{vb:stylevar font.units};
+	padding: 1px;
+	border: 0;
+}
+
+.toplinks form input.textbox {
+	color: {vb:stylevar toplinks_form_input};
+}
+
+.toplinks form input.default-value {
+	color: {vb:stylevar toplinks_form_input_defaultValue.color};
+}
+
+.toplinks .remember {
+	margin: -{vb:math {vb:stylevar padding}/3} 0 0 {vb:math {vb:stylevar padding}*2};
+	font-size: {vb:math {vb:stylevar font.fontSize}-3}{vb:stylevar font.units};
+        color: {vb:stylevar toplinks_text};
+}
+
+.toplinks .remember input {
+	vertical-align: baseline;
+}
+
+.cb_cookieuser_navbar{
+	position: relative;
+	top: 2px;
+}
+
+.notifications a.popupctrl:link, .notifications a.popupctrl:visited,
+.toplinks a:link, .toplinks a:visited {
+	color: {vb:stylevar toplinks_link_color};
+	text-decoration:none;
+}
+
+.notifications>a:link, .notifications>a:visited {
+        /* ie6 hack: broke this rule out on its own: the > selector makes ie6 ignore rule entirely. */
+	color: {vb:stylevar toplinks_link_color};
+	text-decoration:none;
+}
+
+.notifications > a:hover,
+.notifications a.popupctrl:hover {
+	color: {vb:stylevar toplinks_linkhover_color};
+}
+
+.notifications {
+	font-size:{vb:stylevar small_fontSize};
+	color: {vb:stylevar toplinks_link_color};
+	-moz-border-radius-bottom{vb:stylevar left}: 5px;
+	-webkit-border-bottom-{vb:stylevar left}-radius: 5px;
+	border-bottom-{vb:stylevar left}-radius: 5px;
+	-moz-border-radius-bottom{vb:stylevar right}: 5px;
+	-webkit-border-bottom-{vb:stylevar right}-radius: 5px;
+	border-bottom-{vb:stylevar right}-radius: 5px;
+
+}
+
+.notifications a {
+	text-decoration:none;
+}
+
+.notifications .popupbody {
+	color:{vb:stylevar navbar_selected_popup_body_a_Color};
+}
+
+.header hr,
+.header h2 {
+	display:none;
+}
+
+/*************************************************/
+/* NAVBAR */
+
+.navbar {
+	position:relative;
+	height:{vb:math {vb:stylevar navbar_tab_border.borderWidth} + {vb:stylevar navbar_tab_size.height} * 2}px;
+	background:{vb:stylevar navbar_background};
+	margin:{vb:stylevar navbar_margin};
+	color:{vb:stylevar navbar_color};
+	font:{vb:stylevar navbar_font};
+	border:{vb:stylevar navbar_border};
+	-moz-border-radius-bottom{vb:stylevar left}:{vb:stylevar border_radius};
+	-moz-border-radius-bottom{vb:stylevar right}:{vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar left}-radius:{vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	border-bottom-{vb:stylevar left}-radius:{vb:stylevar border_radius};
+	border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+}
+.navbar a { color:{vb:stylevar navbar_link_color}; }
+.navbar a:hover { color:{vb:stylevar navbar_linkhover_color}; }
+
+.navtabs {
+	background:{vb:stylevar navbar_tab_background};
+	padding: {vb:stylevar navbar_padding};
+	height: {vb:stylevar navbar_tab_size.height}px;
+        _background-image:none;
+}
+
+.navtabs li:first-child {
+	border-{vb:stylevar left}: {vb:stylevar navbar_tab_border};
+}
+
+.navtabs ul {
+/*	background: {vb:stylevar navbar_background.backgroundColor}; */
+	position:absolute;
+	top:{vb:math {vb:stylevar navbar_tab_size.height}px + {vb:stylevar navbar_padding.paddingTop}};
+	{vb:stylevar left}:0px;
+	width:100%;
+        border-top:{vb:stylevar navbar_tab_border};
+	-moz-border-radius-bottom{vb:stylevar left}:{vb:stylevar border_radius};
+	-moz-border-radius-bottom{vb:stylevar right}:{vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar left}-radius:{vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	border-bottom-{vb:stylevar left}-radius:{vb:stylevar border_radius};
+	border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	margin-{vb:stylevar right}:-{vb:stylevar navbar_tab_size.width}px;
+/* This is to fix RTL menu issue under Opera */
+	direction:ltr;
+}
+
+.navtabs li {
+	float:{vb:stylevar left};
+	border-{vb:stylevar right}: {vb:stylevar navbar_tab_border};
+}
+
+.navtabs ul li:first-child {
+	margin-{vb:stylevar left}: 20px;
+	border-{vb:stylevar left}: 0;
+}
+
+#navtabs .popupmenu ul li:first-child {
+	margin-{vb:stylevar left}: 0px;
+}
+
+.navtabs ul li {
+	border-{vb:stylevar right}: 0;
+	position: relative;
+}
+
+.navtabs li a {
+	height:{vb:stylevar navbar_tab_size.height}px;
+	line-height:{vb:stylevar navbar_tab_size.height}px;
+	padding:0 {vb:stylevar padding};
+}
+
+.navtabs li a.navtab {
+	border-top: {vb:stylevar navbar_tab_bevel};
+	border-{vb:stylevar left}: {vb:stylevar navbar_tab_bevel};
+	display:block;
+	background:{vb:stylevar navbar_tab_background};
+        _background-image:none;
+	min-width:{vb:math {vb:stylevar navbar_tab_size.width} - 2 * {vb:stylevar padding}};
+	width:auto !important;
+	width:{vb:math {vb:stylevar navbar_tab_size.width} - 2 * {vb:stylevar padding}};
+	_min-width:{vb:math {vb:stylevar navbar_tab_size.width} - 0.5 * {vb:stylevar padding}};
+	_width:auto !important;
+	_width:{vb:math {vb:stylevar navbar_tab_size.width} - 0.5 * {vb:stylevar padding}};
+	text-align:center;
+	color: {vb:stylevar navbar_tab_color};
+	font:{vb:stylevar navbar_tab_font};
+	text-decoration:none;
+	line-height:{vb:stylevar navbar_tab_size.height}px;
+}
+
+.navtabs li a.navtab:hover {
+	background:{vb:stylevar navbar_tab_selected_background} 0 -{vb:stylevar navbar_tab_selected_top_width}px;
+        _background-image:none;
+	/*color:{vb:stylevar linkhover_color};*/
+	color:{vb:stylevar navbar_tab_linkhover_color};
+}
+
+.navtabs li.selected {
+	height:{vb:stylevar navbar_tab_size.height}px;
+	color:{vb:stylevar navbar_tab_linkhover_color};
+}
+
+.navtabs li.selected a.navtab {
+	color:{vb:stylevar navbar_tab_linkhover_color};
+	background:{vb:stylevar navbar_tab_selected_background};
+        _background-image:none;
+	position:relative;
+	top:-{vb:stylevar navbar_tab_selected_top_width}px;
+	padding-top:{vb:stylevar navbar_tab_selected_top_width}px;
+	z-index:10;
+}
+.navtabs li.selected li a,
+.navbar_advanced_search li a {
+	text-decoration:none;
+	font:{vb:stylevar navbar_font};
+	line-height: {vb:stylevar navbar_tab_size.height}px;
+}
+.navtabs li.selected li a {
+	color:{vb:stylevar navbar_link_color};
+	padding:{vb:math {vb:stylevar padding}/5} {vb:math {vb:stylevar padding}/2};
+}
+
+.navbar_advanced_search li {
+	height: {vb:stylevar navbar_tab_size.height}px;
+	display:block;
+	clear:both;
+}
+
+.navbar_advanced_search li a {
+	color:{vb:stylevar navbar_link_color};
+}
+
+.navbar_advanced_search li a:hover {
+	color:{vb:stylevar navbar_linkhover_color};
+	text-decoration:{vb:stylevar linkhover_textDecoration};
+}
+
+.navtabs li.selected li a:hover {
+	color:{vb:stylevar navbar_linkhover_color};
+	text-decoration:{vb:stylevar linkhover_textDecoration};
+}
+
+.navtabs li.selected .popupbody li > a {
+	padding:{vb:stylevar popup_padding}px {vb:stylevar padding};
+	text-indent: 0;
+	color: {vb:stylevar navbar_selected_popup_body_a_Color};
+}
+
+.navtabs li.selected li a.popupctrl {
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;	
+	border-radius:3px;
+	border:solid {vb:stylevar lightweightbox_border.borderWidth}px transparent;
+	_border: none;
+	background:transparent url({vb:stylevar imgdir_misc}/arrow.png) no-repeat {vb:stylevar right} center;
+	padding-{vb:stylevar right}:15px;
+        _background-image:url('{vb:stylevar imgdir_misc}/arrow.gif');
+	color: {vb:stylevar navbar_link_color};
+}
+
+.toplinks .notifications a.popupctrl {	
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-{vb:stylevar left}: 4px;
+	padding-{vb:stylevar right}: 15px;
+	background: {vb:stylevar navbar_background_notify.backgroundColor} url({vb:stylevar imgdir_misc}/arrow.png) {vb:stylevar right} center no-repeat ;
+	-moz-border-radius-bottom{vb:stylevar left}: {vb:stylevar border_radius};
+	-moz-border-radius-bottom{vb:stylevar right}: {vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	-webkit-border-bottom-{vb:stylevar left}-radius: {vb:stylevar border_radius};
+	border-bottom-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	border-bottom-{vb:stylevar left}-radius: {vb:stylevar border_radius};
+       _background-image:url('{vb:stylevar imgdir_misc}/arrow.gif');
+}
+
+.toplinks .nonotifications a.popupctrl {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-{vb:stylevar left}: 4px;
+	padding-{vb:stylevar right}: 15px;
+	background: transparent url({vb:stylevar imgdir_misc}/arrow.png) no-repeat {vb:stylevar right} center;
+        _background-image:url('{vb:stylevar imgdir_misc}/arrow.gif');
+}
+
+.toplinks .notifications a.popupctrl:hover, .toplinks .nonotifications a.popupctrl:hover, .toplinks .nonotifications a.popupctrl.active , .toplinks .notifications a.popupctrl.active{
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-{vb:stylevar left}: 4px;
+	padding-{vb:stylevar right}: 15px;
+	background: {vb:stylevar navbar_tab_background.backgroundColor} url({vb:stylevar imgdir_misc}/arrow.png) no-repeat {vb:stylevar right} center;
+        _background-image:url('{vb:stylevar imgdir_misc}/arrow.gif');
+}
+
+.toplinks .notifications a.popupctrl:hover {
+	padding-top: 3px;
+}
+
+.navtabs li.selected li:hover a.popupctrl {
+	border-color:{vb:stylevar navbar_background.backgroundColor};
+	background-color:{vb:stylevar navbar_tab_background.backgroundColor};
+	text-decoration:none;
+}
+
+.navtabs li.selected li:hover a.popupctrl.active,
+.navtabs li.selected li a.popupctrl.active {
+	border-color:{vb:stylevar navbar_tab_background.backgroundColor};
+	background-color:{vb:stylevar navbar_tab_background.backgroundColor};
+	color:{vb:stylevar navbar_link_color};
+	text-decoration:none;
+}
+
+.navtabs .popupbody {
+	border: 1px solid {vb:stylevar navbar_tab_background.backgroundColor};
+	background: {vb:stylevar navbar_tab_background.backgroundColor};
+	width: auto;
+}
+
+.navtabs .popupbody li {
+	float:none;
+	border-top: 1px solid {vb:stylevar navbar_tab_background.backgroundColor};
+}
+
+.navtabs .popupbody li a:hover {
+	background-color: {vb:stylevar imodhilite_backgroundColor};
+}
+
+.nonotifications div.popupbody {
+	min-width: 170px;
+	width: auto !important;
+	width: 170px;
+	background: {vb:stylevar navbar_tab_background.backgroundColor};
+	border: 1px solid {vb:stylevar navbar_tab_background.backgroundColor};
+}
+
+.nonotifications .popupbody p {
+	color: {vb:stylevar navbar_selected_popup_body_a_Color};
+	text-align: {vb:stylevar left};
+	background: {vb:stylevar navbar_popup_link_background};
+	border-top: 1px solid {vb:stylevar navbar_tab_background.backgroundColor};
+	padding: 0;
+	text-indent: {vb:math {vb:stylevar padding}/2};
+	line-height: {vb:stylevar navbar_tab_size.height}px;
+	display:block;
+}
+
+.toplinks .nonotifications .popupbody a {
+	background: {vb:stylevar navbar_popup_link_background};
+	color: {vb:stylevar navbar_selected_popup_body_a_Color};
+	float: none;
+	clear: none;
+	padding: 0 {vb:math {vb:stylevar padding}/2};
+	margin-{vb:stylevar left}: 0;
+	text-align: {vb:stylevar left};
+	line-height: {vb:stylevar navbar_tab_size.height}px;
+}
+
+.toplinks .nonotifications .popupbody a:hover {
+	background:{vb:stylevar imodhilite_backgroundColor};
+	color: {vb:stylevar navbar_selected_popup_body_a_Color};
+	text-decoration: {vb:stylevar linkhover_textDecoration};
+	padding: 0 {vb:math {vb:stylevar padding}/2};
+}
+
+.globalsearch {
+	position:absolute;
+	width:180px;
+	{vb:stylevar right}: {vb:math {vb:stylevar padding}*2};
+	top: {vb:stylevar navbar_padding.paddingTop}{vb:stylevar navbar_padding.units};
+	float: {vb:stylevar right};
+	clear: {vb:stylevar left};
+	text-align:{vb:stylevar right};
+	line-height: 1.0em;
+	display:block;
+}
+
+.navbar_search {
+	position:relative;
+	width:180px;
+	{vb:stylevar right}: -{vb:math {vb:stylevar padding}*2};
+	display:block;
+}
+
+.navbar_search input {
+	font-size: {vb:math {vb:stylevar font.fontSize}-2}{vb:stylevar font.units};
+	vertical-align:middle;
+	padding: 1px;
+	border:{vb:stylevar navbarsearch_borderWidth} solid {vb:stylevar navbarsearch_input_borderColor};
+}
+
+.globalsearch .textboxcontainer {
+	height: {vb:stylevar navbar_tab_size.height}px;
+	border-{vb:stylevar left}:{vb:stylevar navbar_tab_border};
+	display:inline-block;
+	float: {vb:stylevar left};
+	text-align:center;
+}
+
+.globalsearch .textboxcontainer span {
+	border-top: {vb:stylevar navbar_tab_bevel};
+	border-{vb:stylevar left}: {vb:stylevar navbar_tab_bevel};
+	display: inline-block;
+	height: {vb:math {vb:stylevar navbar_tab_size.height}-4}px;
+	padding-{vb:stylevar left}: 2px;
+	padding-{vb:stylevar right}: 2px;
+	padding-top: 3px;
+	margin-bottom: 1px;
+	width: 147px;
+        _width:140px; /* ie6 hack */
+}
+
+.globalsearch input.textbox {
+	width: 120px;
+}
+
+.toplinks form input.loginbutton {
+	font-size: {vb:math {vb:stylevar font.fontSize}-2}{vb:stylevar font.units};
+	padding: 0 {vb:math {vb:stylevar padding}/2};
+	background-color:  {vb:stylevar toplinks_input_login_backgroundColor};
+	border:solid 1px {vb:stylevar heavy_border.borderColor};
+}
+
+.globalsearch .buttoncontainer {
+	height: {vb:stylevar navbar_tab_size.height}px;
+	border-{vb:stylevar left}:{vb:stylevar navbar_tab_border};
+	display:inline-block;
+	border-{vb:stylevar right}:{vb:stylevar navbar_tab_border};
+	width: 25px;
+	overflow: hidden;
+	float: {vb:stylevar right};
+}
+
+.globalsearch .buttoncontainer span{
+	border-top: {vb:stylevar navbar_tab_bevel};
+	border-{vb:stylevar left}: {vb:stylevar navbar_tab_bevel};
+	height: {vb:math {vb:stylevar navbar_tab_size.height}-3}px;
+	padding-{vb:stylevar left}: 4px;
+	padding-top: {vb:math {vb:math {vb:stylevar navbar_tab_size.height}-21}/2}px;
+	display:inline-block;
+}
+
+.globalsearch .searchbutton {
+	border: 0;
+	padding: 0;
+	width: 22px;
+	margin-top: -2px;
+	margin-{vb:stylevar left}: -2px;
+}
+
+/*************************************************/
+/* BREADCRUMB */
+
+.breadcrumb .navbit {
+	float:{vb:stylevar left};
+	background-image:url({vb:stylevar imgdir_misc}/navbit-arrow-{vb:stylevar right}.png);
+	background-position:{vb:stylevar right} center;
+	background-repeat:no-repeat;
+	padding-{vb:stylevar right}:10px;
+	padding-{vb:stylevar left}:3px;
+}
+
+.breadcrumb .navbit:first-child {
+	padding-{vb:stylevar left}:0;
+}
+
+.breadcrumb .navbit.lastnavbit {
+	background: transparent;
+}
+
+.breadcrumb .navbit.lastnavbit span {
+	float:{vb:stylevar left};
+	background: transparent;
+	padding-{vb:stylevar right}:10px;
+	padding-{vb:stylevar left}:3px;
+}
+
+.breadcrumb .navbit > a, .breadcrumb .lastnavbit > span {
+	display:block;
+	padding:2px 4px;
+	float:{vb:stylevar left};
+	background-color:transparent;
+	border:1px solid transparent;
+	-moz-border-radius:{vb:stylevar border_radius};
+	-webkit-border-radius:{vb:stylevar border_radius};	
+	border-radius:{vb:stylevar border_radius};	
+}
+
+.breadcrumb .navbit a:hover {
+	border-color:{vb:stylevar lightweightbox_border.borderColor};
+	background-color:{vb:stylevar lightweightbox_background.backgroundColor};
+}
+
+.breadcrumb .navbit a {
+	text-decoration:none;
+}
+
+.breadcrumb .navbit a.popupctrl {
+	background-image:url({vb:stylevar imgdir_misc}/navbit-arrow-{vb:stylevar right}.png);
+	background-position:center center;
+	padding:2px 6px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+}
+
+.breadcrumb .navbit a.popupctrl:hover {
+	background-color:{vb:stylevar imodhilite_backgroundColor};
+	color:{vb:stylevar linkhover_color};
+}
+
+.breadcrumb hr {
+	display:none;
+}
+
+/*************************************************/
+/* PAGE TITLE */
+	
+#pagetitle {
+	padding:{vb:stylevar pagetitle_padding};
+	clear:both;
+	padding-top: {vb:math {vb:stylevar padding}/2};
+	background:{vb:stylevar pagetitle_background};
+	border:{vb:stylevar pagetitle_border};
+}
+#pagetitle a { color:{vb:stylevar pagetitle_link_color}; }
+#pagetitle a:hover { color:{vb:stylevar pagetitle_linkhover_color}; }
+
+#pagetitle h1 {
+	color: {vb:stylevar pagetitle_color};
+	font-size:{vb:stylevar pagetitle_font.fontSize}{vb:stylevar pagetitle_font.units};
+	font-weight:{vb:stylevar pagetitle_font.fontWeight};
+}
+
+#pagetitle .description {
+	color: {vb:stylevar pagetitle_description_color};
+	font-size: {vb:math {vb:stylevar font.fontSize}*0.85}{vb:stylevar font.units};
+}
+
+/*************************************************/
+/* NEW CONTENT LINK */
+.newcontent_textcontrol {
+	background: {vb:stylevar control_content_background};
+	_background-image: none;
+	-moz-border-radius: {vb:stylevar control_content_radius};
+	-webkit-border-radius: {vb:stylevar control_content_radius};
+	border-radius: {vb:stylevar control_content_radius};
+	-moz-box-shadow: 0 3px 8px {vb:stylevar control_content_shadow_color};
+	-webkit-box-shadow: 0 3px 8px {vb:stylevar control_content_shadow_color};
+	box-shadow: 0 3px 8px {vb:stylevar control_content_shadow_color};
+	font: {vb:stylevar control_content_font};
+	color: {vb:stylevar control_content_color};
+	padding: {vb:stylevar control_content_padding};
+	border: {vb:stylevar control_content_border};
+	display:block;
+	float: {vb:stylevar left};
+	clear: {vb:stylevar right};
+}
+.newcontent_textcontrol span {
+	font-size:{vb:math {vb:stylevar big_fontSize}+1};
+	font-weight:bold;
+	display:inline;
+}
+.newcontent_textcontrol:hover {
+	background: {vb:stylevar control_content_hover_background};
+	_background-image: none;
+	color: {vb:stylevar control_content_hover_color};
+	text-decoration: none;
+}
+
+
+/*************************************************/
+/* FOOTER */
+
+.footer {
+	clear:both;
+	margin-top:{vb:math {vb:stylevar padding}*1.5};
+	text-align:{vb:stylevar right};
+	display:block;
+	/*width: 100%; VBIV-10173*/
+	-moz-box-shadow: -2px 2px 2px {vb:stylevar footer_moz_shadow_color};
+	-webkit-box-shadow: -2px 2px 2px {vb:stylevar footer_moz_shadow_color};
+	box-shadow: -2px 2px 2px {vb:stylevar footer_moz_shadow_color};
+	background:{vb:stylevar footer_background};
+	padding:{vb:stylevar footer_padding};
+	border:{vb:stylevar footer_border};
+	color:{vb:stylevar footer_color};
+	font:{vb:stylevar footer_font};
+}
+.footer a { color:{vb:stylevar footer_link_color}; }
+.footer a:hover { color:{vb:stylevar footer_linkhover_color}; }
+
+
+.footer_copyright,
+.footer_morecopyright {
+	padding-bottom:{vb:math {vb:stylevar padding}/2};
+	color:{vb:stylevar footer_copyright_color};
+	font:{vb:stylevar footer_copyright_font};
+	margin-top: {vb:stylevar padding};
+	text-align:center;
+	display:block;
+}
+
+.footer_time {
+	color:{vb:stylevar footer_copyright_color};
+	font:{vb:stylevar footer_copyright_font};
+	padding-top:{vb:stylevar padding};
+	text-align:center;
+}
+
+.footer_select {
+	float:{vb:stylevar left};
+	text-align:{vb:stylevar left};
+	margin-{vb:stylevar left}: {vb:stylevar padding};
+	margin-top: 0;
+}
+
+.footer_links {
+	margin-{vb:stylevar right}: {vb:stylevar padding};
+	margin-top: 2px;
+}
+
+.footer_links li {
+	display:inline;
+	margin-{vb:stylevar left}:{vb:math {vb:stylevar padding}/2};
+}
+
+.below_body .time {
+	color: {vb:stylevar footer_time_color};
+}
+
+.notices {
+	background: {vb:stylevar body_background.backgroundColor};
+	margin: {vb:math {vb:stylevar padding}/2} 0;
+}
+
+.notices li {
+	background: {vb:stylevar notices_background};
+	font-size: {vb:math {vb:stylevar font.fontSize}-1}{vb:stylevar font.units};
+	color: {vb:stylevar body_color};
+	padding:{vb:math {vb:stylevar padding}/2} {vb:stylevar padding};
+	margin-bottom:{vb:math {vb:stylevar padding}/2};
+	-moz-box-shadow: -2px 2px 2px {vb:stylevar notices_shadow_color};
+	-webkit-box-shadow: -2px 2px 2px {vb:stylevar notices_shadow_color};
+	box-shadow: -2px 2px 2px {vb:stylevar notices_shadow_color};
+	text-align: {vb:stylevar left};
+	clear:both;
+}
+
+.breadcrumb .navbithome {
+	float: {vb:stylevar left};
+	padding: {vb:math {vb:math {vb:stylevar font.fontSize}+6px-12px}/2} 0;
+}
+/* end styles for template: navbar */
+
+/*************************************************/
+/* ADS GLOBAL */
+.ad_global_header {
+}
+#ad_global_header1 {
+        float:{vb:stylevar left};
+        clear:{vb:stylevar right};
+        padding:{vb:stylevar ad_padding};
+        margin:{vb:stylevar ad_margin};
+}
+#ad_global_header2 {
+        float:{vb:stylevar left};
+        padding:{vb:stylevar ad_padding};
+        margin:{vb:stylevar ad_margin};
+}
+#ad_global_below_navbar {
+        width:100%;
+        padding:{vb:stylevar ad_padding};
+        margin:{vb:stylevar ad_margin};
+}
+#ad_global_above_footer {
+        width:100%;
+        padding:{vb:stylevar ad_padding};
+        margin:{vb:stylevar ad_margin};
+        text-align:{vb:stylevar left};
+        clear:both;
+}
+#ad_board_below_whats_going_on {
+        width:100%;
+        padding:{vb:stylevar ad_padding};
+        margin:{vb:stylevar ad_margin};
+        text-align:{vb:stylevar left};
+}
+#ad_thread_first_post_content {
+        float:{vb:stylevar right};
+        margin:{vb:stylevar ad_margin};
+}
+#ad_thread_last_post_content {
+        float:{vb:stylevar right};
+        margin:{vb:stylevar ad_margin};
+        z-index: 1000;
+}
+.google_adsense_footer {
+        clear:both;
+}]]></template>
+		<template name="vbulletin.css" templatetype="template" date="1324179271" username="Kai" version="4.1.9"><![CDATA[@charset "UTF-8";
+/* CSS Document */
+
+/*THIS*/
+
+html {
+	background:{vb:stylevar doc_background};
+
+	<vb:if condition="$stylevar['textdirection'] == 'rtl'"> /* VBIV-11882 */
+		overflow-x: hidden;
+	</vb:if>
+}
+
+/* REVERSE SOME YUI RESET STUFF */
+em {}
+strong {}
+
+/* BASIC PAGE ELEMENTS */
+
+body {
+	width:{vb:stylevar doc_width};
+	min-width:{vb:stylevar doc_minWidth};
+	max-width:{vb:stylevar doc_maxWidth};
+	margin: {vb:stylevar doc_margin};
+	font-size:{vb:stylevar font.fontSize}{vb:stylevar font.units};
+	color:{vb:stylevar body_color};
+	line-height:{vb:stylevar line_height};
+}
+
+a:active, a:focus {
+	outline: 0;
+}
+
+body a {
+	color:{vb:stylevar link_color};
+	text-decoration:{vb:stylevar link_textDecoration};
+}
+body a:hover,
+body a:hover .time,
+body a:hover .shade,
+body a:hover .understate {
+	color:{vb:stylevar linkhover_color};
+	text-decoration:{vb:stylevar linkhover_textDecoration};
+}
+
+body a.understate,
+body a .understate {
+	color:inherit;
+	text-decoration:none;
+	*clear:expression(style.color = parentNode.currentStyle.color, style.clear = "none", 0);
+}
+
+.body_wrapper {
+	padding: {vb:stylevar body_padding};
+	background: {vb:stylevar body_background};
+	-moz-border-radius: {vb:stylevar border_radius};
+	-webkit-border-radius: {vb:stylevar border_radius};
+	border-radius: {vb:stylevar border_radius};
+}
+
+input,
+textarea,
+button,
+select {
+	font-family:{vb:stylevar control_font.fontFamily};
+}
+
+.button {
+	padding: {vb:math {vb:stylevar padding}/4} {vb:math {vb:stylevar padding}/2};
+	font: {vb:stylevar control_font};
+	border:{vb:stylevar button_control_border};
+	color:{vb:stylevar control_color};
+	background:{vb:stylevar control_background};
+	-moz-border-radius:{vb:stylevar popupmenu_border_radius};
+	-webkit-border-radius:{vb:stylevar popupmenu_border_radius};
+	border-radius:{vb:stylevar popupmenu_border_radius};
+}
+
+.button:hover {
+	background: {vb:stylevar control_hover_background};
+	color: {vb:stylevar control_color};
+}
+body,
+legend {
+	font-family:{vb:stylevar font.fontFamily};
+}
+
+.shade {
+	color:{vb:stylevar shade_color};
+}
+
+.time {
+	color:{vb:stylevar time_color};
+}
+
+.nocss_label {
+	display:none;
+}
+
+.normal {
+	font-size:{vb:stylevar font.fontSize}{vb:stylevar font.units};
+	font-weight:normal;
+}
+
+/* BLOCK STUFF */
+
+.block {
+	clear:both;
+	padding:{vb:stylevar block_padding};
+	color:{vb:stylevar block_color};
+	font:{vb:stylevar block_font};
+}
+
+.blockhead {
+	font:{vb:stylevar blockhead_font};
+	color:{vb:stylevar blockhead_color};
+	background:{vb:stylevar blockhead_background};
+	_background-image: none;
+	padding:{vb:stylevar blockhead_padding};
+	border:{vb:stylevar blockhead_border};
+	-moz-border-radius-top{vb:stylevar right}: {vb:stylevar border_radius};
+	-moz-border-radius-top{vb:stylevar left}: {vb:stylevar border_radius};
+	-webkit-border-top-{vb:stylevar right}-radius: {vb:stylevar border_radius};
+	-webkit-border-top-{vb:stylevar left}-radius: {vb:stylevar border_radius};
+	border-top-{vb:stylevar right}-radius: {vb:stylevar border_radius};
+	border-top-{vb:stylevar left}-radius: {vb:stylevar border_radius};
+}
+
+.blockhead h2 {
+	font-weight:bold;
+}
+
+.blockhead a { color:{vb:stylevar blockhead_link_color}; }
+.blockhead a:hover { color:{vb:stylevar blockhead_linkhover_color}; }
+
+.blockhead img {
+	margin-bottom: -{vb:stylevar blockhead_padding.paddingBottom}{vb:stylevar blockhead_padding.units};
+}
+
+.blocksubhead {
+	font:{vb:stylevar blocksubhead_font};
+	color:{vb:stylevar blocksubhead_color};
+	background:{vb:stylevar blocksubhead_background};
+	padding:{vb:stylevar blocksubhead_padding};
+	border-top:{vb:stylevar blocksubhead_border};
+}
+
+
+
+.blocksubhead img {
+	vertical-align:middle;
+}
+
+.blocksubhead a { color:{vb:stylevar blocksubhead_link_color}; text-decoration:none; }
+.blocksubhead a:hover { color:{vb:stylevar blocksubhead_linkhover_color}; }
+
+.blockhead_info, .blocksubhead_info {
+	float:{vb:stylevar right};
+	font-weight:normal;
+}
+
+/*.blockhead + */.blockbody { /* not sure why I had this .blockhead + .blockbody selector... need to look out for breakage */
+	background:{vb:stylevar blockbody_background};
+	padding-{vb:stylevar left}:{vb:stylevar blockbody_padding.paddingLeft}px;
+	padding-{vb:stylevar right}:{vb:stylevar blockbody_padding.paddingRight}px;
+}
+
+.blockrow {
+	background:{vb:stylevar blockrow_background};
+	padding:{vb:stylevar blockrow_padding};
+	border:{vb:stylevar blockrow_border};
+	color:{vb:stylevar blockrow_color};
+	font:{vb:stylevar blockrow_font};
+}
+.blockrow a { color:{vb:stylevar blockrow_link_color}; }
+.blockrow a:hover { color:{vb:stylevar blockrow_linkhover_color}; }
+
+.blockfoot, .blocksubfoot {
+	display:block;
+	clear:both;
+	background:{vb:stylevar blockfoot_background};
+	padding:{vb:stylevar blockfoot_padding};
+	border:{vb:stylevar blockfoot_border};
+	color:{vb:stylevar blockfoot_color};
+	font:{vb:stylevar blockfoot_font};
+
+}
+.blockfoot a { color:{vb:stylevar blockfoot_link_color}; }
+.blockfoot a:hover { color:{vb:stylevar blockfoot_linkhover_color}; }
+
+.blockfoot,
+.blocksubfoot {
+	padding:{vb:stylevar blockfoot_padding};
+}
+
+.blocksubfoot {
+	text-align:{vb:stylevar right};
+}
+/* END BLOCK STUFF */
+
+/* WYSIWYG */
+.wysiwyg_block {
+	margin-bottom: {vb:stylevar padding};
+}
+
+.wysiwyg_block .blockrow:first-child {
+	background: transparent url({vb:stylevar wysiwyg_block_background_image}) repeat-x top {vb:stylevar left};
+}
+
+.wysiwyg_block .formcontrols .blockrow {
+	border-top: 0;
+}
+
+/* CSS TABLE STUFF */
+.table { display:table; table-layout:fixed; }
+.thead { width:100%; padding:0; display: table-row; }
+.tr    { display:table-row; }
+.td    { display:table-cell; }
+
+/* PAGINATION LINKS */
+
+.pagination span {
+	display: block;
+	float: {vb:stylevar left};
+	clear: {vb:stylevar right};
+}
+
+.pagination span a {
+	font:{vb:stylevar pagination_font};
+	border: {vb:stylevar pagination_border};
+	height: {vb:math {vb:stylevar pagination_font.fontSize}{vb:stylevar pagination_font.units}*{vb:stylevar line_height}};
+	padding: 2px 4px;
+	margin-{vb:stylevar left}: 1px;
+	background:{vb:stylevar pagination_background};
+	text-decoration:none;
+	color: {vb:stylevar pagination_color};
+}
+
+.pagination span a:hover {
+	border: {vb:stylevar pagination_hover_border};
+}
+
+.pagination span.prev_next a, .pagination span.first_last a {
+	position: relative;
+	top: -2px;
+}
+
+.pagination span.prev_next a img, .pagination span.first_last a img {
+	position: relative;
+	display: inline;
+	top: 3px;
+}
+.pagination dt.label {
+	display:none;
+}
+
+.pagination span.selected a {
+	background: {vb:stylevar pagination_current_background};
+	color: {vb:stylevar pagination_current_color};
+	border: {vb:stylevar pagination_current_border};
+	height: {vb:math {vb:stylevar pagination_font.fontSize}{vb:stylevar pagination_font.units}*{vb:stylevar line_height}};
+	font-weight:bold;
+	padding: 2px 4px;
+	margin-{vb:stylevar left}: 1px;
+}
+
+.pagination .separator,
+.pagination .elipsis {
+	background: none;
+	border: 0;
+}
+
+.pagination .separator:hover {
+	border: 0;
+}
+
+.pagination li.jumptopage {
+	text-align:center;
+}
+
+
+.pagination span a.popupctrl {
+	height: {vb:math {vb:stylevar pagination_font.fontSize}{vb:stylevar pagination_font.units}*{vb:stylevar line_height}};
+	background: {vb:stylevar pagination_background.backgroundColor} url({vb:stylevar imgdir_misc}/black_downward_arrow.png) no-repeat center {vb:stylevar left};
+	padding-{vb:stylevar right}: 4px;
+	padding-{vb:stylevar left}: 18px;
+}
+
+.pagination .popupmenu:hover a.popupctrl {
+	border: {vb:stylevar pagination_hover_border};
+	color: {vb:stylevar body_color};
+}
+
+/* TEXT CONTROLS */
+
+.cke_skin_kama .cke_dialog_contents a.cke_dialog_ui_button_ok,
+.cke_skin_kama .cke_dialog_contents a.cke_dialog_ui_button_cancel,
+.textcontrols a,
+a.textcontrol {
+	position:relative;
+	padding: 3px {vb:math {vb:stylevar padding}/2};
+	font: {vb:stylevar control_font};
+	line-height: {vb:stylevar line_height};
+	text-decoration:none;
+	border: {vb:stylevar control_border};
+	color: {vb:stylevar control_color};
+	background:{vb:stylevar control_background};
+	-moz-border-radius:{vb:stylevar popupmenu_border_radius};
+	-webkit-border-radius:{vb:stylevar popupmenu_border_radius};
+	border-radius:{vb:stylevar popupmenu_border_radius};
+}
+
+.textcontrols a img,
+a.textcontrol img {
+	position:absolute;
+	bottom:2px;
+	{vb:stylevar left}:-2px;
+}
+
+.textcontrols a:hover img,
+a:hover.textcontrol img {
+	position: absolute;
+	bottom:2px;
+	{vb:stylevar left}:-2px;
+}
+
+.textcontrols a:hover,
+a:hover.textcontrol {
+	background:{vb:stylevar control_hover_background};
+	text-decoration:none;
+	color: {vb:stylevar control_hover_color};
+}
+
+.textcontrols a:hover,
+a:hover.textcontrol {
+	text-decoration:none;
+}
+
+.blockhead a.textcontrol {
+	float:{vb:stylevar right};
+	font:{vb:stylevar control_font};
+	margin-top: -{vb:math {vb:math {vb:math {vb:stylevar control_font.fontSize} + {vb:math 3px*2} + {vb:math {vb:stylevar control_border.borderWidth}*2}} - {vb:math {vb:stylevar blockhead_font.fontsize} + {vb:stylevar blockhead_padding.paddingTop}{vb:stylevar blockhead_padding.units} + {vb:stylevar blockhead_padding.paddingBottom}{vb:stylevar blockhead_padding.units}+{vb:math {vb:stylevar blockhead_border.borderWidth}*2}}}/2};
+	text-transform: none;
+}
+
+.blockhead a.textcontrol:hover {
+	color: {vb:stylevar control_hover_color};
+}
+
+/* FORUMJUMP (navpopup) */
+
+.navpopupmenu {
+	text-align:{vb:stylevar right};
+	float: {vb:stylevar right};
+	display:block;
+	padding: 0;
+	padding-top: {vb:math {vb:math {vb:stylevar pagination_font.fontSize}{vb:stylevar pagination_font.units} + {vb:math {vb:stylevar padding}/2} - {vb:stylevar mid_fontSize}}/2};
+	clear: {vb:stylevar left};
+	margin-{vb:stylevar left}: {vb:stylevar padding};
+	font-size: {vb:stylevar mid_fontSize};
+	margin-top: 0;
+}
+
+* html .navpopupmenu.popupmenu.nohovermenu a.textcontrol, .navpopupmenu a.textcontrol, .navpopupmenu a.popupctrl, .navpopupmenu.popupmenu.nohovermenu a.textcontrol, .navpopupmenu.popupmenu.nohovermenu a.popupctrl {
+	text-decoration:none;
+	color: {vb:stylevar control_color};
+	border: {vb:stylevar control_border};
+	background: {vb:stylevar control_background};
+	_background-image: none;
+	font: {vb:stylevar control_font};
+	padding: {vb:math {vb:stylevar padding}/3} {vb:math {vb:stylevar padding}/1.5};
+	-moz-border-radius: {vb:stylevar popupmenu_border_radius};
+	-webkit-border-radius: {vb:stylevar popupmenu_border_radius};
+	border-radius: {vb:stylevar popupmenu_border_radius};
+}
+
+.navpopupmenu a.textcontrol:hover, .navpopupmenu a.popupctrl:hover, .navpopupmenu.popupmenu.nohovermenu a.textcontrol:hover, .navpopupmenu.popupmenu.nohovermenu a.popupctrl:hover {
+        background: {vb:stylevar control_hover_background};
+        color: {vb:stylevar control_hover_color};
+        _background-image: none;
+}
+
+.navpopupmenu .popupctrl .ctrlcontainer {
+	background: transparent url({vb:stylevar imgdir_misc}/black_downward_arrow.png) no-repeat center {vb:stylevar left};
+	padding-{vb:stylevar left}: 15px;
+	white-space:nowrap;
+}
+
+.navpopupbody {
+	width:auto;
+	max-height:350px;
+	text-align:{vb:stylevar left};
+	*overflow:auto;
+	overflow-y:scroll;
+	{vb:stylevar left}:auto;
+	{vb:stylevar right}:0;
+}
+
+.navpopupbody li {
+	overflow:hidden;
+	min-width: 200px;
+}
+
+.navpopupbody li.optionlabel {
+	text-align:center;
+	font-weight:bold;
+	color: {vb:stylevar popupmenu_label_color};
+}
+
+/**
+* Not pretty, but it works...
+*/
+.navpopupbody .d1  a, option.d1  { text-indent:{vb:math 1  * {vb:stylevar padding} * 2}; }
+.navpopupbody .d2  a, option.d2  { text-indent:{vb:math 2  * {vb:stylevar padding} * 2}; }
+.navpopupbody .d3  a, option.d3  { text-indent:{vb:math 3  * {vb:stylevar padding} * 2}; }
+.navpopupbody .d4  a, option.d4  { text-indent:{vb:math 4  * {vb:stylevar padding} * 2}; }
+.navpopupbody .d5  a, option.d5  { text-indent:{vb:math 5  * {vb:stylevar padding} * 2}; }
+.navpopupbody .d6  a, option.d6  { text-indent:{vb:math 6  * {vb:stylevar padding} * 2}; }
+.navpopupbody .d7  a, option.d7  { text-indent:{vb:math 7  * {vb:stylevar padding} * 2}; }
+.navpopupbody .d8  a, option.d8  { text-indent:{vb:math 8  * {vb:stylevar padding} * 2}; }
+.navpopupbody .d9  a, option.d9  { text-indent:{vb:math 9  * {vb:stylevar padding} * 2}; }
+.navpopupbody .d10 a, option.d10 { text-indent:{vb:math 10 * {vb:stylevar padding} * 2}; }
+.navpopupbody .d11 a, option.d11 { text-indent:{vb:math 11 * {vb:stylevar padding} * 2}; }
+.navpopupbody .d12 a, option.d12 { text-indent:{vb:math 12 * {vb:stylevar padding} * 2}; }
+.navpopupbody .d13 a, option.d13 { text-indent:{vb:math 13 * {vb:stylevar padding} * 2}; }
+.navpopupbody .d14 a, option.d14 { text-indent:{vb:math 14 * {vb:stylevar padding} * 2}; }
+.navpopupbody .d15 a, option.d15 { text-indent:{vb:math 15 * {vb:stylevar padding} * 2}; }
+.navpopupbody .d16 a, option.d16 { text-indent:{vb:math 16 * {vb:stylevar padding} * 2}; }
+.navpopupbody .d17 a, option.d17 { text-indent:{vb:math 17 * {vb:stylevar padding} * 2}; }
+.navpopupbody .d18 a, option.d18 { text-indent:{vb:math 18 * {vb:stylevar padding} * 2}; }
+.navpopupbody .d19 a, option.d19 { text-indent:{vb:math 19 * {vb:stylevar padding} * 2}; }
+.navpopupbody .d20 a, option.d20 { text-indent:{vb:math 20 * {vb:stylevar padding} * 2}; }
+
+/* LEFT / RIGHT DT+DD */
+
+dl.stats.totals {
+	float:{vb:stylevar right};
+	padding:{vb:math {vb:stylevar padding}/2};
+}
+
+dl.stats dt {
+	display:inline;
+	color:{vb:stylevar shade_color};
+}
+dl.stats dt:after {
+	content:":";
+}
+dl.stats dd {
+	display:inline;
+}
+
+/* BLOCK STATS */
+dl.statsblock dt {
+	display:block;
+	float:{vb:stylevar left};
+	clear:{vb:stylevar left};
+	width:25%;
+}
+
+dl.statsblock dd {
+	display:block;
+	float:{vb:stylevar left};
+	margin-{vb:stylevar left}:{vb:stylevar padding};
+}
+
+/* LIGHT-TABS */
+
+dl.tabslight {
+	border-bottom:solid {vb:stylevar tabslight_border.borderWidth}px {vb:stylevar mid_border.borderColor};
+	padding-{vb:stylevar left}:{vb:math {vb:stylevar padding} * 2};
+	margin-bottom:1em;
+	height:{vb:math {vb:stylevar tabslight_size.height} + {vb:stylevar tabslight_border.borderWidth}}px;
+	margin-top:{vb:math {vb:stylevar padding}*1.5};
+}
+
+dl.tabslight dt {
+	display:none;
+}
+
+dl.tabslight dd {
+	float:{vb:stylevar left};
+}
+
+dl.tabslight dd a {
+	font-size:{vb:stylevar small_fontSize};
+	font-weight:bold;
+	color:{vb:stylevar body_color};
+	text-decoration:none;
+	text-align:center;
+
+	padding:0 {vb:stylevar padding};
+	min-width:{vb:stylevar tabslight_size.width};
+	height:{vb:stylevar tabslight_size.height};
+	line-height:{vb:stylevar tabslight_size.height}px;
+	display:block;
+
+	border:{vb:stylevar tabslight_border};
+	background-color:{vb:stylevar blocksubhead_background.backgroundColor};
+
+	margin-{vb:stylevar left}:-{vb:stylevar tabslight_border.borderWidth}{vb:stylevar tabslight_border.unit};
+	margin-bottom:-{vb:stylevar tabslight_border.borderWidth}{vb:stylevar tabslight_border.unit};
+
+	-moz-border-radius-top{vb:stylevar left}:5px;
+	-moz-border-radius-top{vb:stylevar right}:11px;
+	-webkit-border-top-{vb:stylevar left}-radius:3px;
+	-webkit-border-top-{vb:stylevar right}-radius:11px;
+	border-top-{vb:stylevar left}-radius:3px;
+	border-top-{vb:stylevar right}-radius:11px;
+}
+
+html>/**/body dl.tabslight dd.selected a,
+html>/**/body dl.tabslight dd.selected a:hover {
+	position:relative;
+	border-bottom: {vb:stylevar tabslight_border.borderWidth}{vb:stylevar tabslight_border.units} {vb:stylevar tabslight_border.borderStyle} transparent;
+	background:{vb:stylevar tabslight_selected_background};
+}
+* dl.tabslight dd.selected a, * dl.tabslight dd.selected a:hover {
+	border-bottom: {vb:stylevar tabslight_border.borderWidth}{vb:stylevar tabslight_border.units} {vb:stylevar tabslight_border.borderStyle} transparent;
+	background:{vb:stylevar tabslight_selected_background};
+}
+
+dl.tabslight dd a:hover {
+	color:{vb:stylevar linkhover_color};
+	background:{vb:stylevar navbar_tab_selected_background.backgroundColor} {vb:stylevar navbar_tab_selected_background.backgroundImage} repeat-x 0 -{vb:stylevar navbar_tab_selected_top_width}px;
+}
+
+/* COLUMN SORT LINKS */
+
+.columnsort a,
+.columnsort span {
+	display:block;
+	text-decoration:none;
+	white-space:nowrap;
+	text-align: {vb:stylevar left};
+}
+
+.columnsort a:hover {
+	background-color:{vb:stylevar imodhilite_backgroundColor};
+	text-decoration:none;
+	color:inherit;
+}
+
+tr.columnsort th {
+	white-space:nowrap;
+}
+
+/* MISC */
+
+div.collapse {
+	position:relative;
+}
+
+a.collapse {
+	float:{vb:stylevar right};
+	{vb:stylevar right}:{vb:stylevar padding};
+	top:{vb:math {vb:stylevar padding}*2};
+	position:absolute;
+}
+
+.blockhead a.collapse {
+	top: {vb:stylevar padding};
+}
+
+#forumrules {
+	margin-bottom: {vb:stylevar padding};
+	border-bottom: {vb:stylevar secondarycontent_border};
+	border-{vb:stylevar left}: {vb:stylevar secondarycontent_border};
+	border-{vb:stylevar right}: {vb:stylevar secondarycontent_border};
+	border-top: 1px solid {vb:stylevar secondarycontent_background.backgroundColor};
+	background: {vb:stylevar secondarycontent_background};
+}
+
+#forumrules ul.youcandoblock {
+	float:{vb:stylevar left};
+	width:55%;
+	overflow:hidden;
+	margin: 0 {vb:stylevar padding} {vb:stylevar padding} 0;
+}
+
+#forumrules ul.bbcodeblock {
+	float:{vb:stylevar right};
+	width:42%;
+	text-align:{vb:stylevar right};
+	overflow:hidden;
+}
+
+#forumrules .rules_link {
+	margin-top: {vb:stylevar padding};
+	width: 42%;
+	padding-{vb:stylevar left}: 55%;
+}
+
+.errorblock ul.blockrow.error > li {
+	border-bottom:solid 1px {vb:stylevar light_border.borderColor};
+	padding-bottom:{vb:stylevar padding};
+	margin-bottom:{vb:stylevar padding};
+}
+
+.errorblock ul.blockrow.error li:last-child {
+	border-bottom:none;
+	padding-bottom:0;
+	margin-bottom:0;
+}
+
+blockquote.preview {
+	font:{vb:stylevar content_msg_font};
+}
+
+blockquote.preview.forumcontent,
+blockquote.preview ul, blockquote.preview ol, blockquote.preview dl {
+	margin:0 40px;
+}
+
+blockquote.preview.forumcontent {
+	font:{vb:stylevar forum_msg_font};
+}
+
+blockquote.preview .bbcode_container div.bbcode_code,
+blockquote.preview .bbcode_container pre.bbcode_code {
+	margin:0;
+	padding:6px;
+	border:1px inset;
+	text-align:{vb:stylevar left};
+	overflow:auto;
+	direction:ltr;
+	background:{vb:stylevar content3_background.backgroundColor} {vb:stylevar content3_background.backgroundImage} repeat-x;
+	/*height:{vb:stylevar bbcode_codeheight};*/
+	font-size:{vb:stylevar mid_fontSize};
+}
+
+blockquote.preview .bbcode_container code.bbcode_code {
+	margin:0;
+	text-align:{vb:stylevar left};
+	direction:ltr;
+	font-size:{vb:stylevar mid_fontSize};
+}
+
+blockquote.preview .bbcode_container code.bbcode_code code {
+	white-space:nowrap;
+}
+
+blockquote.preview fieldset.postattachlist {
+	background:{vb:stylevar formrow_background};
+	border-top:solid 1px {vb:stylevar light_border.borderColor};
+	padding-bottom:1em;
+}
+
+blockquote.preview .bbcode_container div.bbcode_quote {
+	margin:0 {vb:stylevar padding};
+	margin-bottom: {vb:stylevar padding};
+	-moz-border-radius: {vb:stylevar border_radius};
+	-webkit-border-radius: {vb:stylevar border_radius};
+	background: {vb:stylevar bbcode_quote_background};
+	border-radius: {vb:stylevar border_radius};
+	border: {vb:stylevar bbcode_quote_border};
+	font: {vb:stylevar bbcode_quote_font};
+	position: relative;
+	top: 0;
+}
+
+
+blockquote.preview .bbcode_container .bbcode_quote_container {
+	background: transparent url({vb:stylevar imgdir_misc}/quote-{vb:stylevar left}.png) no-repeat {vb:stylevar top} {vb:stylevar left};
+	display:block;
+	width: 9px;
+	height: 13px;
+	position: absolute;
+	top: 5;
+	{vb:stylevar left}: -9px;
+}
+
+blockquote.preview .bbcode_quote div.quote_container {
+	border-top: 1px solid {vb:stylevar postbit_background.backgroundColor};
+	-moz-border-radius: {vb:stylevar border_radius};
+	-webkit-border-radius: {vb:stylevar border_radius};
+	border-radius: {vb:stylevar border_radius};
+	padding: {vb:stylevar bbcode_quote_padding};
+}
+
+.attachments {
+	border: {vb:stylevar postbit_boxed_border};
+	background: {vb:stylevar postbit_boxed_background};
+	margin: 20px {vb:math {vb:stylevar bbcode_quote_padding.paddingLeft}+20px};
+	-moz-border-radius: {vb:stylevar border_radius};
+	-webkit-border-radius: {vb:stylevar border_radius};
+	border-radius: {vb:stylevar border_radius};
+	padding: {vb:stylevar postbit_boxed_padding};
+	font-size: {vb:stylevar postbit_boxed_fontSize};
+}
+
+.attachments fieldset {
+	margin: {vb:stylevar bbcode_quote_padding.paddingTop}{vb:stylevar bbcode_quote_padding.units} 0;
+}
+
+.attachments img.inlineimg {
+	position: relative;
+	top: 2px;
+}
+
+
+blockquote.preview .signature {
+	margin-top:1.5em;
+	border-top:solid 1px {vb:stylevar shade_deep_color};
+	padding-top:0.5em;
+}
+
+.commalist li {
+	display:inline;
+}
+
+.standard_error {
+	max-width:600px;
+	margin:0 auto;
+	padding:4em 0 6em;
+}
+
+.hidden {
+	display: none !important;
+}
+
+/* Auto-clearing of floats */
+.floatcontainer:after,
+.formcontrols .blockrow:after,
+dl.stats:after {
+	content:".";
+	display:block;
+	height:0;
+	clear:both;
+	visibility:hidden;
+}
+.floatcontainer,
+.formcontrols .blockrow,
+dl.stats {
+	display:inline-block;
+	font-weight:normal;
+}
+/* IE-Mac hide \*/
+* html .floatcontainer,
+.formcontrols .blockrow,
+dl.stats {
+	height:1%;
+}
+.floatcontainer,
+.formcontrols .blockrow,
+dl.stats {
+	display:block;
+}
+.floatcontainer.hidden {
+	display:none;
+}
+/* End IE-Mac hide */
+
+
+/* INLINEMOD */
+
+#inlinemod_formctrls {
+	float:{vb:stylevar right};
+}
+
+#inlinemod_formctrls .popupctrl {
+	top: -5px;
+	position: inherit;
+	text-decoration:none;
+	background: {vb:stylevar control_background};
+	padding-{vb:stylevar right}: 0;
+	color: {vb:stylevar control_color};
+	border: {vb:stylevar control_border};
+	font: {vb:stylevar control_font};
+	float: {vb:stylevar left};
+	-moz-border-radius:{vb:stylevar popupmenu_border_radius};
+	-webkit-border-radius:{vb:stylevar popupmenu_border_radius};
+	border-radius:{vb:stylevar popupmenu_border_radius};
+}
+
+#inlinemod_formctrls a.popupctrl:hover {
+	background: {vb:stylevar control_hover_background};
+	color: {vb:stylevar control_hover_color};
+}
+
+#inlinemod_formctrls a.popupctrl span.ctrlcontainer {
+	display:inline-block;
+	background: transparent url({vb:stylevar imgdir_misc}/black_downward_arrow.png) no-repeat center {vb:stylevar left};
+	padding-top: {vb:math {vb:stylevar padding}/3};
+	padding-{vb:stylevar right}: {vb:math {vb:stylevar padding}/2};
+	padding-bottom: {vb:math {vb:stylevar padding}/3};
+	padding-{vb:stylevar left}: {vb:math {vb:stylevar padding}+5};
+	font-size: {vb:stylevar small_fontSize};
+	float: {vb:stylevar left};
+}
+
+#inlinemod_formctrls .popupbody {
+	{vb:stylevar left}:auto;
+	{vb:stylevar right}:0px;
+}
+
+
+/* FORUM DISABLED */
+div.forum_disabled {
+	text-align:center;
+	color:red;
+	background-color:white;
+	padding:{vb:stylevar padding};
+	font-size:{vb:math {vb:stylevar giant_fontSize}+2};
+}
+
+/**
+* UN-RESET
+*
+* These definitions are designed to undo the effects of YUI Reset, but only when contained within a *.reset element.
+* Code is based on YUI Base
+*/
+
+/*
+Copyright (c) 2009, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 2.7.0
+*/
+/**
+ * YUI Base
+ * @module base
+ * @namespace yui-
+ * @requires reset, fonts
+*/
+
+.restore body {
+	/* For breathing room between content and viewport. */
+	margin:10px;
+}
+
+.restore h1 {
+	/* 18px via YUI Fonts CSS foundation. */
+	font-size: 138.5%;
+}
+
+.restore h2 {
+	/* 16px via YUI Fonts CSS foundation. */
+	font-size: 123.1%;
+}
+
+.restore h3 {
+	/* 14px via YUI Fonts CSS foundation. */
+	font-size: 108%;
+}
+
+.restore h1,
+.restore h2,
+.restore h3 {
+	/* Top & bottom margin based on font size. */
+	margin: 1em 0;
+}
+
+.restore h1,
+.restore h2,
+.restore h3,
+.restore h4,
+.restore h5,
+.restore h6,
+.restore strong,
+.restore dt {
+	/* Bringing boldness back to headers and the strong element. */
+	font-weight: bold;
+}
+.restore optgroup {
+	font-weight:normal;
+}
+
+.restore abbr,
+.restore acronym {
+	/* Indicating to users that more info is available. */
+	border-bottom: 1px dotted #000;
+	cursor: help;
+}
+
+.restore em {
+	/* Bringing italics back to the em element. */
+	font-style: italic;
+}
+
+.restore del {
+	/* Striking deleted phrases. */
+	text-decoration: line-through;
+}
+
+.restore blockquote,
+.restore ul,
+.restore ol,
+.restore dl {
+	/* Giving blockquotes and lists room to breath. */
+	margin: 1em;
+}
+
+.restore ol,
+.restore ul,
+.restore dl {
+	/* Bringing lists on to the page with breathing room. */
+	margin-{vb:stylevar left}: 2em;
+}
+
+.restore ol > li,
+.restore ol.decimal > li {
+	list-style:decimal outside;
+}
+
+.restore ol.upper-roman > li {
+	list-style:upper-roman outside;
+}
+
+.restore ol.lower-roman > li {
+	list-style:lower-roman outside;
+}
+
+.restore ol.upper-alpha > li {
+	list-style:upper-alpha outside;
+}
+
+.restore ol.lower-alpha > li {
+	list-style:lower-alpha outside;
+}
+
+.restore ul > li {
+	/* Giving UL's LIs generated disc markers. */
+	list-style: disc outside;
+}
+
+.restore dl dd {
+	/* Giving UL's LIs generated numbers. */
+	margin-{vb:stylevar left}: 1em;
+}
+
+.restore th,
+.restore td {
+	/* Borders and padding to make the table readable. */
+	border: {vb:stylevar restore};
+	padding: {vb:stylevar restore_padding};
+}
+
+.restore th {
+	/* Distinguishing table headers from data cells. */
+	font-weight: bold;
+	text-align: center;
+}
+
+.restore caption {
+	/* Coordinated margin to match cell's padding. */
+	margin-bottom: .5em;
+	/* Centered so it doesn't blend in to other content. */
+	text-align: center;
+}
+
+.restore sup {
+	/* to preserve line-height and selector appearance */
+	vertical-align: super;
+}
+
+.restore sub {
+	/* to preserve line-height and selector appearance */
+	vertical-align: sub;
+}
+
+.restore p,
+.restore fieldset,
+.restore table,
+.restore pre {
+	/* So things don't run into each other. */
+	margin-bottom: 1em;
+}
+/* Opera requires 1px of passing to render with contemporary native chrome */
+.restore button,
+.restore input[type="checkbox"],
+.restore input[type="radio"],
+.restore input[type="reset"],
+.restore input[type="submit"] {
+	padding:1px;
+}
+
+.restore li > p {
+	margin-bottom: 0em;
+}
+
+.unread {
+	font-weight:bold;
+}
+
+/* Cloud tags */
+li.tag {
+	display:inline;
+	margin-{vb:stylevar right}:{vb:math {vb:stylevar padding} / 2}px;
+}
+
+li.tag label.mine {
+	font-weight:bold;
+}
+
+li.tag a {
+	text-decoration:none;
+}
+
+li.taglevel1 {
+	font-size:{vb:stylevar tiny_fontSize};
+}
+
+li.taglevel2 {
+	font-size:{vb:stylevar mid_fontSize};
+}
+
+li.taglevel3 {
+	font-size:{vb:math {vb:stylevar big_fontSize}+1};
+}
+
+li.taglevel4 {
+	font-size:{vb:stylevar giant_fontSize};
+}
+
+li.taglevel5 {
+	font-size: {vb:math {vb:stylevar giant_fontSize}+3};
+}
+
+li.tag.option {
+	padding:{vb:stylevar padding};
+}
+
+/* Tag Controls */
+/* Tagging Controls */
+
+#thread_tags_list input#tag_add_input {
+	display:block;
+	width:90%;
+	margin-top:2px;
+	margin-bottom:0.5em;
+}
+
+#thread_tags_list  .description {
+	color:{vb:stylevar shade_color};
+}
+
+#thread_tags_list  .actionbuttons {
+	text-align:{vb:stylevar right};
+	margin-bottom:1em;
+}
+
+#tag_edit_list {
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+
+#tag_edit_list li {
+	float:{vb:stylevar left};
+	display:block;
+	width:100px;
+}
+
+#tag_edit_list li.mine {
+	font-weight:bold;
+}
+
+/* We don't use class="inlineimg" in vB4
+img.inlineimg {
+	padding:0 {vb:stylevar padding};
+}
+*/
+
+
+/* Social Bookmarks */
+
+#social_bookmarks_list li {
+	display:block;
+	float:{vb:stylevar left};
+	padding-{vb:stylevar left}:{vb:stylevar padding};
+}
+
+/* Imagereg */
+#imagereg {
+	vertical-align:middle;
+	margin-bottom:{vb:math {vb:stylevar padding}/2};
+}
+
+
+#wol_navpopup.navpopupmenu {
+	margin-bottom:6px;
+}
+.navlinks {
+	background: {vb:stylevar navlinks_background};
+	border-top: {vb:stylevar navlinks_border_top};
+	padding: {vb:stylevar padding} 0;
+	text-align: center;
+	color: {vb:stylevar navlinks_color};
+	font-size: {vb:stylevar font.fontSize}{vb:stylevar font.units};
+        margin-top: 20px;
+        margin-bottom: 20px;
+width:100%;
+clear:both;
+}
+
+.clear, .cleardiv {
+	clear: both;
+}
+
+#ajax_post_errors {
+	position:absolute;
+	width:420px;
+	z-index:500;
+	padding:2px;
+	background-color:#FFFFFF;
+	-moz-border-radius-top{vb:stylevar right}:{vb:stylevar border_radius};
+	-moz-border-radius-top{vb:stylevar left}:{vb:stylevar border_radius};
+	-webkit-border-top-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	-webkit-border-top-{vb:stylevar left}-radius:{vb:stylevar border_radius};
+	border-top-{vb:stylevar right}-radius:{vb:stylevar border_radius};
+	border-top-{vb:stylevar left}-radius:{vb:stylevar border_radius};
+}
+
+#ajax_post_errors .blockrow {
+	border-bottom:{vb:stylevar forumbits_border};
+	border-{vb:stylevar left}:{vb:stylevar forumbits_border};
+	border-{vb:stylevar right}:{vb:stylevar forumbits_border};
+}
+#ajax_post_errors .blockfoot {
+	text-align:center;
+}
+
+#ajax_post_errors_message ol {
+	margin:1em;
+	margin-{vb:stylevar left}:2em;
+}
+
+#ajax_post_errors_message ol.numeric li,
+#ajax_post_errors_message ol li {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:decimal;
+}
+
+.highlight {
+	background: {vb:stylevar highlight_background};
+}
+
+/* Facebook Section */
+label#fb_pulishlabel {
+	font-size:{vb:stylevar mid_fontSize};
+	font-weight: normal;
+	margin-right: 10px;
+	vertical-align: middle;
+}
+
+#fb_likeframe {
+	border: none;
+	overflow: hidden;
+	height: 27px;
+	width: 260px;
+	vertical-align: text-bottom;
+}
+#pagetitle #fb_likeframe {
+	float: {vb:stylevar right};
+}
+.blogbit #fb_likeframe {
+	margin-top: 7px;
+}
+
+/* Fix for Facebook Connect rtl scrollbar */
+<vb:if condition="$stylevar['textdirection'] == 'rtl'">
+#FB_HiddenContainer { left: 0; right: -10000px; <vb:if condition="is_browser('firefox')">display: none;</vb:if> }
+</vb:if>
+
+#recaptcha_area {
+	direction:ltr;
+	display:inline;
+}
+
+#recaptcha_widget_div {
+	float:{vb:stylevar left};
+}
+
+.member_blockrow .error 
+{ 
+        padding:{vb:stylevar blocksubhead_padding}; 
+}  
+
+div.cms_table {
+	overflow:auto;
+	overflow-y:hidden;
+	padding:1px;
+}
+
+table.cms_table_grid,
+table.wysiwyg_cms_table_grid {
+	border-collapse: collapse;
+	margin-bottom:0;
+}
+
+td.cms_table_grid_td,
+td.wysiwyg_cms_table_grid_td {
+	border: {vb:stylevar vbcms_wysiwyg_table_borderSize} solid {vb:stylevar vbcms_wysiwyg_table_borderColor};
+}
+
+table.cms_table_outer_border,
+table.wysiwyg_cms_table_outer_border {
+	border-collapse: collapse;
+	border: {vb:stylevar vbcms_wysiwyg_table_borderSize} solid {vb:stylevar vbcms_wysiwyg_table_borderColor};
+}
+
+td.cms_table_td,
+td.cms_table_outer_border_td {
+	border:none;
+}]]></template>
+	</templategroup>
+	<templategroup name="ñïåöèàëüíûå øàáëîíû ïåðåìåííûõ ñòèëÿ">
+		<template name="titleimage" templatetype="stylevar" date="1324000518" username="Kai" version=""><![CDATA[images/newtype/style/logo.png]]></template>
+	</templategroup>
+	<stylevardfns>
+	</stylevardfns>
+	<stylevars>
+		<stylevar name="albumedit_blockrow_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="albumedit_maineditor_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="albumedit_maineditor_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="albumlist_blockbody_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="albumlist_entry_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="albumlist_entry_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="albumlist_image_shadow_color" value="YToxOntzOjU6ImNvbG9yIjtzOjEyOiJyZ2IoMCwgMCwgMCkiO30=" />
+		<stylevar name="announcement_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxMToidHJhbnNwYXJlbnQiO3M6NToiaW1hZ2UiO3M6NDE6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9zZWxlY3RlZF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="bbcode_quote_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxMjoicmdiKDAsIDAsIDApIjtzOjU6ImltYWdlIjtzOjM5OiJ1cmwoaW1hZ2VzL25ld3R5cGUvc3R5bGUvYm90dG9tX2JnLnBuZykiO3M6NjoicmVwZWF0IjtzOjY6InJlcGVhdCI7czoxOiJ4IjtzOjA6IiI7czoxOiJ5IjtzOjA6IiI7fQ==" />
+		<stylevar name="bbcode_quote_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NjoiZG90dGVkIjtzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="block_border" value="YTo0OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJ3aWR0aCI7czoxOiIxIjtzOjU6InN0eWxlIjtzOjU6InNvbGlkIjtzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="block_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="blockbody_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxMToidHJhbnNwYXJlbnQiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="blockfoot_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxMToidHJhbnNwYXJlbnQiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czowOiIiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="blockfoot_border" value="YTo0OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJ3aWR0aCI7czoxOiIwIjtzOjU6InN0eWxlIjtzOjQ6Im5vbmUiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="blockhead_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="blockhead_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="blockrow_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czo0OiJub25lIjtzOjU6ImltYWdlIjtzOjM5OiJ1cmwoaW1hZ2VzL25ld3R5cGUvc3R5bGUvYm90dG9tX2JnLnBuZykiO3M6NjoicmVwZWF0IjtzOjY6InJlcGVhdCI7czoxOiJ4IjtzOjA6IiI7czoxOiJ5IjtzOjA6IiI7fQ==" />
+		<stylevar name="blockrow_border" value="YTo0OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJ3aWR0aCI7czoxOiIwIjtzOjU6InN0eWxlIjtzOjQ6Im5vbmUiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="blocksubhead_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="blocksubhead_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="blocksubhead_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="blocksubhead_link_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="blocksubhead_linkhover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="blocksubhead_outline" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="body_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czowOiIiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="body_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="border_radius" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MToiNSI7fQ==" />
+		<stylevar name="button_control_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="calendar_events_a_daynum_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="calendar_events_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="calendar_events_height" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MjoiNTAiO30=" />
+		<stylevar name="calendar_mini_othermonth_a_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="calendar_othermonth_background_color" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="calendar_th_blocksubhead_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="calendar_today_border_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="calendar_week_eventlist_birthdays_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzg6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9hbGVydF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="calendar_week_eventlist_birthdays_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjIiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6MTg6InJnYigyNTUsIDI1NSwgMjU1KSI7fQ==" />
+		<stylevar name="calendarwidget_monthnav_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="calendarwidget_weekdays_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="calendarwidget_weekdays_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="content1_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxODoicmdiKDIwNCwgMjA0LCAyMDQpIjtzOjU6ImltYWdlIjtzOjA6IiI7czo2OiJyZXBlYXQiO3M6MDoiIjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="content2_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxODoicmdiKDE1MywgMTUzLCAxNTMpIjtzOjU6ImltYWdlIjtzOjA6IiI7czo2OiJyZXBlYXQiO3M6MDoiIjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="content3_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxODoicmdiKDI1NSwgMjU1LCAyNTUpIjtzOjU6ImltYWdlIjtzOjA6IiI7czo2OiJyZXBlYXQiO3M6MDoiIjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="control_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MzoidG9wIjtzOjE6InkiO3M6NDoibGVmdCI7fQ==" />
+		<stylevar name="control_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="control_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="control_content_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6NDoibGVmdCI7czoxOiJ5IjtzOjM6InRvcCI7fQ==" />
+		<stylevar name="control_content_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="control_content_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="control_content_hover_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6NDoibGVmdCI7czoxOiJ5IjtzOjM6InRvcCI7fQ==" />
+		<stylevar name="control_content_hover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE3OiJyZ2IoNTEsIDEwMiwgMTUzKSI7fQ==" />
+		<stylevar name="control_content_radius" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MToiNSI7fQ==" />
+		<stylevar name="control_content_shadow_color" value="YToxOntzOjU6ImNvbG9yIjtzOjEyOiJyZ2IoMCwgMCwgMCkiO30=" />
+		<stylevar name="control_focus_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxMToidHJhbnNwYXJlbnQiO3M6NToiaW1hZ2UiO3M6NDE6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9zZWxlY3RlZF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="control_hover_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="control_hover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE3OiJyZ2IoNTEsIDIwNCwgMjA0KSI7fQ==" />
+		<stylevar name="doc_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzI6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="editor_autosave_notice_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxMToidHJhbnNwYXJlbnQiO3M6NToiaW1hZ2UiO3M6Mzg6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9hbGVydF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="editor_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="editor_button_background" value="YTo2OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6ImNvbG9yIjtzOjA6IiI7czo1OiJpbWFnZSI7czowOiIiO3M6NjoicmVwZWF0IjtzOjA6IiI7czoxOiJ4IjtzOjE6IjAiO3M6MToieSI7czo0OiItNTAwIjt9" />
+		<stylevar name="editor_button_background_hover" value="YToxOntzOjU6ImNvbG9yIjtzOjExOiJ0cmFuc3BhcmVudCI7fQ==" />
+		<stylevar name="editor_button_disabled_opacity" value="YToxOntzOjY6InN0cmluZyI7czoyOiIuNSI7fQ==" />
+		<stylevar name="editor_button_enabled_opacity" value="YToxOntzOjY6InN0cmluZyI7czoyOiIuOCI7fQ==" />
+		<stylevar name="editor_button_selected_background" value="YToxOntzOjU6ImNvbG9yIjtzOjE3OiJyZ2IoNTEsIDE1MywgMTUzKSI7fQ==" />
+		<stylevar name="editor_button_selected_background_hover" value="YToxOntzOjU6ImNvbG9yIjtzOjExOiJ0cmFuc3BhcmVudCI7fQ==" />
+		<stylevar name="editor_popupbody_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="editor_popupbody_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE1OiJyZ2IoNTEsIDUxLCA1MSkiO30=" />
+		<stylevar name="editor_popupbody_frame_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6NDE6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9zZWxlY3RlZF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="editor_popupbody_frame_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE1OiJyZ2IoNTEsIDUxLCA1MSkiO30=" />
+		<stylevar name="editor_popupbody_tab_background_hover" value="YToxOntzOjU6ImNvbG9yIjtzOjE3OiJyZ2IoNTEsIDEwMiwgMjA0KSI7fQ==" />
+		<stylevar name="editor_toolbar_background" value="YTo2OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6ImNvbG9yIjtzOjE3OiJyZ2IoNTEsIDEwMiwgMTAyKSI7czo1OiJpbWFnZSI7czo1NjoidXJsKGNsaWVudHNjcmlwdC9ja2VkaXRvci9za2lucy9rYW1hL2ltYWdlcy9zcHJpdGVzLnBuZykiO3M6NjoicmVwZWF0IjtzOjg6InJlcGVhdC14IjtzOjE6IngiO3M6MToiMCI7czoxOiJ5IjtzOjU6Ii0xOTUwIjt9" />
+		<stylevar name="editor_wysiwyg_table_borderColor" value="YToxOntzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="favicon" value="YToxOntzOjM6InVybCI7czoxMToiZmF2aWNvbi5pY28iO30=" />
+		<stylevar name="footer_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="footer_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="footer_color" value="YToxOntzOjU6ImNvbG9yIjtzOjExOiJ0cmFuc3BhcmVudCI7fQ==" />
+		<stylevar name="footer_copyright_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMTAyLCAxMDIsIDEwMikiO30=" />
+		<stylevar name="footer_copyright_font" value="YTo2OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjY6ImZhbWlseSI7czo0NDoiVGFob21hLCBDYWxpYnJpLCBWZXJkYW5hLCBHZW5ldmEsIHNhbnMtc2VyaWYiO3M6NDoic2l6ZSI7czoxOiI5IjtzOjY6IndlaWdodCI7czo2OiJub3JtYWwiO3M6NToic3R5bGUiO3M6MDoiIjtzOjc6InZhcmlhbnQiO3M6MDoiIjt9" />
+		<stylevar name="footer_link_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="footer_moz_shadow_color" value="YToxOntzOjU6ImNvbG9yIjtzOjEyOiJyZ2IoMCwgMCwgMCkiO30=" />
+		<stylevar name="footer_time_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="formrow_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czo2OiJjZW50ZXIiO3M6MToieSI7czo2OiJib3R0b20iO30=" />
+		<stylevar name="formrow_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjAiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6MDoiIjt9" />
+		<stylevar name="forum_sidebar_link_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="forum_sidebar_linkhover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="forum_sidebar_time_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="forumbits_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="forumbits_shadow_color" value="YToxOntzOjU6ImNvbG9yIjtzOjEyOiJyZ2IoMCwgMCwgMCkiO30=" />
+		<stylevar name="forumbits_text_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="forumhead_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="forumhead_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="forumhead_top_corner_radius" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MToiNSI7fQ==" />
+		<stylevar name="foruminfo_header_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="foruminfo_header_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="foruminfo_header_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="forummenu_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="forummenu_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjAiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2NlY2VjZSI7fQ==" />
+		<stylevar name="forummenu_border_radius" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MToiNSI7fQ==" />
+		<stylevar name="forumrow_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6NDoibGVmdCI7czoxOiJ5IjtzOjY6ImJvdHRvbSI7fQ==" />
+		<stylevar name="forumrow_firstentry_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6NDoibGVmdCI7czoxOiJ5IjtzOjY6ImJvdHRvbSI7fQ==" />
+		<stylevar name="groups_row_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6NDoibGVmdCI7czoxOiJ5IjtzOjY6ImJvdHRvbSI7fQ==" />
+		<stylevar name="header_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="header_border" value="YTo0OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJ3aWR0aCI7czoxOiIwIjtzOjU6InN0eWxlIjtzOjQ6Im5vbmUiO3M6NToiY29sb3IiO3M6MDoiIjt9" />
+		<stylevar name="heavy_border" value="YTo0OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJ3aWR0aCI7czoxOiIwIjtzOjU6InN0eWxlIjtzOjQ6Im5vbmUiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="highlight_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxNzoicmdiKDUxLCAxMDIsIDEwMikiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czo4OiJyZXBlYXQteCI7czoxOiJ4IjtzOjA6IiI7czoxOiJ5IjtzOjA6IiI7fQ==" />
+		<stylevar name="icon_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxNzoicmdiKDUxLCAxMDIsIDEwMikiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czowOiIiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="image_large_max" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6NDoiMjA0OCI7fQ==" />
+		<stylevar name="imgdir_attach" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjEzOiJpbWFnZXMvYXR0YWNoIjt9" />
+		<stylevar name="imgdir_button" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE0OiJpbWFnZXMvYnV0dG9ucyI7fQ==" />
+		<stylevar name="imgdir_misc" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjExOiJpbWFnZXMvbWlzYyI7fQ==" />
+		<stylevar name="imgdir_pagination" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE3OiJpbWFnZXMvcGFnaW5hdGlvbiI7fQ==" />
+		<stylevar name="imgdir_rating" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjEzOiJpbWFnZXMvcmF0aW5nIjt9" />
+		<stylevar name="imgdir_reputation" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE3OiJpbWFnZXMvcmVwdXRhdGlvbiI7fQ==" />
+		<stylevar name="imgdir_searchresults" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjIxOiJpbWFnZXMvc2VhcmNoX3Jlc3VsdHMiO30=" />
+		<stylevar name="imgdir_siteicons" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE3OiJpbWFnZXMvc2l0ZV9pY29ucyI7fQ==" />
+		<stylevar name="imgdir_statusicon" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE3OiJpbWFnZXMvc3RhdHVzaWNvbiI7fQ==" />
+		<stylevar name="imodhilite_backgroundColor" value="YToxOntzOjU6ImNvbG9yIjtzOjE3OiJyZ2IoNTEsIDEwMiwgMTAyKSI7fQ==" />
+		<stylevar name="imodhilite_color" value="YToxOntzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="input_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxODoicmdiKDI1NSwgMjU1LCAyNTUpIjtzOjU6ImltYWdlIjtzOjA6IiI7czo2OiJyZXBlYXQiO3M6MDoiIjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="input_borderColor" value="YToxOntzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="light_border" value="YTo0OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJ3aWR0aCI7czoxOiIwIjtzOjU6InN0eWxlIjtzOjQ6Im5vbmUiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="lightweightbox_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="lightweightbox_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="link_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="link_textDecoration" value="YTo1OntzOjQ6Im5vbmUiO3M6MToiMSI7czo5OiJ1bmRlcmxpbmUiO3M6MToiMCI7czo4OiJvdmVybGluZSI7czoxOiIwIjtzOjEyOiJsaW5lLXRocm91Z2giO3M6MToiMCI7czo1OiJibGluayI7czoxOiIwIjt9" />
+		<stylevar name="linkhover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="member_popupmenu_shadow_color" value="YToxOntzOjU6ImNvbG9yIjtzOjEyOiJyZ2IoMCwgMCwgMCkiO30=" />
+		<stylevar name="mid_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="navbar_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="navbar_background_notify" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxNDoicmdiKDEwMiwgMCwgMCkiO3M6NToiaW1hZ2UiO3M6Mzg6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9hbGVydF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="navbar_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="navbar_color" value="YToxOntzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="navbar_font" value="YTo2OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjY6ImZhbWlseSI7czo0MzoiQXJpYWwsIENhbGlicmksIFZlcmRhbmEsIEdlbmV2YSwgc2Fucy1zZXJpZiI7czo0OiJzaXplIjtzOjI6IjExIjtzOjY6IndlaWdodCI7czowOiIiO3M6NToic3R5bGUiO3M6MDoiIjtzOjc6InZhcmlhbnQiO3M6MDoiIjt9" />
+		<stylevar name="navbar_link_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="navbar_linkhover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE3OiJyZ2IoNTEsIDIwNCwgMjA0KSI7fQ==" />
+		<stylevar name="navbar_popup_link_background" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="navbar_selected_popup_body_a_Color" value="YToxOntzOjU6ImNvbG9yIjtzOjEyOiJyZ2IoMCwgMCwgMCkiO30=" />
+		<stylevar name="navbar_tab_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czowOiIiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="navbar_tab_bevel" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjAiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="navbar_tab_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjAiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="navbar_tab_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="navbar_tab_font" value="YTo2OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjY6ImZhbWlseSI7czo0MzoiQXJpYWwsIENhbGlicmksIFZlcmRhbmEsIEdlbmV2YSwgc2Fucy1zZXJpZiI7czo0OiJzaXplIjtzOjI6IjEyIjtzOjY6IndlaWdodCI7czo0OiJib2xkIjtzOjU6InN0eWxlIjtzOjA6IiI7czo3OiJ2YXJpYW50IjtzOjA6IiI7fQ==" />
+		<stylevar name="navbar_tab_linkhover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE1OiJyZ2IoNTEsIDUxLCA1MSkiO30=" />
+		<stylevar name="navbar_tab_selected_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6NDE6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9zZWxlY3RlZF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="navbar_tab_selected_top_width" value="YToyOntzOjU6InVuaXRzIjtzOjA6IiI7czo0OiJzaXplIjtzOjE6IjAiO30=" />
+		<stylevar name="navbar_tab_size" value="YTozOntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJ3aWR0aCI7czoyOiI4NiI7czo2OiJoZWlnaHQiO3M6MjoiMjYiO30=" />
+		<stylevar name="navbarsearch_borderWidth" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MToiMSI7fQ==" />
+		<stylevar name="navbarsearch_input_borderColor" value="YToxOntzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="navbarsearch_padding" value="YTo2OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjM6InRvcCI7czoxOiIyIjtzOjU6InJpZ2h0IjtzOjE6IjAiO3M6NjoiYm90dG9tIjtzOjE6IjAiO3M6NDoibGVmdCI7czoxOiIwIjtzOjQ6InNhbWUiO3M6MToiMSI7fQ==" />
+		<stylevar name="navlinks_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="navlinks_border_top" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="navlinks_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="notices_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzg6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9hbGVydF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="notices_shadow_color" value="YToxOntzOjU6ImNvbG9yIjtzOjEyOiJyZ2IoMCwgMCwgMCkiO30=" />
+		<stylevar name="pagetitle_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czowOiIiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="pagetitle_border" value="YTo0OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJ3aWR0aCI7czoxOiIwIjtzOjU6InN0eWxlIjtzOjQ6Im5vbmUiO3M6NToiY29sb3IiO3M6MDoiIjt9" />
+		<stylevar name="pagetitle_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="pagetitle_description_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="pagetitle_link_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="pagetitle_linkhover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="pagination_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="pagination_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="pagination_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="pagination_current_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6NDE6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9zZWxlY3RlZF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="pagination_current_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="pagination_hover_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6MTg6InJnYigyNTUsIDI1NSwgMjU1KSI7fQ==" />
+		<stylevar name="picturelink_img_shadow_color" value="YToxOntzOjU6ImNvbG9yIjtzOjEyOiJyZ2IoMCwgMCwgMCkiO30=" />
+		<stylevar name="poll_background" value="YTo2OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6ImNvbG9yIjtzOjE3OiJyZ2IoNTEsIDEwMiwgMTUzKSI7czo1OiJpbWFnZSI7czozOToidXJsKGltYWdlcy9taXNjL3BvbGxfcXVlc3Rpb25fbWFyay5wbmcpIjtzOjY6InJlcGVhdCI7czo5OiJuby1yZXBlYXQiO3M6MToieCI7czoyOiIzMCI7czoxOiJ5IjtzOjI6IjEwIjt9" />
+		<stylevar name="popupmenu_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="popupmenu_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="popupmenu_border_radius" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MToiNSI7fQ==" />
+		<stylevar name="popupmenu_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="popupmenu_label_color" value="YToxOntzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="postbit_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="postbit_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="postbit_boxed_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="postbit_boxed_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="postbit_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="postbit_control_background" value="YToxOntzOjU6ImNvbG9yIjtzOjExOiJ0cmFuc3BhcmVudCI7fQ==" />
+		<stylevar name="postbit_control_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="postbit_control_hover_background" value="YToxOntzOjU6ImNvbG9yIjtzOjExOiJ0cmFuc3BhcmVudCI7fQ==" />
+		<stylevar name="postbit_control_hover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="postbit_deleted_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzg6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9hbGVydF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="postbit_foot_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="postbit_lite_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxMToidHJhbnNwYXJlbnQiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="postbit_userinfo_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="postbit_userinfo_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="postbithead_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="postbithead_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjAiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="postbitlegacy_avatar_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="postbitlegacy_avatar_outline" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NjoiZG90dGVkIjtzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="postbitlite_header_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxMToidHJhbnNwYXJlbnQiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="postbitlite_header_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjAiO3M6NToic3R5bGUiO3M6NDoibm9uZSI7czo1OiJjb2xvciI7czo3OiIjYzY2ZTAwIjt9" />
+		<stylevar name="postbitlite_header_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="postbitlite_header_link_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="postbittitle_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="postfoot_separator_color" value="YToxOntzOjU6ImNvbG9yIjtzOjExOiJ0cmFuc3BhcmVudCI7fQ==" />
+		<stylevar name="postfoot_separator_width" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MToiMCI7fQ==" />
+		<stylevar name="profile_content_friends_list_hover" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="profile_content_infractions_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="profile_content_infractions_li_hover_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="profile_content_infractions_li_hover_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="profile_content_subsection_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="profile_content_subsectionhead_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="profile_content_subsectionhead_link_border_bottom" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NjoiZG90dGVkIjtzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="profile_contentheader_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="profile_sidebar_avatar_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czoxMToidHJhbnNwYXJlbnQiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czo5OiJuby1yZXBlYXQiO3M6MToieCI7czo2OiJjZW50ZXIiO3M6MToieSI7czo2OiJjZW50ZXIiO30=" />
+		<stylevar name="profile_sidebar_avatar_backgroundColor" value="YToxOntzOjU6ImNvbG9yIjtzOjExOiJ0cmFuc3BhcmVudCI7fQ==" />
+		<stylevar name="profile_sidebar_avatar_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjAiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="restore" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="secondarycontent_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="secondarycontent_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="secondarycontent_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="secondarycontent_header_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="secondarycontent_header_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="shade_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="shade_deep_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMTAyLCAxMDIsIDEwMikiO30=" />
+		<stylevar name="shade_mid_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMTUzLCAxNTMsIDE1MykiO30=" />
+		<stylevar name="shadow_color" value="YToxOntzOjU6ImNvbG9yIjtzOjEyOiJyZ2IoMCwgMCwgMCkiO30=" />
+		<stylevar name="sidebar_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6NDoibGVmdCI7czoxOiJ5IjtzOjM6InRvcCI7fQ==" />
+		<stylevar name="sidebar_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="sidebar_content_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="sidebar_content_bevel" value="YToxOntzOjU6ImNvbG9yIjtzOjEyOiJyZ2IoMCwgMCwgMCkiO30=" />
+		<stylevar name="sidebar_content_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="sidebar_content_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="sidebar_contentavatar_width" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MjoiMjQiO30=" />
+		<stylevar name="sidebar_contentlist_separator" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="sidebar_contentseparator_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czowOiIiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="sidebar_contentseparator_height" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MToiMSI7fQ==" />
+		<stylevar name="sidebar_header_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="sidebar_header_link_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="signature_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="tabslight_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="tabslight_selected_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6NDE6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9zZWxlY3RlZF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="texthilite_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="threadbit_alt_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czo0OiJsZWZ0IjtzOjE6InkiO3M6NjoiYm90dG9tIjt9" />
+		<stylevar name="threadbit_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6NDoibGVmdCI7czoxOiJ5IjtzOjY6ImJvdHRvbSI7fQ==" />
+		<stylevar name="threadbit_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="threadbit_deleted_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzg6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9hbGVydF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="threadbit_hilite_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6NDE6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9zZWxlY3RlZF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czo0OiJsZWZ0IjtzOjE6InkiO3M6NjoiYm90dG9tIjt9" />
+		<stylevar name="threadbit_iconsize" value="YTozOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjI6IjQ4IjtzOjY6ImhlaWdodCI7czoyOiI0OCI7fQ==" />
+		<stylevar name="threadlisthead_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="threadlisthead_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="threadlisthead_top_corner_radius" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6MToiNSI7fQ==" />
+		<stylevar name="time_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="titleimage" value="YToxOntzOjM6InVybCI7czoyOToiaW1hZ2VzL25ld3R5cGUvc3R5bGUvbG9nby5wbmciO30=" />
+		<stylevar name="titleimage_padding" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czozOiJ0b3AiO3M6MToiMCI7czo1OiJyaWdodCI7czoxOiIwIjtzOjY6ImJvdHRvbSI7czoxOiIwIjtzOjQ6ImxlZnQiO3M6MToiMCI7czo0OiJzYW1lIjtzOjE6IjAiO30=" />
+		<stylevar name="toolsmenu_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="toolsmenu_bevel" value="YToxOntzOjU6ImNvbG9yIjtzOjExOiJ0cmFuc3BhcmVudCI7fQ==" />
+		<stylevar name="toolsmenu_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="toolsmenu_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
+		<stylevar name="toolsmenu_link_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="toolsmenu_linkhover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjU1LCAyNTUsIDI1NSkiO30=" />
+		<stylevar name="toplinks_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MDoiIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="toplinks_form_input" value="YToxOntzOjU6ImNvbG9yIjtzOjE1OiJyZ2IoNTEsIDUxLCA1MSkiO30=" />
+		<stylevar name="toplinks_input_login_backgroundColor" value="YToxOntzOjU6ImNvbG9yIjtzOjA6IiI7fQ==" />
+		<stylevar name="toplinks_text" value="YToxOntzOjU6ImNvbG9yIjtzOjA6IiI7fQ==" />
+		<stylevar name="unknownsgicon" value="YToxOntzOjM6InVybCI7czoyNjoiaW1hZ2VzL21pc2MvdW5rbm93bl9zZy5naWYiO30=" />
+		<stylevar name="usercp_forum_icon_legend_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6NDE6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9zZWxlY3RlZF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
+		<stylevar name="usercp_forum_icon_legend_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="usercp_forum_icon_legend_top_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="usercp_hr_seperator" value="YToxOntzOjU6ImNvbG9yIjtzOjc6IiNjNjZlMDAiO30=" />
+		<stylevar name="usercp_nav_blockbody_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzk6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9ib3R0b21fYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
+		<stylevar name="usercp_nav_blockbody_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjEiO3M6NToic3R5bGUiO3M6NToic29saWQiO3M6NToiY29sb3IiO3M6NzoiI2M2NmUwMCI7fQ==" />
+		<stylevar name="wysiwyg_block_background_image" value="YToxOntzOjM6InVybCI7czozNDoiaW1hZ2VzL25ld3R5cGUvc3R5bGUvYm90dG9tX2JnLnBuZyI7fQ==" />
+	</stylevars>
+</style>
