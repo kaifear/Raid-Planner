@@ -1,1 +1,56 @@
-admin
+<div style="background-color:#ccc;"><IF name="is_guild">
+	<div class="pagetitle">Настройки гильдий</div>
+	<form method="post" action="" style="padding:10px;" onsubmit="return checkName();">
+		Создать гильдию:
+		<input id="new_guild" name="new_guild" placeholder="Введите название" required />
+		<input type="submit" value="Создать">
+		<input type="hidden" name="action" value="create_guild" />
+	</form>
+	<div style="padding:10px;"><IF name="is_glist">
+		<table style="width:100%;" class="tborder">
+			<tr align="center" class="tcat">
+				<td>Название гильдии</td>
+				<td style="width:25%;">Действие</td>
+			</tr><LOOP name="glist">
+			<tr>
+				<td><input id="guild_{ID}" name="guild_name" value="{NAME}" style="width:98%;" /></td>
+				<td>
+					<a style="cursor:pointer;" onclick="saveGuild({ID});">Сохранить название</a>
+					<a style="cursor:pointer;" onclick="deleteGuild({ID});">Удалить</a>
+				</td>
+			</tr></LOOP name="glist">
+		</table>
+		<form id="form_submit" method="post" action="">
+			<input id="form_action" name="action" type="hidden" value="" />
+			<input id="form_name" name="form_name" type="hidden" value="" />
+			<input id="form_gid" name="form_gid" type="hidden" value="" />
+		</form>
+		<script type="text/javascript">
+		function deleteGuild(gid)
+		{
+			if (!confirm('Подтвердите удаление')) return;
+			
+			document.getElementById('form_action').value = 'delete_guild';
+			document.getElementById('form_gid').value = gid;
+			document.getElementById('form_submit').submit();
+		}
+		
+		function saveGuild(gid)
+		{
+			var name = document.getElementById('guild_'+gid).value.replace(/^\s+/, '').replace(/\s+$/, '');
+			if (name=='') return;
+			
+			document.getElementById('form_name').value = name;
+			document.getElementById('form_action').value = 'save_guild';
+			document.getElementById('form_gid').value = gid;
+			document.getElementById('form_submit').submit();
+		}
+		
+		function checkName()
+		{
+			return !(document.getElementById('new_guild').replace(/^\s+/, '').replace(/\s+$/, '').value == '');
+		}
+		</script></IF name="is_glist">
+	</div></IF name="is_guild"><IF name="is_roster">
+	roster</IF name="is_roster">
+</div>
