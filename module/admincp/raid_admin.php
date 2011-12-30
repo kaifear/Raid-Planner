@@ -11,7 +11,7 @@ require_once(DIR . '/includes/adminfunctions_navpanel.php');
 /**** Default values Section Start  ****/
 error_reporting(E_ALL & ~E_NOTICE);
 if (!can_administer('canadminsettings'))
-	exit(header('Location: /'));
+	exit(header('Location: index.php?do=home'));
 
 require_once(DIR.'/raid/class.raid.php');
 define('RAID_PERM', 'admin', true);

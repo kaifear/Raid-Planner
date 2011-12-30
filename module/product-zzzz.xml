@@ -13,12 +13,15 @@
 			<installcode><![CDATA[$queries = array();
 $queries[] = sprintf('CREATE TABLE %sraid_guilds (id smallint(5) unsigned NOT NULL AUTO_INCREMENT, name varchar(64) CHARACTER SET cp1251 COLLATE cp1251_general_cs NOT NULL, PRIMARY KEY (id)) ENGINE=MyISAM', TABLE_PREFIX);
 $queries[] = sprintf('CREATE TABLE %sraid_roster (gid smallint(5) unsigned NOT NULL, uid bigint(20) unsigned NOT NULL, UNIQUE KEY uid (uid)) ENGINE=MyISAM', TABLE_PREFIX);
+$queries[] = sprintf('ALTER TABLE %suser ADD raid_approve ENUM("none", "approve", "denied") NOT NULL DEFAULT "none", ADD INDEX (raid_approve)', TABLE_PREFIX);
 
 foreach ($queries as $query)
     $db->query_write($query);]]></installcode>
 			<uninstallcode><![CDATA[$queries = array();
 $queries[] = sprintf('DROP TABLE IF EXISTS %sraid_guilds', TABLE_PREFIX);
 $queries[] = sprintf('DROP TABLE IF EXISTS %sraid_roster', TABLE_PREFIX);
+$queries[] = sprintf('ALTER TABLE %suser DROP INDEX raid_approve', TABLE_PREFIX);
+$queries[] = sprintf('ALTER TABLE %suser DROP raid_approve', TABLE_PREFIX);
 
 foreach ($queries as $query)
     $db->query_write($query);]]></uninstallcode>
@@ -34,7 +37,7 @@ foreach ($queries as $query)
 		<plugin active="1" executionorder="5">
 			<title>test_admin</title>
 			<hookname>admin_index_navigation</hookname>
-			<phpcode><![CDATA[if ($_REQUEST['do'] == 'nav') {
+			<phpcode><![CDATA[if ($_REQUEST['do'] == 'nav' && can_administer('canadminsettings')) {
    $navigation[-1] = array(
        'Рейд планнер' => array(
             'options' => array(

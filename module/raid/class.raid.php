@@ -13,6 +13,7 @@ class RaidPlanner
 	private $connect;
 	private $guildList = array();
 	private $guild_list = array();
+	private $roster_list = array();
 	
 	public $action = null;
 	
@@ -102,11 +103,13 @@ class RaidPlanner
 	{
 		$query = sprintf('SELECT * FROM %sraid_guilds ORDER BY id', TABLE_PREFIX);
 		$result = $this->connect->query_write($query);
-		while (list($gid, $gname) = $this->connect->fetch_row($result))
+		while (list($gid, $gname) = $this->connect->fetch_row($result)) {
 			$this->guild_list[] = array(
-			                            'ID'     => $gid,
-			                            'NAME'   => $gname
+			                            'GID'           => $gid,
+			                            'GUILD_NAME'    => $gname
 			                            );
+			$this->guildList[$gid] = $gname;
+		}
 	}
 	
 	/**
@@ -116,7 +119,21 @@ class RaidPlanner
 	 */
 	private function createRosterList()
 	{
-		
+		//$undecided = $approved = $guilds = array();
+		$this->createGuildsList();
+		$query = sprintf('SELECT COUNT(U.userid), RG.gid, U.raid_approve FROM %1$suser U LEFT JOIN %1$sraid_roster RG ON U.userid=RG.uid WHERE U.raid_approve!="denied" GROUP BY RG.gid, U.raid_approve ORDER BY RG.gid', TABLE_PREFIX);
+		$result = $this->connect->query_write($query);
+		while (list($count_users, $guild, $approve) = $this->connect->fetch_row($result)) {
+			if (!isset($this->guildList[$guild])) {
+			//	$data = $approve == 'none' ? &$undecided : &$approved;
+			//	$data[] = array(
+			//					'NAME'=> $count_users
+			//					);
+			}
+			else {
+				
+			}
+		}
 	}
 }
 ?>

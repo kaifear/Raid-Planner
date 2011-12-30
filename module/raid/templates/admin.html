@@ -13,10 +13,10 @@
 				<td style="width:25%;">Действие</td>
 			</tr><LOOP name="glist">
 			<tr>
-				<td><input id="guild_{ID}" name="guild_name" value="{NAME}" style="width:98%;" /></td>
+				<td><input id="guild_{GID}" name="guild_name" value="{GUILD_NAME}" style="width:98%;" /></td>
 				<td>
-					<a style="cursor:pointer;" onclick="saveGuild({ID});">Сохранить название</a>
-					<a style="cursor:pointer;" onclick="deleteGuild({ID});">Удалить</a>
+					<a style="cursor:pointer;" onclick="saveGuild({GID});">Сохранить название</a>
+					<a style="cursor:pointer;" onclick="deleteGuild({GID});">Удалить</a>
 				</td>
 			</tr></LOOP name="glist">
 		</table>
@@ -52,5 +52,104 @@
 		}
 		</script></IF name="is_glist">
 	</div></IF name="is_guild"><IF name="is_roster">
-	roster</IF name="is_roster">
+	<style type="text/css">
+	.float_left {
+		float:left;
+		width:50%;
+	}
+	.block {
+		border:4px ridge #000;
+		margin:10px 0;
+	}
+	.header {
+		background:url(../cpstyles/vBulletin_3_Silver/cp_tblhead_bg.gif) repeat-x #aeacb9;
+		text-align:center;
+		font-weight:bold;
+		font-size:9pt;
+	}
+	.body {
+		max-height:500px;
+		overflow-y:auto;
+		overflow-x:hidden;
+	}
+	.footer {
+		background:#dee0e2;
+		text-align:center;
+		color:#001f30;
+	}
+	.clear {
+		clear:both;
+	}
+	.link {
+		cursor:pointer;
+	}
+	</style>
+	<div class="pagetitle">Назначение пользователей в гильдии</div>
+	<div style="padding:10px;">
+		<div class="block">
+			<div class="header">
+				<div class="link" onclick="getUsers(this);">Список не принятых игроков</div>
+				<div>
+					<div class="float_left">Ник</div>
+					<div class="float_left">Действие</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="body">
+				<!--<div style="float:left;width:50%;">{NAME}</div>
+				<div style="float:left;width:50%;">
+					<input type="radio" name="" />
+				</div>-->
+				<div class="clear"></div>
+			</div>
+			<div class="footer">
+				<input type="submit" value="Сохранить" />
+			</div>
+		</div>
+		<div class="block">
+			<div class="header">
+				<div class="link" onclick="getUsers(this);">Список принятых игроков</div>
+				<div>
+					<div class="float_left">Ник</div>
+					<div class="float_left">Действие</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="body">
+				<!--<div style="float:left;width:50%;">{NAME}</div>
+				<div style="float:left;width:50%;">Действие</div>-->
+				<div class="clear"></div>
+			</div>
+			<div class="footer">
+				<input type="submit" value="Сохранить" />
+			</div>
+		</div>
+		<div class="block">
+			<div class="header">
+				<div class="link" onclick="getUsers(this);">Список игроков гильдии {GUILD_NAME}</div>
+				<div>
+					<div class="float_left">Ник</div>
+					<div class="float_left">Действие</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="body">
+				<!--<div style="float:left;width:50%;">{NAME}</div>
+				<div style="float:left;width:50%;">Действие</div>-->
+				<div class="clear"></div>
+			</div>
+			<div class="footer">
+				<input type="submit" value="Сохранить" />
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	function getUsers(obj)
+	{
+		var hidden = obj.nextElementSibling.style.display != 'none';
+		obj.nextElementSibling.style.display = hidden ? 'none' : 'block';
+		obj.parentNode.nextElementSibling.style.display = hidden ? 'none' : 'block';
+		obj.parentNode.nextElementSibling.nextElementSibling.style.display = hidden ? 'none' : 'block';
+	}
+	</script></IF name="is_roster">
 </div>
