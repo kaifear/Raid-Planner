@@ -46,6 +46,18 @@ if (isset($_POST['action']))
 				$db->query_write($query);
 			}
 			exit(header('Location: raid_admin.php?raid_action=' . $planner->action));
+		case 'get_users':
+			$planner->userList($_POST['gid']);
+			exit;
+		case 'approve_users':
+			$planner->approveUsers($_POST['user']);
+			exit(header('Location: raid_admin.php?raid_action=' . $planner->action));
+		case 'invite_users':
+			$planner->inviteUsers($_POST['user']);
+			exit(header('Location: raid_admin.php?raid_action=' . $planner->action));
+		case 'change_users':
+			$planner->changeUsers($_POST['user'], intval($_POST['gid']));
+			exit(header('Location: raid_admin.php?raid_action=' . $planner->action));
 		default:
 			
 	}

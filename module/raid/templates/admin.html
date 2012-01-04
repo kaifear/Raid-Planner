@@ -84,72 +84,162 @@
 		cursor:pointer;
 	}
 	</style>
-	<div class="pagetitle">Назначение пользователей в гильдии</div>
-	<div style="padding:10px;">
-		<div class="block">
+	<div class="pagetitle">Назначение пользователей в сообщество и гильдии</div>
+	<div style="padding:10px;"><IF name="is_undecided">
+		<form method="post" action="" class="block">
 			<div class="header">
-				<div class="link" onclick="getUsers(this);">Список не принятых игроков</div>
-				<div>
+				<div class="link" onclick="getUsers(this, -1);">Список не принятых игроков в сообщество</div>
+				<div style="display:none;">
 					<div class="float_left">Ник</div>
 					<div class="float_left">Действие</div>
 					<div class="clear"></div>
 				</div>
 			</div>
-			<div class="body">
-				<!--<div style="float:left;width:50%;">{NAME}</div>
-				<div style="float:left;width:50%;">
-					<input type="radio" name="" />
-				</div>-->
-				<div class="clear"></div>
-			</div>
-			<div class="footer">
+			<div class="body" style="display:none;"><div class="clear"></div></div>
+			<div class="footer" style="display:none;">
 				<input type="submit" value="Сохранить" />
 			</div>
-		</div>
-		<div class="block">
+			<input type="hidden" name="action" value="approve_users" />
+		</form></IF name="is_undecided"><IF name="is_approved">
+		<form method="post" action="" class="block">
 			<div class="header">
-				<div class="link" onclick="getUsers(this);">Список принятых игроков</div>
-				<div>
+				<div class="link" onclick="getUsers(this, 0);">Список принятых игроков в сообщество</div>
+				<div style="display:none;">
 					<div class="float_left">Ник</div>
 					<div class="float_left">Действие</div>
 					<div class="clear"></div>
 				</div>
 			</div>
-			<div class="body">
-				<!--<div style="float:left;width:50%;">{NAME}</div>
-				<div style="float:left;width:50%;">Действие</div>-->
-				<div class="clear"></div>
-			</div>
-			<div class="footer">
+			<div class="body" style="display:none;"><div class="clear"></div></div>
+			<div class="footer" style="display:none;">
 				<input type="submit" value="Сохранить" />
 			</div>
-		</div>
-		<div class="block">
+			<input type="hidden" name="action" value="invite_users" />
+		</form></IF name="is_approved"><LOOP name="g_list">
+		<form method="post" action="" class="block">
 			<div class="header">
-				<div class="link" onclick="getUsers(this);">Список игроков гильдии {GUILD_NAME}</div>
-				<div>
+				<div class="link" onclick="getUsers(this, {GID});">Список игроков гильдии {GUILD_NAME}</div>
+				<div style="display:none;">
 					<div class="float_left">Ник</div>
 					<div class="float_left">Действие</div>
 					<div class="clear"></div>
 				</div>
 			</div>
-			<div class="body">
-				<!--<div style="float:left;width:50%;">{NAME}</div>
-				<div style="float:left;width:50%;">Действие</div>-->
-				<div class="clear"></div>
-			</div>
-			<div class="footer">
+			<div class="body" style="display:none;"><div class="clear"></div></div>
+			<div class="footer" style="display:none;">
 				<input type="submit" value="Сохранить" />
 			</div>
-		</div>
+			<input type="hidden" name="action" value="change_users" />
+			<input type="hidden" name="gid" value="{GID}" />
+		</form></LOOP name="g_list">
 	</div>
 	<script type="text/javascript">
-	function getUsers(obj)
+	function createList(obj, text)
+	{
+		var data;
+		try {
+			data = JSON.parse(text);
+		} catch (e) {
+			try {
+				data = eval('('+text+')');
+			} catch (e) {
+				alert('Не удалось обработать данные');
+				return;
+			}
+		}
+		
+		for (var p in data.data) {
+			var div = document.createElement('div');
+			div.className = 'float_left';
+			div.innerHTML = data.data[p];
+			obj.insertBefore(div, obj.lastChild);
+			div = document.createElement('div');
+			div.className = 'float_left';
+			var html;
+			switch (data.gid) {
+				case -1:
+					html = '<input id="appr" type="radio" name="user['+p+']" value="approve" /> <label for="appr">Принять</label>';
+					html += ' <input id="den" type="radio" name="user['+p+']" value="denied" /> <label for="den">Отказать</label>';
+					break;
+				case 0:
+					html = '<select name="user['+p+']">';
+					html += '<option value="0"></option>';
+					html += '<option value="-1">Исключить из сообщества</option>';<LOOP name="glist">
+					html += '<option value="{GID}">Принять в {GUILD_NAME}</option>';</LOOP name="glist">
+					html += '</select>';
+					break;
+				default:
+					html = '<select name="user['+p+']">';
+					html += '<option value="0"></option>';
+					html += '<option value="-1">Исключить из сообщества</option>';
+					var text;<LOOP name="glist">
+					text = {GID} == data.gid ? 'Исключить из': 'Первести в';
+					html += '<option value="{GID}">'+text+' {GUILD_NAME}</option>';</LOOP name="glist">
+					html += '</select>';
+			}
+			div.innerHTML = html;
+			obj.insertBefore(div, obj.lastChild);
+		}
+		
+		if (data.offset < data.total)
+			request('', 'post', 'action=get_users&offset='+data.offset+'&gid='+data.gid, {obj:obj, func:createList});
+	}
+	
+	function getUsers(obj, gid)
 	{
 		var hidden = obj.nextElementSibling.style.display != 'none';
 		obj.nextElementSibling.style.display = hidden ? 'none' : 'block';
-		obj.parentNode.nextElementSibling.style.display = hidden ? 'none' : 'block';
-		obj.parentNode.nextElementSibling.nextElementSibling.style.display = hidden ? 'none' : 'block';
+		obj = obj.parentNode.nextElementSibling;
+		obj.style.display = hidden ? 'none' : 'block';
+		obj.nextElementSibling.style.display = hidden ? 'none' : 'block';
+		
+		if (obj.innerHTML == '<div class="clear"></div>' && !hidden)
+			request('', 'post', 'action=get_users&offset=0&gid='+gid, {obj:obj, func:createList});
 	}
+	
+	function request(url, type, post, func)
+	{
+		var httpRequest;
+		try {
+			httpRequest = new XMLHttpRequest();
+		} catch (e) {
+			try {
+				httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+			} catch (e) {
+				try {
+					httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+				} catch (e) {
+					alert('Не возможно отправить запрос');
+					return;
+				}
+			}
+		}
+		
+		httpRequest.open(type, url, true);
+		if (type.toLowerCase() == 'post')
+			httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		
+		httpRequest.onreadystatechange = function()
+		{
+			if (httpRequest.readyState == 4)
+				if (httpRequest.status == 200)
+					func.func(func.obj, httpRequest.responseText);
+				else
+					alert('Запрос вернул код: '+httpRequest.status);
+		}
+		
+		httpRequest.send(post);
+	}
+	
 	</script></IF name="is_roster">
 </div>
+				<!--<div class="float_left">{NAME}</div>
+				<div class="float_left">
+					<input type="radio" name="" />
+				</div>-->
+				
+				<!--<div class="float_left"">{NAME}</div>
+				<div class="float_left">Действие</div>-->
+				
+				<!--<div class="float_left">{NAME}</div>
+				<div class="float_left">Действие</div>-->

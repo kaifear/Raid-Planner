@@ -13,7 +13,11 @@ class RaidPlanner
 	private $connect;
 	private $guildList = array();
 	private $guild_list = array();
+	private $guild_list_table = array();
 	private $roster_list = array();
+	private $undecided = false;
+	private $approved = false;
+	private $limit = 100;
 	
 	public $action = null;
 	
@@ -60,13 +64,16 @@ class RaidPlanner
 		$tpl->LoadFile($id, $path);
 		
 		$parse_if = array(
-		                  'is_guild'    => $this->action == 'guilds',
-		                  'is_roster'   => $this->action == 'roster',
-		                  'is_glist'    => count($this->guild_list) > 0,
+		                  'is_guild'        => $this->action == 'guilds',
+		                  'is_roster'       => $this->action == 'roster',
+		                  'is_glist'        => count($this->guild_list) > 0,
+		                  'is_undecided'    => $this->undecided,
+		                  'is_approved'     => $this->approved
 		                  );
 		$tpl->parseIf($id, $parse_if);
 		
 		$tpl->parseLoop($id, 'glist', $this->guild_list);
+		$tpl->parseLoop($id, 'g_list', $this->guild_list_table);
 		
 		$tpl->PrintFile($id);
 	}
@@ -95,6 +102,101 @@ class RaidPlanner
 	}
 	
 	/**
+	 * function userList
+	 * Created 04.01.2012
+	 * @param Integer $gid;
+	 * @result void;
+	 */
+	public function userList($gid)
+	{
+		switch ($gid) {
+			case -1:
+				$this->undecidedUsers();
+				break;
+			case 0:
+				$this->approvedUsers();
+				break;
+			default:
+				$gid = intval($gid);
+				if ($gid > 0)
+					$this->guildUsers($gid);
+				else
+					header('HTTP/1.1 404 Not Found');
+		}
+	}
+	
+	/**
+	 * function approveUsers
+	 * Created 04.01.2012
+	 * @param Array $users;
+	 * @result void;
+	 */
+	public function approveUsers($users)
+	{
+		if (!is_array($users))
+			$users = array();
+		
+		foreach ($users as $id => $result) {
+			if (!in_array($result, array('approve', 'denied'))) continue;
+			
+			$query = sprintf('UPDATE %suser SET raid_approve="%s" WHERE userid="%d"', TABLE_PREFIX, $result, $id);
+			$this->connect->query_write($query);
+		}
+	}
+	
+	/**
+	 * function inviteUsers
+	 * Created 04.01.2012
+	 * @param Array $users;
+	 * @result void;
+	 */
+	public function inviteUsers($users)
+	{
+		if (!is_array($users))
+			$users = array();
+		
+		foreach ($users as $id => $result) {
+			if ($result == 0)
+				continue;
+			elseif ($result == -1)
+				$query = sprintf('UPDATE %suser SET raid_approve="denied" WHERE userid="%d"', TABLE_PREFIX, $id);
+			else
+				$query = sprintf('INSERT INTO %sraid_roster (gid, uid) VALUES ("%d", "%d")', TABLE_PREFIX, $result, $id);
+			
+			$this->connect->query_write($query);
+		}
+	}
+	
+	/**
+	 * function changeUsers
+	 * Created 04.01.2012
+	 * @param Array $users;
+	 * @param Integer $gid;
+	 * @result void;
+	 */
+	public function changeUsers($users, $gid)
+	{
+		if (!is_array($users))
+			$users = array();
+		
+		foreach ($users as $id => $result) {
+			if ($result == 0)
+				continue;
+			elseif ($result == -1) {
+				$query = sprintf('DELETE FROM %sraid_roster WHERE uid="%d"', TABLE_PREFIX, $id);
+				$this->connect->query_write($query);
+				$query = sprintf('UPDATE %suser SET raid_approve="denied" WHERE userid="%d"', TABLE_PREFIX, $id);
+			}
+			elseif ($result == $gid)
+				$query = sprintf('DELETE FROM %sraid_roster WHERE uid="%d"', TABLE_PREFIX, $id);
+			else
+				$query = sprintf('UPDATE %sraid_roster SET gid="%d" WHERE uid="%d"', TABLE_PREFIX, $result, $id);
+			
+			$this->connect->query_write($query);
+		}
+	}
+	
+	/**
 	 * function createGuildsList
 	 * Created 29.12.2011
 	 * @result void;
@@ -119,21 +221,107 @@ class RaidPlanner
 	 */
 	private function createRosterList()
 	{
-		//$undecided = $approved = $guilds = array();
+		$undecided = $approved = $guilds = array();
 		$this->createGuildsList();
 		$query = sprintf('SELECT COUNT(U.userid), RG.gid, U.raid_approve FROM %1$suser U LEFT JOIN %1$sraid_roster RG ON U.userid=RG.uid WHERE U.raid_approve!="denied" GROUP BY RG.gid, U.raid_approve ORDER BY RG.gid', TABLE_PREFIX);
 		$result = $this->connect->query_write($query);
-		while (list($count_users, $guild, $approve) = $this->connect->fetch_row($result)) {
+		while (list($count_users, $guild, $approve) = $this->connect->fetch_row($result))
 			if (!isset($this->guildList[$guild])) {
-			//	$data = $approve == 'none' ? &$undecided : &$approved;
-			//	$data[] = array(
-			//					'NAME'=> $count_users
-			//					);
+				if ($approve == 'approve')
+					$this->approved = true;
+				elseif ($approve == 'none')
+					$this->undecided = true;
 			}
-			else {
-				
-			}
-		}
+			else
+				$this->guild_list_table[$guild] = array(
+				                                        'GID'           => $guild,
+				                                        'GUILD_NAME'    => $this->guildList[$guild],
+				                                        'SELECTED'      => ''
+				                                        );
+		
+		$this->guild_list_table = array_values($this->guild_list_table);
+	}
+	
+	/**
+	 * function undecidedUsers
+	 * Created 04.01.2012
+	 * @result void;
+	 */
+	private function undecidedUsers()
+	{
+		$tquery = sprintf('SELECT COUNT(*) FROM %suser WHERE raid_approve="none"', TABLE_PREFIX);
+		$uquery = sprintf('SELECT userid, username FROM %suser WHERE raid_approve="none" ORDER BY userid LIMIT %d, %d',
+		                  TABLE_PREFIX, $_POST['offset'], $this->limit);
+		$this->getUsers($tquery, $uquery, -1);
+	}
+	
+	/**
+	 * function approvedUsers
+	 * Created 04.01.2012
+	 * @result void;
+	 */
+	private function approvedUsers()
+	{
+		$tquery = sprintf('SELECT COUNT(*) FROM %1$suser U LEFT JOIN %1$sraid_roster RR ON RR.uid=U.userid '.
+		                  'WHERE U.raid_approve="approve" AND RR.uid IS NULL', TABLE_PREFIX);
+		$uquery = sprintf('SELECT U.userid, U.username FROM  %1$suser U LEFT JOIN %1$sraid_roster RR ON RR.uid=U.userid'.
+		                  ' WHERE U.raid_approve="approve" AND RR.uid IS NULL ORDER BY U.userid LIMIT %2$d, %3$d',
+		                  TABLE_PREFIX, $_POST['offset'], $this->limit);
+		$this->getUsers($tquery, $uquery, 0);
+	}
+	
+	/**
+	 * function guildUsers
+	 * Created 04.01.2012
+	 * @param Integer $gid
+	 * @result void;
+	 */
+	private function guildUsers($gid)
+	{
+		$tquery = sprintf('SELECT COUNT(*) FROM %1$suser U LEFT JOIN %1$sraid_roster RR ON RR.uid=U.userid '.
+		                  'WHERE U.raid_approve="approve" AND RR.gid="%2$d"', TABLE_PREFIX, $gid);
+		$uquery = sprintf('SELECT U.userid, U.username FROM  %1$suser U LEFT JOIN %1$sraid_roster RR ON RR.uid=U.userid'.
+		                  ' WHERE U.raid_approve="approve" AND RR.gid="%4$d" ORDER BY U.userid LIMIT %2$d, %3$d',
+		                  TABLE_PREFIX, $_POST['offset'], $this->limit, $gid);
+		$this->getUsers($tquery, $uquery, $gid);
+	}
+	
+	/**
+	 * function printUsers
+	 * Created 04.01.2012
+	 * @param Array $users;
+	 * @result void;
+	 */
+	private function getUsers($tquery, $uquery, $gid)
+	{
+		$users = array();
+		$result = $this->connect->query_write($tquery);
+		list($users['total']) = $this->connect->fetch_row($result);
+		$users['total'] = intval($users['total']);
+		
+		$users['offset'] = intval($_POST['offset']);
+		
+		$users['offset'] += $this->limit;
+		$users['gid'] = $gid;
+		
+		$users['data'] = array();
+		
+		$result = $this->connect->query_write($uquery);
+		while (list($id, $user) = $this->connect->fetch_row($result))
+			$users['data'][$id] = $user;
+		
+		$this->printUsers($users);
+	}
+	
+	/**
+	 * function printUsers
+	 * Created 04.01.2012
+	 * @param Array $users;
+	 * @result void;
+	 */
+	private function printUsers($users)
+	{
+		echo json_encode($users);
 	}
 }
 ?>
