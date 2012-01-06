@@ -12,8 +12,9 @@
 		<code version="*">
 			<installcode><![CDATA[$queries = array();
 $queries[] = sprintf('CREATE TABLE %sraid_guilds (id smallint(5) unsigned NOT NULL AUTO_INCREMENT, name varchar(64) CHARACTER SET cp1251 COLLATE cp1251_general_cs NOT NULL, PRIMARY KEY (id)) ENGINE=MyISAM', TABLE_PREFIX);
-$queries[] = sprintf('CREATE TABLE %sraid_roster (gid smallint(5) unsigned NOT NULL, uid bigint(20) unsigned NOT NULL, UNIQUE KEY uid (uid)) ENGINE=MyISAM', TABLE_PREFIX);
+$queries[] = sprintf('CREATE TABLE %sraid_roster (gid smallint(5) unsigned NOT NULL, uid bigint(20) unsigned NOT NULL, rid smallint(5) unsigned NOT NULL, fid smallint(5) unsigned DEFAULT NULL, UNIQUE KEY uid (uid), KEY gid (gid), KEY fid (fid), KEY rid (rid)) ENGINE=MyISAM', TABLE_PREFIX);
 $queries[] = sprintf('ALTER TABLE %suser ADD raid_approve ENUM("none", "approve", "denied") NOT NULL DEFAULT "none", ADD INDEX (raid_approve)', TABLE_PREFIX);
+$queries[] = sprintf('CREATE TABLE %sraid_unit (id smallint(5) unsigned NOT NULL AUTO_INCREMENT, unit_type enum('raid','firm') COLLATE utf8_unicode_ci NOT NULL, name varchar(64) CHARACTER SET cp1251 COLLATE cp1251_general_cs NOT NULL, gid smallint(5) unsigned NOT NULL, PRIMARY KEY (id), KEY unit_type (unit_type), KEY gid (gid)) ENGINE=MyISAM', TABLE_PREFIX);
 
 foreach ($queries as $query)
     $db->query_write($query);]]></installcode>
@@ -22,6 +23,7 @@ $queries[] = sprintf('DROP TABLE IF EXISTS %sraid_guilds', TABLE_PREFIX);
 $queries[] = sprintf('DROP TABLE IF EXISTS %sraid_roster', TABLE_PREFIX);
 $queries[] = sprintf('ALTER TABLE %suser DROP INDEX raid_approve', TABLE_PREFIX);
 $queries[] = sprintf('ALTER TABLE %suser DROP raid_approve', TABLE_PREFIX);
+$queries[] = sprintf('DROP TABLE IF EXISTS %sraid_unit', TABLE_PREFIX);
 
 foreach ($queries as $query)
     $db->query_write($query);]]></uninstallcode>

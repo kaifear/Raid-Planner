@@ -1,11 +1,32 @@
 <div style="background-color:#ccc;"><IF name="is_guild">
-	<div class="pagetitle">Настройки гильдий</div>
-	<form method="post" action="" style="padding:10px;" onsubmit="return checkName();">
+	<div class="pagetitle">Настройки гильдий, рейдов и фирм</div>
+	<form method="post" action="" style="padding:10px;float:left;" onsubmit="return checkName('guild');">
 		Создать гильдию:
-		<input id="new_guild" name="new_guild" placeholder="Введите название" required />
+		<input id="new_guild" name="new" placeholder="Введите название" required />
 		<input type="submit" value="Создать">
 		<input type="hidden" name="action" value="create_guild" />
+	</form><IF name="is_glist">
+	<form method="post" action="" style="padding:10px;float:left;" onsubmit="return checkName('raid');">
+		Создать рейд:
+		<input id="new_raid" name="new" placeholder="Введите название" required />
+		<select id="guild_raid_id" name="guild" required>
+			<option value=""></option><LOOP name="glist">
+			<option value="{GID}">{GUILD_NAME}</option></LOOP name="glist">
+		</select>
+		<input type="submit" value="Создать">
+		<input type="hidden" name="action" value="create_raid" />
 	</form>
+	<form method="post" action="" style="padding:10px;float:left;" onsubmit="return checkName('firm');">
+		Создать фирму:
+		<input id="new_firm" name="new" placeholder="Введите название" required />
+		<select id="guild_firm_id" name="guild" required>
+			<option value=""></option><LOOP name="glist">
+			<option value="{GID}">{GUILD_NAME}</option></LOOP name="glist">
+		</select>
+		<input type="submit" value="Создать">
+		<input type="hidden" name="action" value="create_firm" />
+	</form>
+	<div style="clear:both;"></div></IF name="is_glist">
 	<div style="padding:10px;"><IF name="is_glist">
 		<table style="width:100%;" class="tborder">
 			<tr align="center" class="tcat">
@@ -13,42 +34,67 @@
 				<td style="width:25%;">Действие</td>
 			</tr><LOOP name="glist">
 			<tr>
-				<td><input id="guild_{GID}" name="guild_name" value="{GUILD_NAME}" style="width:98%;" /></td>
+				<td><input id="guild_{GID}" value="{GUILD_NAME}" style="width:98%;" /></td>
 				<td>
-					<a style="cursor:pointer;" onclick="saveGuild({GID});">Сохранить название</a>
-					<a style="cursor:pointer;" onclick="deleteGuild({GID});">Удалить</a>
+					<a style="cursor:pointer;" onclick="save('guild', {GID});">Сохранить название</a>
+					<a style="cursor:pointer;" onclick="del('guild', {GID});">Удалить</a>
+				</td>
+			</tr>
+			<tr{DISPLAY}>
+				<td colspan="2" align="center">
+					<table style="width:90%;">
+						<tr align="center">
+							<td>Название</td>
+							<td width="10%">Тип</td>
+							<td width="25%">Действие</td>
+						</tr><LOOP name="unit_{GID}">
+						<tr>
+							<td><input id="unit_{UID}" value="{UNIT_NAME}" style="width:98%;" /></td>
+							<td>{UNIT_TYPE}</td>
+							<td>
+								<a style="cursor:pointer;" onclick="save('unit', {UID});">Сохранить название</a>
+								<a style="cursor:pointer;" onclick="del('unit', {UID});">Удалить</a>
+							</td>
+						</tr></LOOP name="unit_{GID}">
+					</table>
 				</td>
 			</tr></LOOP name="glist">
 		</table>
 		<form id="form_submit" method="post" action="">
 			<input id="form_action" name="action" type="hidden" value="" />
 			<input id="form_name" name="form_name" type="hidden" value="" />
-			<input id="form_gid" name="form_gid" type="hidden" value="" />
+			<input id="form_id" name="form_id" type="hidden" value="" />
 		</form>
 		<script type="text/javascript">
-		function deleteGuild(gid)
+		function del(type, id)
 		{
 			if (!confirm('Подтвердите удаление')) return;
 			
-			document.getElementById('form_action').value = 'delete_guild';
-			document.getElementById('form_gid').value = gid;
+			document.getElementById('form_action').value = 'delete_'+type;
+			document.getElementById('form_id').value = id;
 			document.getElementById('form_submit').submit();
 		}
 		
-		function saveGuild(gid)
+		function save(type, id)
 		{
-			var name = document.getElementById('guild_'+gid).value.replace(/^\s+/, '').replace(/\s+$/, '');
+			var name = document.getElementById(type+'_'+id).value.replace(/^\s+/, '').replace(/\s+$/, '');
 			if (name=='') return;
 			
 			document.getElementById('form_name').value = name;
-			document.getElementById('form_action').value = 'save_guild';
-			document.getElementById('form_gid').value = gid;
+			document.getElementById('form_action').value = 'save_'+type;
+			document.getElementById('form_id').value = id;
 			document.getElementById('form_submit').submit();
 		}
 		
-		function checkName()
+		function checkName(type)
 		{
-			return !(document.getElementById('new_guild').replace(/^\s+/, '').replace(/\s+$/, '').value == '');
+			var input = document.getElementById('new_'+type).value.replace(/^\s+/, '').replace(/\s+$/, '').value == '', select;
+			if (type == 'guild')
+				return !input;
+			else {
+				select = document.getElementById('guild_'+type+'_id').value == '';
+				return !(input || select);
+			}
 		}
 		</script></IF name="is_glist">
 	</div></IF name="is_guild"><IF name="is_roster">
@@ -84,7 +130,7 @@
 		cursor:pointer;
 	}
 	</style>
-	<div class="pagetitle">Назначение пользователей в сообщество и гильдии</div>
+	<div class="pagetitle">Назначение пользователей в сообщество, гильдию, рейд и крафт</div>
 	<div style="padding:10px;"><IF name="is_undecided">
 		<form method="post" action="" class="block">
 			<div class="header">
@@ -151,7 +197,7 @@
 		for (var p in data.data) {
 			var div = document.createElement('div');
 			div.className = 'float_left';
-			div.innerHTML = data.data[p];
+			div.innerHTML = data.data[p].user;
 			obj.insertBefore(div, obj.lastChild);
 			div = document.createElement('div');
 			div.className = 'float_left';
@@ -163,19 +209,33 @@
 					break;
 				case 0:
 					html = '<select name="user['+p+']">';
-					html += '<option value="0"></option>';
+					html += '<option value="0">Гильдии</option>';
 					html += '<option value="-1">Исключить из сообщества</option>';<LOOP name="glist">
 					html += '<option value="{GID}">Принять в {GUILD_NAME}</option>';</LOOP name="glist">
-					html += '</select>';
+					html += '</select> ';
 					break;
 				default:
 					html = '<select name="user['+p+']">';
-					html += '<option value="0"></option>';
+					html += '<option value="0">Гильдии</option>';
 					html += '<option value="-1">Исключить из сообщества</option>';
 					var text;<LOOP name="glist">
-					text = {GID} == data.gid ? 'Исключить из': 'Первести в';
+					text = {GID} == data.gid ? 'Исключить из': 'Перевести в';
 					html += '<option value="{GID}">'+text+' {GUILD_NAME}</option>';</LOOP name="glist">
 					html += '</select>';
+					html += '<select name="user_raid['+p+']">';
+					html += '<option value="0">Рейды</option>';<LOOP name="glist"><LOOP name="runit_{GID}">
+					text = {UID} == data.data[p].rid ? 'Исключить из': 'Перевести в';
+					if (data.gid == {GID})
+						html += '<option value="{UID}">'+text+' {UNIT_NAME}</option>';</LOOP name="runit_{GID}"></LOOP name="glist">
+					html += '</select> ';
+					html += '<input type="hidden" name="rid['+p+']" value="'+data.data[p].rid+'"/>';
+					html += '<select name="user_firm['+p+']">';
+					html += '<option value="0">Фирмы</option>';
+					html += '<option value="'+(typeof(data.data[p].fid) != 'number' ? 'not':-1)+'">'+(typeof(data.data[p].fid) != 'number' ? 'Независимый крафтер':'Не крафтер')+'</option>';<LOOP name="glist"><LOOP name="funit_{GID}">
+					text = {UID} == data.data[p].fid ? 'Исключить из': 'Перевести в';
+					if (data.gid == {GID})
+						html += '<option value="{UID}">'+text+' {UNIT_NAME}</option>';</LOOP name="funit_{GID}"></LOOP name="glist">
+					html += '</select> ';
 			}
 			div.innerHTML = html;
 			obj.insertBefore(div, obj.lastChild);
@@ -233,13 +293,3 @@
 	
 	</script></IF name="is_roster">
 </div>
-				<!--<div class="float_left">{NAME}</div>
-				<div class="float_left">
-					<input type="radio" name="" />
-				</div>-->
-				
-				<!--<div class="float_left"">{NAME}</div>
-				<div class="float_left">Действие</div>-->
-				
-				<!--<div class="float_left">{NAME}</div>
-				<div class="float_left">Действие</div>-->

@@ -18,8 +18,8 @@ class RaidPlanner
 	private $undecided = false;
 	private $approved = false;
 	private $limit = 100;
-	
-	public $action = null;
+	private $action = null;
+	private $units = array();
 	
 	/**
 	 * function __construct
@@ -51,8 +51,8 @@ class RaidPlanner
 	/**
 	 * function getPlannerTemplate
 	 * Created 20.12.2011
-	 * @param String $id Ð˜Ð½Ð´ÐµÐºÑ ÑˆÐ°Ð±Ð»Ð¾Ð½Ð°;
-	 * @param String $path ÐŸÑƒÑ‚ÑŒ Ðº  ÑˆÐ°Ð±Ð»Ð¾Ð½Ñƒ;
+	 * @param String $id Èíäåêñ øàáëîíà;
+	 * @param String $path Ïóòü ê  øàáëîíó;
 	 * @result void;
 	 */
 	public function getPlannerTemplate($id, $path)
@@ -75,18 +75,39 @@ class RaidPlanner
 		$tpl->parseLoop($id, 'glist', $this->guild_list);
 		$tpl->parseLoop($id, 'g_list', $this->guild_list_table);
 		
+		foreach ($this->units as $gid => $data)
+			$tpl->parseLoop($id, 'unit_' . $gid, $data);
+		
+		foreach ($this->units as $gid => $data) {
+			$raid = $firm = array();
+			foreach ($data as $key => $unit)
+				if ($unit['TYPE'] == 'raid')
+					$raid[] = $unit;
+				else
+					$firm[] = $unit;
+			$tpl->parseLoop($id, 'runit_' . $gid, $raid);
+			$tpl->parseLoop($id, 'funit_' . $gid, $firm);
+		}
+		
 		$tpl->PrintFile($id);
 	}
 	
 	/**
-	 * function createGuild
+	 * function createUnit
 	 * Created 29.12.2011
-	 * @param String $guild_name;
+	 * @param String $name;
 	 * @result void;
 	 */
-	public function createGuild($guild_name)
+	public function createUnit($action, $name, $gid = null)
 	{
-		$query = sprintf('INSERT INTO %sraid_guilds (name) VALUE ("%s")', TABLE_PREFIX, $guild_name);
+		if ($action == 'create_guild')
+			$query = sprintf('INSERT INTO %sraid_guilds (name) VALUE ("%s")', TABLE_PREFIX, $name);
+		elseif (intval($gid) > 0 ) {
+			$action = str_replace('create_', null, $action);
+			$query = sprintf('INSERT INTO %sraid_unit (unit_type, name, gid) VALUE ("%s", "%s", "%d")', TABLE_PREFIX, $action, $name, $gid);
+		}
+		else
+			return;
 		$this->connect->query_write($query);
 	}
 	
@@ -174,11 +195,16 @@ class RaidPlanner
 	 * @param Integer $gid;
 	 * @result void;
 	 */
-	public function changeUsers($users, $gid)
+	public function changeUsers($users, $gid, $raids, $firms)
 	{
 		if (!is_array($users))
 			$users = array();
+		if (!is_array($raids))
+			$raids = array();
+		if (!is_array($firms))
+			$firms = array();
 		
+		$deleted_users = array();
 		foreach ($users as $id => $result) {
 			if ($result == 0)
 				continue;
@@ -186,12 +212,45 @@ class RaidPlanner
 				$query = sprintf('DELETE FROM %sraid_roster WHERE uid="%d"', TABLE_PREFIX, $id);
 				$this->connect->query_write($query);
 				$query = sprintf('UPDATE %suser SET raid_approve="denied" WHERE userid="%d"', TABLE_PREFIX, $id);
+				$deleted_users[] = $id;
 			}
-			elseif ($result == $gid)
+			elseif ($result == $gid) {
 				$query = sprintf('DELETE FROM %sraid_roster WHERE uid="%d"', TABLE_PREFIX, $id);
+				$deleted_users[] = $id;
+			}
 			else
 				$query = sprintf('UPDATE %sraid_roster SET gid="%d" WHERE uid="%d"', TABLE_PREFIX, $result, $id);
 			
+			$this->connect->query_write($query);
+		}
+		
+		foreach ($raids as $id => $result) {
+			if (in_array($id, $deleted_users) || $result == 0) continue;
+			
+			$query = sprintf('UPDATE %sraid_roster SET rid="%d" WHERE uid="%d"', TABLE_PREFIX,
+			                 isset($_POST['rid']) && isset($_POST['rid'][$id]) && $result != $_POST['rid'][$id] ? $result : 0,
+			                 $id);
+			$this->connect->query_write($query);
+		}
+		
+		//echo '<pre>';
+		//print_r($firms);
+		//print_r($deleted_users);
+		//echo '</pre>';
+		foreach ($firms as $id => $result) {
+			//echo '<pre>';
+			//var_dump($id);
+			//var_dump($deleted_users);
+			//var_dump(in_array($id, $deleted_users));
+			//var_dump($result == 0);
+			//echo '</pre>';
+			if (in_array($id, $deleted_users) || $result == 0) continue;
+			//echo "$result<br>";
+			
+			$query = sprintf('UPDATE %sraid_roster SET fid=%s WHERE uid="%d"', TABLE_PREFIX,
+			                $result == 'not' /*isset($_POST['rid']) && isset($_POST['rid'][$id]) && $result != $_POST['rid'][$id]*/ ? sprintf('"%d"', $result) : 'NULL',
+			                 $id);
+			//echo $query;
 			$this->connect->query_write($query);
 		}
 	}
@@ -203,14 +262,27 @@ class RaidPlanner
 	 */
 	private function createGuildsList()
 	{
-		$query = sprintf('SELECT * FROM %sraid_guilds ORDER BY id', TABLE_PREFIX);
+		$query = sprintf('SELECT RG.id, RG.name, COUNT(RU.id) units FROM %1$sraid_guilds RG LEFT JOIN %1$sraid_unit RU ON RG.id=RU.gid GROUP BY RU.gid, RG.id ORDER BY RG.id', TABLE_PREFIX);
 		$result = $this->connect->query_write($query);
-		while (list($gid, $gname) = $this->connect->fetch_row($result)) {
+		while (list($gid, $gname, $units) = $this->connect->fetch_row($result)) {
 			$this->guild_list[] = array(
 			                            'GID'           => $gid,
-			                            'GUILD_NAME'    => $gname
+			                            'GUILD_NAME'    => $gname,
+			                            'DISPLAY'       => empty($units) ? ' style="display:none;"' : null,
 			                            );
 			$this->guildList[$gid] = $gname;
+		}
+		foreach ($this->guildList as $gid => $gname) {
+			$query = sprintf('SELECT id, name, unit_type FROM %sraid_unit WHERE gid="%d"', TABLE_PREFIX, $gid);
+			$result = $this->connect->query_write($query);
+			$this->units[$gid] = array();
+			while (list($unit_id, $unit_name, $unit_type) = $this->connect->fetch_row($result))
+				$this->units[$gid][] = array(
+				                             'UNIT_NAME'    => $unit_name,
+				                             'UID'          => $unit_id,
+				                             'TYPE'         => $unit_type,
+				                             'UNIT_TYPE'    => $unit_type == 'raid' ? 'Ðåéä' : 'Ôèðìà'
+				                             );
 		}
 	}
 	
@@ -280,7 +352,7 @@ class RaidPlanner
 	{
 		$tquery = sprintf('SELECT COUNT(*) FROM %1$suser U LEFT JOIN %1$sraid_roster RR ON RR.uid=U.userid '.
 		                  'WHERE U.raid_approve="approve" AND RR.gid="%2$d"', TABLE_PREFIX, $gid);
-		$uquery = sprintf('SELECT U.userid, U.username FROM  %1$suser U LEFT JOIN %1$sraid_roster RR ON RR.uid=U.userid'.
+		$uquery = sprintf('SELECT U.userid, U.username, RR.rid, RR.fid FROM  %1$suser U LEFT JOIN %1$sraid_roster RR ON RR.uid=U.userid'.
 		                  ' WHERE U.raid_approve="approve" AND RR.gid="%4$d" ORDER BY U.userid LIMIT %2$d, %3$d',
 		                  TABLE_PREFIX, $_POST['offset'], $this->limit, $gid);
 		$this->getUsers($tquery, $uquery, $gid);
@@ -307,8 +379,11 @@ class RaidPlanner
 		$users['data'] = array();
 		
 		$result = $this->connect->query_write($uquery);
-		while (list($id, $user) = $this->connect->fetch_row($result))
-			$users['data'][$id] = $user;
+		while (list($id, $user, $rid, $fid) = $this->connect->fetch_row($result)){
+			$users['data'][$id]['user'] = $user;
+			$users['data'][$id]['rid'] = intval($rid);
+			$users['data'][$id]['fid'] = is_null($fid) ? $fid : intval($fid);
+		}
 		
 		$this->printUsers($users);
 	}
