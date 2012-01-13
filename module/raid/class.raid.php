@@ -224,33 +224,21 @@ class RaidPlanner
 			$this->connect->query_write($query);
 		}
 		
-		foreach ($raids as $id => $result) {
-			if (in_array($id, $deleted_users) || $result == 0) continue;
+		foreach ($raids as $id => $raid) {
+			if (in_array($id, $deleted_users) || $raid == 0) continue;
 			
 			$query = sprintf('UPDATE %sraid_roster SET rid="%d" WHERE uid="%d"', TABLE_PREFIX,
-			                 isset($_POST['rid']) && isset($_POST['rid'][$id]) && $result != $_POST['rid'][$id] ? $result : 0,
+			                 isset($_POST['rid']) && isset($_POST['rid'][$id]) && $raid != $_POST['rid'][$id] ? $raid : 0,
 			                 $id);
 			$this->connect->query_write($query);
 		}
 		
-		//echo '<pre>';
-		//print_r($firms);
-		//print_r($deleted_users);
-		//echo '</pre>';
-		foreach ($firms as $id => $result) {
-			//echo '<pre>';
-			//var_dump($id);
-			//var_dump($deleted_users);
-			//var_dump(in_array($id, $deleted_users));
-			//var_dump($result == 0);
-			//echo '</pre>';
-			if (in_array($id, $deleted_users) || $result == 0) continue;
-			//echo "$result<br>";
+		foreach ($firms as $id => $firm) {
+			if (in_array($id, $deleted_users) || (is_numeric($firm) && $firm == 0)) continue;
 			
 			$query = sprintf('UPDATE %sraid_roster SET fid=%s WHERE uid="%d"', TABLE_PREFIX,
-			                $result == 'not' /*isset($_POST['rid']) && isset($_POST['rid'][$id]) && $result != $_POST['rid'][$id]*/ ? sprintf('"%d"', $result) : 'NULL',
+			                ($firm == 'not' || $firm > 0) && isset($_POST['fid'][$id]) && $firm != $_POST['fid'][$id] ? sprintf('"%d"', $firm) : 'NULL',
 			                 $id);
-			//echo $query;
 			$this->connect->query_write($query);
 		}
 	}

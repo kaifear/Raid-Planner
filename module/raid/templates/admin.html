@@ -229,9 +229,10 @@
 						html += '<option value="{UID}">'+text+' {UNIT_NAME}</option>';</LOOP name="runit_{GID}"></LOOP name="glist">
 					html += '</select> ';
 					html += '<input type="hidden" name="rid['+p+']" value="'+data.data[p].rid+'"/>';
+					html += '<input type="hidden" name="fid['+p+']" value="'+data.data[p].fid+'"/>';
 					html += '<select name="user_firm['+p+']">';
 					html += '<option value="0">Фирмы</option>';
-					html += '<option value="'+(typeof(data.data[p].fid) != 'number' ? 'not':-1)+'">'+(typeof(data.data[p].fid) != 'number' ? 'Независимый крафтер':'Не крафтер')+'</option>';<LOOP name="glist"><LOOP name="funit_{GID}">
+					html += '<option value="'+(typeof(data.data[p].fid) != 'number' || data.data[p].fid > 0 ? 'not':-1)+'">'+(typeof(data.data[p].fid) != 'number' || data.data[p].fid > 0 ? 'Независимый крафтер':'Не крафтер')+'</option>';<LOOP name="glist"><LOOP name="funit_{GID}">
 					text = {UID} == data.data[p].fid ? 'Исключить из': 'Перевести в';
 					if (data.gid == {GID})
 						html += '<option value="{UID}">'+text+' {UNIT_NAME}</option>';</LOOP name="funit_{GID}"></LOOP name="glist">
