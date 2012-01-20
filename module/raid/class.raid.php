@@ -12,6 +12,7 @@ class RaidPlanner
 	                         );
 	private $connect;
 	private $guildList = array();
+	private $usersList = array();
 	private $guild_list = array();
 	private $guild_list_table = array();
 	private $roster_list = array();
@@ -20,6 +21,23 @@ class RaidPlanner
 	private $limit = 100;
 	private $action = null;
 	private $units = array();
+	private $ranks = array(
+	                       'Рекрут',
+	                       'Участник',
+	                       'Ветеран',
+	                       'Сержант',
+	                       'Лейтенант',
+	                       'Офицер',
+	                       'Глава гильдии'
+	                       );
+	//id custom поля => id группы
+	private $perms = array(
+	                       5 => 10,
+	                       7 => 11,
+	                       8 => 12
+	                       );
+	//id custom поля для ника
+	private $nick = 6;
 	
 	/**
 	 * function __construct
@@ -44,8 +62,41 @@ class RaidPlanner
 	{
 		$raid = vB_Template::create($template);
 		$raid->register_page_templates();
+		$data = $raid->render();
 		
-		return $raid->render();
+		//setlocale(LC_ALL, 'ru_RU.cp1251');
+		
+		require_once('raid/class.template.php');
+		$tpl = new template;
+		
+		$tpl->loadTemplate('roster', $data);
+		
+		$this->createRosterList();
+		
+		$tpl->parseLoop('roster', 'glist', $this->guild_list);
+		
+		$this->createUsersList();
+		
+		$ranks = array();
+		
+		foreach ($this->ranks as $index => $value)
+			if (empty($this->usersList[$index]))
+				unset($this->ranks[$index]);
+		
+		krsort($this->ranks);
+		
+		foreach ($this->ranks as $index => $rank)
+			$ranks[] = array(
+			                 'RANK_INDEX'   => $index,
+			                 'RANK_NAME'    => $rank
+			                 );
+		
+		$tpl->parseLoop('roster', 'rlist', $ranks);
+		
+		foreach ($this->usersList as $rank => $data)
+			$tpl->parseLoop('roster', 'userlist_' . $rank, $data);
+		
+		return $tpl->fileToVar('roster');
 	}
 	
 	/**
@@ -86,8 +137,17 @@ class RaidPlanner
 				else
 					$firm[] = $unit;
 			$tpl->parseLoop($id, 'runit_' . $gid, $raid);
-			$tpl->parseLoop($id, 'funit_' . $gid, $firm);
+			//$tpl->parseLoop($id, 'funit_' . $gid, $firm);
 		}
+		
+		$ranks = array();
+		foreach ($this->ranks as $index => $rank)
+			$ranks[] = array(
+			                 'RANK_INDEX'   => $index,
+			                 'RANK_NAME'    => $rank
+			                 );
+		
+		$tpl->parseLoop($id, 'rlist', $ranks);
 		
 		$tpl->PrintFile($id);
 	}
@@ -195,7 +255,7 @@ class RaidPlanner
 	 * @param Integer $gid;
 	 * @result void;
 	 */
-	public function changeUsers($users, $gid, $raids, $firms)
+	public function changeUsers($users, $gid, $raids, $firms, $ranks)
 	{
 		if (!is_array($users))
 			$users = array();
@@ -233,12 +293,19 @@ class RaidPlanner
 			$this->connect->query_write($query);
 		}
 		
-		foreach ($firms as $id => $firm) {
-			if (in_array($id, $deleted_users) || (is_numeric($firm) && $firm == 0)) continue;
+		//foreach ($firms as $id => $firm) {
+		//	if (in_array($id, $deleted_users) || (is_numeric($firm) && $firm == 0)) continue;
+		//	
+		//	$query = sprintf('UPDATE %sraid_roster SET fid=%s WHERE uid="%d"', TABLE_PREFIX,
+		//	                ($firm == 'not' || $firm > 0) && isset($_POST['fid'][$id]) && $firm != $_POST['fid'][$id] ? sprintf('"%d"', $firm) : 'NULL',
+		//	                 $id);
+		//	$this->connect->query_write($query);
+		//}
+		
+		foreach ($ranks as $id => $rank) {
+			if (!isset($_POST['rank_old']) || in_array($id, $deleted_users) || $_POST['rank_old'][$id] == $rank) continue;
 			
-			$query = sprintf('UPDATE %sraid_roster SET fid=%s WHERE uid="%d"', TABLE_PREFIX,
-			                ($firm == 'not' || $firm > 0) && isset($_POST['fid'][$id]) && $firm != $_POST['fid'][$id] ? sprintf('"%d"', $firm) : 'NULL',
-			                 $id);
+			$query = sprintf('UPDATE %sraid_roster SET rank="%d" WHERE uid="%d"', TABLE_PREFIX, $rank, $id);
 			$this->connect->query_write($query);
 		}
 	}
@@ -296,10 +363,87 @@ class RaidPlanner
 				$this->guild_list_table[$guild] = array(
 				                                        'GID'           => $guild,
 				                                        'GUILD_NAME'    => $this->guildList[$guild],
-				                                        'SELECTED'      => ''
+				                                        //'SELECTED'      => ''
 				                                        );
 		
 		$this->guild_list_table = array_values($this->guild_list_table);
+	}
+	
+	/**
+	 * function createUsersList
+	 * Created 17.01.2012
+	 * @result void;
+	 */
+	private function createUsersList()
+	{
+		$query = sprintf('SELECT * FROM %1$suser U '.
+		                 'INNER JOIN %1$sraid_roster RR ON RR.uid=U.userid '.
+		                 'INNER JOIN %1$suserfield UF ON UF.userid=U.userid '.
+		                 'WHERE U.raid_approve="approve" ORDER BY RR.rank DESC, U.lastactivity',
+		                 TABLE_PREFIX);
+		$result = $this->connect->query_write($query);
+		$time = time();
+		$hour = 60 * 60;
+		$day = $hour * 24;
+		while ($row = $this->connect->fetch_array($result)) {
+			$last_seen = $time - intval($row['lastactivity']);
+			$data = '';
+			
+			if ($last_seen > $day) {
+				$days = ($last_seen - $last_seen % $day) / $day;
+				$last_seen %= $day;
+				
+				$data .= sprintf('%d %s ', $days, $this->parse_time($days, array('день', 'дня', 'дней')));
+			}
+			
+			if ($last_seen > $hour) {
+				$hours = ($last_seen - $last_seen % $hour) / $hour;
+				$last_seen %= $hour;
+				
+				$data .= sprintf('%d %s ', $hours, $this->parse_time($hours, array('час', 'часа', 'часов')));
+			}
+			
+			if ($last_seen > 60) {
+				$mins = ($last_seen - $last_seen % 60) / 60;
+				$last_seen %= 60;
+				
+				$data .= sprintf('%d %s ', $mins, $this->parse_time($mins, array('минута', 'минуты', 'минут')));
+			}
+			
+			$data .= sprintf('%d %s ', $last_seen, $this->parse_time($days, array('секунда', 'секунды', 'секунд')));
+			
+			$class = '';
+			foreach ($this->perms as $field => $perm_index)
+				if (is_member_of($row, $perm_index)) {
+					if (empty($row['field' . $field])) {
+						$query = sprintf('SELECT title FROM %susergroup WHERE usergroupid="%d"', TABLE_PREFIX, $perm_index);
+						$res = $this->connect->query_write($query);
+						list($class) = $this->connect->fetch_row($res);
+					}
+					else
+						$class = $row['field' . $field];
+					break;
+				}
+			
+			$this->usersList[$row['rank']][] = array(
+			                                         'USER_NAME'   => $row['username'],
+			                                         'LAST_SEEN'   => $data,
+			                                         'CLASS'       => $class,
+			                                         'GAME_NICK'   => $row['field' . $this->nick]
+			                                         );
+		}
+	}
+	
+	private function parse_time($time, $text)
+	{
+		if ($time % 10 == 1 && $time != 11)
+			$text =  $text[0];
+		elseif (in_array($time % 10, array(2, 3, 4)) && !in_array($time, array(12, 13, 14)))
+			$text = $text[1];
+		else
+			$text = $text[2];
+		
+		return $text;
 	}
 	
 	/**
@@ -340,7 +484,7 @@ class RaidPlanner
 	{
 		$tquery = sprintf('SELECT COUNT(*) FROM %1$suser U LEFT JOIN %1$sraid_roster RR ON RR.uid=U.userid '.
 		                  'WHERE U.raid_approve="approve" AND RR.gid="%2$d"', TABLE_PREFIX, $gid);
-		$uquery = sprintf('SELECT U.userid, U.username, RR.rid, RR.fid FROM  %1$suser U LEFT JOIN %1$sraid_roster RR ON RR.uid=U.userid'.
+		$uquery = sprintf('SELECT U.userid, U.username, RR.rid, RR.fid, RR.rank FROM  %1$suser U LEFT JOIN %1$sraid_roster RR ON RR.uid=U.userid'.
 		                  ' WHERE U.raid_approve="approve" AND RR.gid="%4$d" ORDER BY U.userid LIMIT %2$d, %3$d',
 		                  TABLE_PREFIX, $_POST['offset'], $this->limit, $gid);
 		$this->getUsers($tquery, $uquery, $gid);
@@ -367,10 +511,11 @@ class RaidPlanner
 		$users['data'] = array();
 		
 		$result = $this->connect->query_write($uquery);
-		while (list($id, $user, $rid, $fid) = $this->connect->fetch_row($result)){
+		while (list($id, $user, $rid, $fid, $rank) = $this->connect->fetch_row($result)){
 			$users['data'][$id]['user'] = $user;
 			$users['data'][$id]['rid'] = intval($rid);
-			$users['data'][$id]['fid'] = is_null($fid) ? $fid : intval($fid);
+			$users['data'][$id]['rank'] = intval($rank);
+			//$users['data'][$id]['fid'] = is_null($fid) ? $fid : intval($fid);
 		}
 		
 		$this->printUsers($users);

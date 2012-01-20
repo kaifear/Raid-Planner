@@ -1,5 +1,5 @@
 <div style="background-color:#ccc;"><IF name="is_guild">
-	<div class="pagetitle">Настройки гильдий, рейдов и фирм</div>
+	<div class="pagetitle">Настройки гильдий, рейдов<!-- и фирм--></div>
 	<form method="post" action="" style="padding:10px;float:left;" onsubmit="return checkName('guild');">
 		Создать гильдию:
 		<input id="new_guild" name="new" placeholder="Введите название" required />
@@ -16,7 +16,7 @@
 		<input type="submit" value="Создать">
 		<input type="hidden" name="action" value="create_raid" />
 	</form>
-	<form method="post" action="" style="padding:10px;float:left;" onsubmit="return checkName('firm');">
+	<!--<form method="post" action="" style="padding:10px;float:left;" onsubmit="return checkName('firm');">
 		Создать фирму:
 		<input id="new_firm" name="new" placeholder="Введите название" required />
 		<select id="guild_firm_id" name="guild" required>
@@ -25,7 +25,7 @@
 		</select>
 		<input type="submit" value="Создать">
 		<input type="hidden" name="action" value="create_firm" />
-	</form>
+	</form>-->
 	<div style="clear:both;"></div></IF name="is_glist">
 	<div style="padding:10px;"><IF name="is_glist">
 		<table style="width:100%;" class="tborder">
@@ -45,12 +45,12 @@
 					<table style="width:90%;">
 						<tr align="center">
 							<td>Название</td>
-							<td width="10%">Тип</td>
+							<!--<td width="10%">Тип</td>-->
 							<td width="25%">Действие</td>
 						</tr><LOOP name="unit_{GID}">
 						<tr>
 							<td><input id="unit_{UID}" value="{UNIT_NAME}" style="width:98%;" /></td>
-							<td>{UNIT_TYPE}</td>
+							<!--<td>{UNIT_TYPE}</td>-->
 							<td>
 								<a style="cursor:pointer;" onclick="save('unit', {UID});">Сохранить название</a>
 								<a style="cursor:pointer;" onclick="del('unit', {UID});">Удалить</a>
@@ -130,7 +130,7 @@
 		cursor:pointer;
 	}
 	</style>
-	<div class="pagetitle">Назначение пользователей в сообщество, гильдию, рейд и крафт</div>
+	<div class="pagetitle">Назначение пользователей в сообщество, гильдию, рейд<!-- и крафт--></div>
 	<div style="padding:10px;"><IF name="is_undecided">
 		<form method="post" action="" class="block">
 			<div class="header">
@@ -229,14 +229,18 @@
 						html += '<option value="{UID}">'+text+' {UNIT_NAME}</option>';</LOOP name="runit_{GID}"></LOOP name="glist">
 					html += '</select> ';
 					html += '<input type="hidden" name="rid['+p+']" value="'+data.data[p].rid+'"/>';
-					html += '<input type="hidden" name="fid['+p+']" value="'+data.data[p].fid+'"/>';
-					html += '<select name="user_firm['+p+']">';
-					html += '<option value="0">Фирмы</option>';
-					html += '<option value="'+(typeof(data.data[p].fid) != 'number' || data.data[p].fid > 0 ? 'not':-1)+'">'+(typeof(data.data[p].fid) != 'number' || data.data[p].fid > 0 ? 'Независимый крафтер':'Не крафтер')+'</option>';<LOOP name="glist"><LOOP name="funit_{GID}">
-					text = {UID} == data.data[p].fid ? 'Исключить из': 'Перевести в';
-					if (data.gid == {GID})
-						html += '<option value="{UID}">'+text+' {UNIT_NAME}</option>';</LOOP name="funit_{GID}"></LOOP name="glist">
+					//html += '<input type="hidden" name="fid['+p+']" value="'+data.data[p].fid+'"/>';
+					//html += '<select name="user_firm['+p+']">';
+					//html += '<option value="0">Фирмы</option>';
+					//html += '<option value="'+(typeof(data.data[p].fid) != 'number' || data.data[p].fid > 0 ? 'not':-1)+'">'+(typeof(data.data[p].fid) != 'number' || data.data[p].fid > 0 ? 'Независимый крафтер':'Не крафтер')+'</option>';<LOOP name="glist"><LOOP name="funit_{GID}">
+					//text = {UID} == data.data[p].fid ? 'Исключить из': 'Перевести в';
+					//if (data.gid == {GID})
+					//	html += '<option value="{UID}">'+text+' {UNIT_NAME}</option>';</LOOP name="funit_{GID}"></LOOP name="glist">
+					//html += '</select> ';
+					html += '<select name="rank['+p+']" >';<LOOP name="rlist">
+					html += '<option value="{RANK_INDEX}"'+(data.data[p].rank == {RANK_INDEX} ? 'selected' : '')+'>{RANK_NAME}</option>';</LOOP name="rlist">
 					html += '</select> ';
+					html += '<input type="hidden" name="rank_old['+p+']" value="'+data.data[p].rank+'"/>';
 			}
 			div.innerHTML = html;
 			obj.insertBefore(div, obj.lastChild);

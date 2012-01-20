@@ -13,15 +13,8 @@ require_once(DIR . '/includes/functions_forumlist.php');
 error_reporting(E_ALL & ~E_NOTICE);
 define('THIS_SCRIPT', 'raid');
 
-if ($vbulletin->userinfo['userid'] == 0)
+if ($vbulletin->userinfo['userid'] == 0 || in_array($vbulletin->userinfo['raid_approve'], array('denied', 'none')))
 	print_no_permission();
-else {
-	$query = sprintf('SELECT raid_approve FROM %suser WHERE userid="%d"', TABLE_PREFIX, $vbulletin->userinfo['userid']);
-	$result = $db->query_write($query);
-	list($approve) = $db->fetch_row($result);
-	if (in_array($approve, array('denied', 'none')))
-		print_no_permission();
-}
 /**** Default values Section End    ****/
 
 /**** $_GET Section Start           ****/

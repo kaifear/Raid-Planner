@@ -25,7 +25,7 @@ $planner = new RaidPlanner($db);
 /**** $_POST Section Start          ****/
 if (isset($_POST['action']))
 	switch ($_POST['action']) {
-		case 'create_guild': case 'create_raid': case 'create_firm':
+		case 'create_guild': case 'create_raid': //case 'create_firm':
 			$name = trim(htmlspecialchars($_POST['new'], ENT_QUOTES, 'cp1251'));
 			if (!empty($name))
 				$planner->createUnit($_POST['action'], $name, isset($_POST['guild']) ? intval($_POST['guild']) : null);
@@ -74,7 +74,7 @@ if (isset($_POST['action']))
 			$planner->inviteUsers($_POST['user']);
 			exit(header('Location: raid_admin.php?raid_action=roster'));
 		case 'change_users':
-			$planner->changeUsers($_POST['user'], intval($_POST['gid']), $_POST['user_raid'], $_POST['user_firm']);
+			$planner->changeUsers($_POST['user'], intval($_POST['gid']), $_POST['user_raid'], $_POST['user_firm'], $_POST['rank']);
 			exit(header('Location: raid_admin.php?raid_action=roster'));
 		default:
 			

@@ -166,6 +166,26 @@
 	</form>
 </vb:if>]]></template>
 	</templategroup>
+	<templategroup name="полей данных пользователя">
+		<template name="userfield_select" templatetype="template" date="1327067596" username="ZyFran" version="4.1.8"><![CDATA[<select class="primary" name="userfield[{vb:raw profilefieldname}]" id="cfield_{vb:raw profilefield.profilefieldid}" tabindex="1">
+	<vb:if condition="$show['noemptyoption']"><option value="0" {vb:raw selected}></option></vb:if>
+		{vb:raw selectbits}
+</select>
+<input type="hidden" name="userfield[{vb:raw profilefieldname}_set]" value="1" />
+{vb:raw optionalfield}
+<p class="description">{vb:raw profilefield.description}</p>]]></template>
+		<template name="userfield_wrapper" templatetype="template" date="1327071326" username="ZyFran" version="4.1.8"><![CDATA[<vb:if condition="!in_array($profilefield['profilefieldid'], array(5, 7, 8)) || 
+                  ($profilefield['profilefieldid'] == 5 && is_member_of($vbulletin->userinfo, array(10))) || 
+                  ($profilefield['profilefieldid'] == 7 && is_member_of($vbulletin->userinfo, array(11))) || 
+                  ($profilefield['profilefieldid'] == 8 && is_member_of($vbulletin->userinfo, array(12)))">
+<div class="blockrow">
+	<label>{vb:raw profilefield.title}:</label>
+	<div class="rightcol">
+		{vb:raw custom_field_holder}
+	</div>
+</div>
+</vb:if>]]></template>
+	</templategroup>
 	<templategroup name="Шаблоны без групп 1">
 		<template name="test_admin" templatetype="template" date="1324390071" username="ZyFran" version="4.1.8"><![CDATA[raid]]></template>
 		<template name="test_template" templatetype="template" date="1324376602" username="ZyFran" version="4.1.8"><![CDATA[{vb:stylevar htmldoctype}
@@ -298,7 +318,61 @@
 	{vb:raw footer}
 </body>
 </html>]]></template>
-		<template name="test_template_raid" templatetype="template" date="1324376570" username="ZyFran" version="4.1.8"><![CDATA[raid]]></template>
+		<template name="test_template_raid" templatetype="template" date="1327064095" username="ZyFran" version="4.1.8"><![CDATA[<style type="text/css">
+#raid_header {
+background: url("images/newtype/style/selected_bg.png");
+border: 1px solid #C66E00;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+}
+.raid_rank {
+background: url("images/newtype/style/top_bg.png");
+border: 1px solid #C66E00;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+}
+.raid_members {
+background: url("images/newtype/style/bottom_bg.png");
+border: 1px solid #C66E00;
+}
+</style>
+<div id="raid_header">
+    <div style="float:left;">
+        Список игроков гильдии:
+        <select>
+            <option>-- Выберите гильдию --</option><LOOP name="glist">
+            <option value="{GID}">{GUILD_NAME}</option></LOOP name="glist">
+        </select>
+    </div>
+    <div style="float:left;margin-left:100px;">
+        Сортировка по: Рангу, Классу, Игровому нику, Форумному нику
+    </div>
+    <div style="float:right;">
+        Поиск по игровому нику:
+        <input />
+    </div>
+    <div style="clear:both;"></div>
+</div><LOOP name="rlist">
+
+<div style="margin-top:10px;">
+    <div class="raid_rank">
+        Ранг: {RANK_NAME}
+    </div>
+    <table style="width:100%;" class="raid_members">
+        <tr>
+            <th width="25%">Игровой ник</th>
+            <th width="25%">Форумный ник</th>
+            <th width="25%">Класс</th>
+            <th width="25%">Бездеятельность</th>
+        </tr><LOOP name="userlist_{RANK_INDEX}">
+        <tr>
+            <td>{GAME_NICK}</td>
+            <td>{USER_NAME}</td>
+            <td>{CLASS}</td>
+            <td>{LAST_SEEN}</td>
+        </tr></LOOP name="userlist_{RANK_INDEX}">
+    </table>
+</div></LOOP name="rlist">]]></template>
 		<template name="vbulletin-chrome.css" templatetype="template" date="1324003529" username="Kai" version="4.1.9"><![CDATA[@charset "UTF-8";
 /* CSS Document */
 

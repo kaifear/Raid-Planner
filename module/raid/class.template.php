@@ -25,6 +25,13 @@ class template
 		$this->tpls[$id] = $content;
 	}
 	
+	public function loadTemplate($id, $template)
+	{
+		if (empty($template)) return;
+		
+		$this->tpls[$id] = $template;
+	}
+	
 	public function parseIf($id, $parse)
 	{
 		if (empty($this->tpls[$id])) return;

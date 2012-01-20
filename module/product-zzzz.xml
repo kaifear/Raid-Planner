@@ -3,7 +3,7 @@
 <product productid="zzzz" active="1">
 	<title>Test</title>
 	<description>test</description>
-	<version>0.1</version>
+	<version>0.2</version>
 	<url />
 	<versioncheckurl />
 	<dependencies>
@@ -12,7 +12,7 @@
 		<code version="*">
 			<installcode><![CDATA[$queries = array();
 $queries[] = sprintf('CREATE TABLE %sraid_guilds (id smallint(5) unsigned NOT NULL AUTO_INCREMENT, name varchar(64) CHARACTER SET cp1251 COLLATE cp1251_general_cs NOT NULL, PRIMARY KEY (id)) ENGINE=MyISAM', TABLE_PREFIX);
-$queries[] = sprintf('CREATE TABLE %sraid_roster (gid smallint(5) unsigned NOT NULL, uid bigint(20) unsigned NOT NULL, rid smallint(5) unsigned NOT NULL, fid smallint(5) unsigned DEFAULT NULL, UNIQUE KEY uid (uid), KEY gid (gid), KEY fid (fid), KEY rid (rid)) ENGINE=MyISAM', TABLE_PREFIX);
+$queries[] = sprintf('CREATE TABLE %sraid_roster (gid smallint(5) unsigned NOT NULL, uid bigint(20) unsigned NOT NULL, rid smallint(5) unsigned NOT NULL, fid smallint(5) unsigned DEFAULT NULL, rank` tinyint(3) unsigned NOT NULL, UNIQUE KEY uid (uid), KEY gid (gid), KEY fid (fid), KEY rid (rid), KEY rank (rank)) ENGINE=MyISAM', TABLE_PREFIX);
 $queries[] = sprintf('ALTER TABLE %suser ADD raid_approve ENUM("none", "approve", "denied") NOT NULL DEFAULT "none", ADD INDEX (raid_approve)', TABLE_PREFIX);
 $queries[] = sprintf('CREATE TABLE %sraid_unit (id smallint(5) unsigned NOT NULL AUTO_INCREMENT, unit_type enum('raid','firm') COLLATE utf8_unicode_ci NOT NULL, name varchar(64) CHARACTER SET cp1251 COLLATE cp1251_general_cs NOT NULL, gid smallint(5) unsigned NOT NULL, PRIMARY KEY (id), KEY unit_type (unit_type), KEY gid (gid)) ENGINE=MyISAM', TABLE_PREFIX);
 
@@ -41,14 +41,14 @@ foreach ($queries as $query)
 			<hookname>admin_index_navigation</hookname>
 			<phpcode><![CDATA[if ($_REQUEST['do'] == 'nav' && can_administer('canadminsettings')) {
    $navigation[-1] = array(
-       'Рейд планнер' => array(
+       'Сообщество' => array(
             'options' => array(
                  array(
-                     'Roster' => array(
+                     'Списки' => array(
                            'displayorder'=>0,
                            'phrase'=>'roster',
                            'link'=>'raid_admin.php?raid_action=roster',
-                           'text'=>'Roster',
+                           'text'=>'Списки',
                       )
                  ),
                  array(
@@ -66,7 +66,7 @@ foreach ($queries as $query)
                   'hr' => 'true',
                   'displayorder' => 10,
                   'nav_file' => 'vbulletin',
-                  'text' => 'Рейд планнер'
+                  'text' => 'Сообщество'
             ),
         )
    );
@@ -76,7 +76,7 @@ foreach ($queries as $query)
 			<title>test</title>
 			<hookname>process_templates_complete</hookname>
 			<phpcode><![CDATA[if ($vbulletin->userinfo['userid'] > 0) {
-    $raid_tab = sprintf('<li%s><a class="navtab" href="raid.php">Рейд планнер</a></li>', THIS_SCRIPT == 'raid' ? ' class="selected"' : null);
+    $raid_tab = sprintf('<li%s><a class="navtab" href="raid.php">Список сообщества</a></li>', THIS_SCRIPT == 'raid' ? ' class="selected"' : null);
     $template_hook['navtab_end'] .= $raid_tab;
 }]]></phpcode>
 		</plugin>
