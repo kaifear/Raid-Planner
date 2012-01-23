@@ -21,6 +21,20 @@ if ($vbulletin->userinfo['userid'] == 0 || in_array($vbulletin->userinfo['raid_a
 /**** $_GET Section End             ****/
 
 /**** $_POST Section Start          ****/
+if (isset($_POST['action']))
+	switch ($_POST['action']) {
+		case 'change_guild':
+			$guild = isset($_POST['guild']) ? intval($_POST['guild']) : 0;
+			if ($guild > 0) {
+				$query = sprintf('UPDATE %ssession SET raid_guild="%d" WHERE idhash="%s"', TABLE_PREFIX, $guild, $vbulletin->session->vars['idhash']);
+				$db->query_write($query);
+				header('Location: raid.php');
+				exit;
+			}
+			break;
+		default:
+			
+	}
 /**** $_POST Section End            ****/
 
 /**** Default Section Start         ****/

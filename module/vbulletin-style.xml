@@ -318,7 +318,7 @@
 	{vb:raw footer}
 </body>
 </html>]]></template>
-		<template name="test_template_raid" templatetype="template" date="1327064095" username="ZyFran" version="4.1.8"><![CDATA[<style type="text/css">
+		<template name="test_template_raid" templatetype="template" date="1327329250" username="ZyFran" version="4.1.8"><![CDATA[<style type="text/css">
 #raid_header {
 background: url("images/newtype/style/selected_bg.png");
 border: 1px solid #C66E00;
@@ -338,26 +338,32 @@ border: 1px solid #C66E00;
 </style>
 <div id="raid_header">
     <div style="float:left;">
+        <form id="change_guild_form" method="post" action="">
         Список игроков гильдии:
-        <select>
-            <option>-- Выберите гильдию --</option><LOOP name="glist">
-            <option value="{GID}">{GUILD_NAME}</option></LOOP name="glist">
+        <select name="guild" onchange="if (this.value > 0) document.getElementById('change_guild_form').submit();">
+            <option value="0">-- Выберите гильдию --</option><LOOP name="glist">
+            <option value="{GID}"{SELECTED}>{GUILD_NAME}</option></LOOP name="glist">
         </select>
+        <input type="hidden" name="action" value="change_guild"/>
+        </form>
     </div>
     <div style="float:left;margin-left:100px;">
-        Сортировка по: Рангу, Классу, Игровому нику, Форумному нику
+        Сортировка по: 
+        <a href="raid.php?sort=rank&type={SORT_TYPE_RANK}">Рангу</a>, 
+        <a href="raid.php?sort=class&type={SORT_TYPE_CLASS}">Классу</a>, 
+        <a href="raid.php?sort=gname&type={SORT_TYPE_GNAME}">Игровому нику</a>, 
+        <a href="raid.php?sort=fname&type={SORT_TYPE_FNAME}">Форумному нику</a>
     </div>
     <div style="float:right;">
+        <form action="raid.php" onsubmit="if (document.getElementById('search_gname').value.replace('^\s+', '').replace('\s+$', '') == ''){alert('Поле не может быть пустым');return false;}">
         Поиск по игровому нику:
-        <input />
+        <input id="search_gname" name="search_gname" required />
+        </form>
     </div>
     <div style="clear:both;"></div>
-</div><LOOP name="rlist">
-
+</div><IF name="show table"><LOOP name="rlist">
 <div style="margin-top:10px;">
-    <div class="raid_rank">
-        Ранг: {RANK_NAME}
-    </div>
+    <div class="raid_rank"{DISPLAY}>{TYPE}: {RANK_NAME}</div>
     <table style="width:100%;" class="raid_members">
         <tr>
             <th width="25%">Игровой ник</th>
@@ -367,12 +373,12 @@ border: 1px solid #C66E00;
         </tr><LOOP name="userlist_{RANK_INDEX}">
         <tr>
             <td>{GAME_NICK}</td>
-            <td>{USER_NAME}</td>
+            <td><a href="member.php?{UID}-{USER_NAME}">{USER_NAME}</td>
             <td>{CLASS}</td>
             <td>{LAST_SEEN}</td>
         </tr></LOOP name="userlist_{RANK_INDEX}">
     </table>
-</div></LOOP name="rlist">]]></template>
+</div></LOOP name="rlist"></IF name="show table">]]></template>
 		<template name="vbulletin-chrome.css" templatetype="template" date="1324003529" username="Kai" version="4.1.9"><![CDATA[@charset "UTF-8";
 /* CSS Document */
 

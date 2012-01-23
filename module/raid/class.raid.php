@@ -21,6 +21,14 @@ class RaidPlanner
 	private $limit = 100;
 	private $action = null;
 	private $units = array();
+	private $sort_types = array(
+	                            'rank'  => 'RR.rank',
+	                            'class' => 'RR.rank',
+	                            'gname' => '',
+	                            'fname' => 'U.username'
+	                            );
+	private $sort;
+	private $type;
 	private $ranks = array(
 	                       'Рекрут',
 	                       'Участник',
@@ -79,16 +87,42 @@ class RaidPlanner
 		
 		$ranks = array();
 		
+		$tpl->parseIf('roster', array('show table' => count($this->usersList) > 0));
+		
 		foreach ($this->ranks as $index => $value)
 			if (empty($this->usersList[$index]))
 				unset($this->ranks[$index]);
 		
-		krsort($this->ranks);
+		if ($this->sort == 'rank')
+			if ($this->type == 'DESC')
+				krsort($this->ranks);
+			else
+				ksort($this->ranks);
 		
-		foreach ($this->ranks as $index => $rank)
+		if ($this->sort == 'rank')
+			foreach ($this->ranks as $index => $rank)
+				$ranks[] = array(
+				                 'RANK_INDEX'   => $index,
+				                 'RANK_NAME'    => $rank,
+				                 'TYPE'         => 'Ранг',
+				                 'DISPLAY'      => ''
+				                 );
+		elseif ($this->sort == 'class') {
+			$class_list = array_keys($this->usersList);
+			foreach ($class_list as $value)
+				$ranks[] = array(
+				                 'RANK_INDEX'   => $value,
+				                 'RANK_NAME'    => $value,
+				                 'TYPE'         => 'Класс',
+				                 'DISPLAY'      => ''
+				                 );
+		}
+		else
 			$ranks[] = array(
-			                 'RANK_INDEX'   => $index,
-			                 'RANK_NAME'    => $rank
+			                 'RANK_INDEX'   => '',
+			                 'RANK_NAME'    => '',
+			                 'TYPE'         => '',
+			                 'DISPLAY'      => ' style="display:none;"'
 			                 );
 		
 		$tpl->parseLoop('roster', 'rlist', $ranks);
@@ -96,7 +130,14 @@ class RaidPlanner
 		foreach ($this->usersList as $rank => $data)
 			$tpl->parseLoop('roster', 'userlist_' . $rank, $data);
 		
-		return $tpl->fileToVar('roster');
+		$tpl_parse = array(
+		                   'SORT_TYPE_RANK'     => $this->sort == 'rank' && $this->type == 'DESC' ? 'asc' : 'desc',
+		                   'SORT_TYPE_CLASS'    => $this->sort == 'class' && $this->type == 'ASC' ? 'desc' : 'asc',
+		                   'SORT_TYPE_GNAME'    => $this->sort == 'gname' && $this->type == 'ASC' ? 'desc' : 'asc',
+		                   'SORT_TYPE_FNAME'    => $this->sort == 'fname' && $this->type == 'ASC' ? 'desc' : 'asc'
+		                   );
+		
+		return $tpl->fileToVar('roster', $tpl_parse);
 	}
 	
 	/**
@@ -317,6 +358,9 @@ class RaidPlanner
 	 */
 	private function createGuildsList()
 	{
+		global $vbulletin;
+		$guild = intval($vbulletin->session->vars['raid_guild']);
+		
 		$query = sprintf('SELECT RG.id, RG.name, COUNT(RU.id) units FROM %1$sraid_guilds RG LEFT JOIN %1$sraid_unit RU ON RG.id=RU.gid GROUP BY RU.gid, RG.id ORDER BY RG.id', TABLE_PREFIX);
 		$result = $this->connect->query_write($query);
 		while (list($gid, $gname, $units) = $this->connect->fetch_row($result)) {
@@ -324,6 +368,7 @@ class RaidPlanner
 			                            'GID'           => $gid,
 			                            'GUILD_NAME'    => $gname,
 			                            'DISPLAY'       => empty($units) ? ' style="display:none;"' : null,
+			                            'SELECTED'      => $gid == $guild ? ' selected' : ''
 			                            );
 			$this->guildList[$gid] = $gname;
 		}
@@ -352,18 +397,17 @@ class RaidPlanner
 		$this->createGuildsList();
 		$query = sprintf('SELECT COUNT(U.userid), RG.gid, U.raid_approve FROM %1$suser U LEFT JOIN %1$sraid_roster RG ON U.userid=RG.uid WHERE U.raid_approve!="denied" GROUP BY RG.gid, U.raid_approve ORDER BY RG.gid', TABLE_PREFIX);
 		$result = $this->connect->query_write($query);
-		while (list($count_users, $guild, $approve) = $this->connect->fetch_row($result))
-			if (!isset($this->guildList[$guild])) {
+		while (list($count_users, $gid, $approve) = $this->connect->fetch_row($result))
+			if (!isset($this->guildList[$gid])) {
 				if ($approve == 'approve')
 					$this->approved = true;
 				elseif ($approve == 'none')
 					$this->undecided = true;
 			}
 			else
-				$this->guild_list_table[$guild] = array(
-				                                        'GID'           => $guild,
-				                                        'GUILD_NAME'    => $this->guildList[$guild],
-				                                        //'SELECTED'      => ''
+				$this->guild_list_table[$gid] = array(
+				                                        'GID'           => $gid,
+				                                        'GUILD_NAME'    => $this->guildList[$gid]
 				                                        );
 		
 		$this->guild_list_table = array_values($this->guild_list_table);
@@ -376,11 +420,44 @@ class RaidPlanner
 	 */
 	private function createUsersList()
 	{
+		global $vbulletin;
+		$guild = intval($vbulletin->session->vars['raid_guild']);
+		if ($guild == 0) {
+			$query = sprintf('SELECT raid_guild FROM session WHERE idhash="%s" AND raid_guild > 0 LIMIT 1', $vbulletin->session->vars['idhash']);
+			$result = $this->connect->query_write($query);
+			list($guild) = $this->connect->fetch_row($result);
+			$guild = intval($guild);
+			if ($guild > 0) {
+				$query = sprintf('UPDATE %ssession SET raid_guild="%d" WHERE idhash="%s"', TABLE_PREFIX, $guild, $vbulletin->session->vars['idhash']);
+				$this->connect->query_write($query);
+			}
+			//else {
+			//	$query = sprintf('SELECT gid FROM %sraid_roster WHERE uid="%d"', TABLE_PREFIX, $vbulletin->userinfo['userid']);
+			//	$result = $this->connect->query_write($query);
+			//	
+			//}
+		}
+		
+		$this->sort_types['gname'] = 'UF.field' . $this->nick;
+		
+		$this->sort = isset($_GET['sort']) && array_key_exists($_GET['sort'], $this->sort_types) ? $_GET['sort'] : 'rank';
+		$this->type = isset($_GET['type']) && in_array(strtolower($_GET['type']), array('asc', 'desc')) ? strtoupper($_GET['type']) : 'DESC';
+		
+		$search = sprintf('RR.gid="%d"', $guild);
+		if (isset($_GET['search_gname'])){
+			$search_name = htmlentities(trim($_GET['search_gname']), ENT_QUOTES, 'cp1251');
+			if ($search_name != '') {
+				$search = sprintf('UF.field%d LIKE "%%%s%%"', $this->nick, $this->connect->escape_string($search_name));
+				$this->sort = 'gname';
+			}
+		}
+		
 		$query = sprintf('SELECT * FROM %1$suser U '.
 		                 'INNER JOIN %1$sraid_roster RR ON RR.uid=U.userid '.
 		                 'INNER JOIN %1$suserfield UF ON UF.userid=U.userid '.
-		                 'WHERE U.raid_approve="approve" ORDER BY RR.rank DESC, U.lastactivity',
-		                 TABLE_PREFIX);
+		                 'WHERE U.raid_approve="approve" AND %2$s ORDER BY %3$s %4$s, U.lastactivity ASC',
+		                 TABLE_PREFIX, $search, $this->sort_types[$this->sort],
+		                 $this->sort != 'rank' ? $this->type : 'DESC');
 		$result = $this->connect->query_write($query);
 		$time = time();
 		$hour = 60 * 60;
@@ -425,13 +502,27 @@ class RaidPlanner
 					break;
 				}
 			
-			$this->usersList[$row['rank']][] = array(
-			                                         'USER_NAME'   => $row['username'],
-			                                         'LAST_SEEN'   => $data,
-			                                         'CLASS'       => $class,
-			                                         'GAME_NICK'   => $row['field' . $this->nick]
-			                                         );
+			if ($this->sort == 'rank')
+				$array = &$this->usersList[$row['rank']];
+			elseif ($this->sort == 'class')
+				$array = &$this->usersList[$class];
+			else
+				$array = &$this->usersList[''];
+			
+			$array[] = array(
+			                 'UID'         => $row['userid'],
+			                 'USER_NAME'   => $row['username'],
+			                 'LAST_SEEN'   => $data,
+			                 'CLASS'       => $class,
+			                 'GAME_NICK'   => $row['field' . $this->nick]
+			                 );
 		}
+		
+		if ($this->sort == 'class')
+			if ($this->type == 'DESC')
+				krsort($this->usersList);
+			else
+				ksort($this->usersList);
 	}
 	
 	private function parse_time($time, $text)
