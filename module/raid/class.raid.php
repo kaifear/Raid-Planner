@@ -282,8 +282,11 @@ class RaidPlanner
 				continue;
 			elseif ($result == -1)
 				$query = sprintf('UPDATE %suser SET raid_approve="denied" WHERE userid="%d"', TABLE_PREFIX, $id);
-			else
+			else {
+				$query = sprintf('UPDATE %suser SET raid_gid="%d" WHERE userid="%d"', TABLE_PREFIX, $result, $id);
+				$this->connect->query_write($query);
 				$query = sprintf('INSERT INTO %sraid_roster (gid, uid) VALUES ("%d", "%d")', TABLE_PREFIX, $result, $id);
+			}
 			
 			$this->connect->query_write($query);
 		}
@@ -319,8 +322,11 @@ class RaidPlanner
 				$query = sprintf('DELETE FROM %sraid_roster WHERE uid="%d"', TABLE_PREFIX, $id);
 				$deleted_users[] = $id;
 			}
-			else
+			else {
+				$query = sprintf('UPDATE %suser SET raid_gid="%d" WHERE userid="%d"', TABLE_PREFIX, $result, $id);
+				$this->connect->query_write($query);
 				$query = sprintf('UPDATE %sraid_roster SET gid="%d" WHERE uid="%d"', TABLE_PREFIX, $result, $id);
+			}
 			
 			$this->connect->query_write($query);
 		}
@@ -359,7 +365,10 @@ class RaidPlanner
 	private function createGuildsList()
 	{
 		global $vbulletin;
-		$guild = intval($vbulletin->session->vars['raid_guild']);
+		$guild = intval($vbulletin->userinfo['raid_gid']);
+		$guild_sess = intval($vbulletin->session->vars['raid_guild']);
+		if ($guild_sess > 0)
+			$guild = $guild_sess;
 		
 		$query = sprintf('SELECT RG.id, RG.name, COUNT(RU.id) units FROM %1$sraid_guilds RG LEFT JOIN %1$sraid_unit RU ON RG.id=RU.gid GROUP BY RU.gid, RG.id ORDER BY RG.id', TABLE_PREFIX);
 		$result = $this->connect->query_write($query);
@@ -421,7 +430,10 @@ class RaidPlanner
 	private function createUsersList()
 	{
 		global $vbulletin;
-		$guild = intval($vbulletin->session->vars['raid_guild']);
+		$guild = intval($vbulletin->userinfo['raid_gid']);
+		$guild_sess = intval($vbulletin->session->vars['raid_guild']);
+		if ($guild_sess > 0)
+			$guild = $guild_sess;
 		if ($guild == 0) {
 			$query = sprintf('SELECT raid_guild FROM session WHERE idhash="%s" AND raid_guild > 0 LIMIT 1', $vbulletin->session->vars['idhash']);
 			$result = $this->connect->query_write($query);
