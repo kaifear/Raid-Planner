@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<style name="Newtype v0.5" vbversion="4.1.8" product="vbulletin" type="custom">
+<style name="Newtype v0.5" vbversion="4.1.9" product="vbulletin" type="custom">
 	<templategroup name="íàâèãàöèè">
 		<template name="navbar" templatetype="template" date="1324376379" username="ZyFran" version="4.1.8"><![CDATA[<div id="navbar" class="navbar">
 	<ul id="navtabs" class="navtabs floatcontainer<vb:if condition="$show['member'] AND $notifications_total"> notify</vb:if>">
@@ -318,67 +318,125 @@
 	{vb:raw footer}
 </body>
 </html>]]></template>
-		<template name="test_template_raid" templatetype="template" date="1327329250" username="ZyFran" version="4.1.8"><![CDATA[<style type="text/css">
+		<template name="test_template_raid" templatetype="template" date="1327978881" username="Kai2" version="4.1.9"><![CDATA[<style type="text/css">
 #raid_header {
 background: url("images/newtype/style/selected_bg.png");
 border: 1px solid #C66E00;
 border-bottom-left-radius: 5px;
 border-bottom-right-radius: 5px;
+padding: 5px 10px 5px 10px;
+margin-top: 20px;
+
 }
 .raid_rank {
 background: url("images/newtype/style/top_bg.png");
 border: 1px solid #C66E00;
-border-top-left-radius: 5px;
+padding: 5px 10px 5px 10px;
+margin: 20px 0 0px auto;
 border-top-right-radius: 5px;
+border-top-left-radius: 5px;
 }
 .raid_members {
 background: url("images/newtype/style/bottom_bg.png");
 border: 1px solid #C66E00;
+padding: 5px 10px 5px 10px;
+margin: -1px 0 20px auto;
+border-bottom-right-radius: 10px;
+border-bottom-left-radius: 10px;
+}
+
+.stat_header {
+background: url("images/newtype/style/top_bg.png");
+border: 1px solid #C66E00;
+padding: 5px 10px 5px 10px;
+margin: 20px 0 0px auto;
+border-top-right-radius: 5px;
+border-top-left-radius: 5px;
+}
+.stat {
+background: url("images/newtype/style/bottom_bg.png");
+border: 1px solid #C66E00;
+padding: 5px 10px 5px 10px;
+margin: -1px 0 20px auto;
+border-bottom-right-radius: 10px;
+border-bottom-left-radius: 10px;
 }
 </style>
+
 <div id="raid_header">
     <div style="float:left;">
-        <form id="change_guild_form" method="post" action="">
-        Ñïèñîê èãðîêîâ ãèëüäèè:
-        <select name="guild" onchange="if (this.value > 0) document.getElementById('change_guild_form').submit();">
-            <option value="0">-- Âûáåðèòå ãèëüäèþ --</option><LOOP name="glist">
-            <option value="{GID}"{SELECTED}>{GUILD_NAME}</option></LOOP name="glist">
-        </select>
-        <input type="hidden" name="action" value="change_guild"/>
-        </form>
-    </div>
-    <div style="float:left;margin-left:100px;">
         Ñîðòèðîâêà ïî: 
         <a href="raid.php?sort=rank&type={SORT_TYPE_RANK}">Ðàíãó</a>, 
-        <a href="raid.php?sort=class&type={SORT_TYPE_CLASS}">Êëàññó</a>, 
+        <a href="raid.php?sort=class&type={SORT_TYPE_CLASS}">Êëàññó</a>,
+        <a href="#">Îñíîâíîé ðîëè</a>, 
         <a href="raid.php?sort=gname&type={SORT_TYPE_GNAME}">Èãðîâîìó íèêó</a>, 
-        <a href="raid.php?sort=fname&type={SORT_TYPE_FNAME}">Ôîðóìíîìó íèêó</a>
+        <a href="raid.php?sort=fname&type={SORT_TYPE_FNAME}">Ôîðóìíîìó íèêó</a>,
+        <a href="#">Ðåéäó</a>,
+        <a href="#">Îòñóòñòâèþ</a>
     </div>
     <div style="float:right;">
         <form action="raid.php" onsubmit="if (document.getElementById('search_gname').value.replace('^\s+', '').replace('\s+$', '') == ''){alert('Ïîëå íå ìîæåò áûòü ïóñòûì');return false;}">
-        Ïîèñê ïî èãðîâîìó íèêó:
+        Ïîèñê ïî èãðîâîìó íèêó èëè legacy:
         <input id="search_gname" name="search_gname" required />
         </form>
     </div>
     <div style="clear:both;"></div>
-</div><IF name="show table"><LOOP name="rlist">
-<div style="margin-top:10px;">
-    <div class="raid_rank"{DISPLAY}>{TYPE}: {RANK_NAME}</div>
-    <table style="width:100%;" class="raid_members">
+</div>
+
+<div class="stat_header">
+<div style="float:left; color:#C66E00">Ñòàòèñòèêà ïî ãèëüäèè</div> 
+<div style="float:right;"><img src="images/newtype/buttons/collapse.png" alt="ñâåðíóòü"><img src="images/newtype/buttons/collapse_collapsed.png" alt="ðàçâåðíóòü"></div>
+<div style="clear:both;"></div>
+</div>
+<div class="stat">Â ðàçðàáîòêå!</div>
+
+<IF name="show table">
+<LOOP name="rlist">
+
+    <div class="raid_rank"{DISPLAY}><div style="color: #C66E00; float: left;">{TYPE}: {RANK_NAME}</div>
+   <div style="float:right"><img src="images/newtype/buttons/collapse.png" alt="ñâåðíóòü"><img src="images/newtype/buttons/collapse_collapsed.png" alt="ðàçâåðíóòü"></div>
+  <div style="clear:both"></div>
+	 <table  style="width:100%;">
         <tr>
-            <th width="25%">Èãðîâîé íèê</th>
-            <th width="25%">Ôîðóìíûé íèê</th>
-            <th width="25%">Êëàññ</th>
-            <th width="25%">Áåçäåÿòåëüíîñòü</th>
-        </tr><LOOP name="userlist_{RANK_INDEX}">
+            <th width="15%">Ïîëüçîâàòåëü</th>
+            <th width="10%">Ñâÿçàòüñÿ</th>
+            <th width="15%">Íèê è Legacy</th>
+            <th width="10%">Êëàññ</th>
+            <th width="10%">Îñíîâíàÿ ðîëü</th>
+            <th width="10%">Ðåéä</th>
+            <th width="10%">Íàâûêè</th>
+            <th width="20%">Îòñóòñòâîâàë</th>
+        </tr></table>
+
+	</div>
+<div class="raid_members">
+<table style="width:100%;">
         <tr>
-            <td>{GAME_NICK}</td>
+            <th width="15%"></th>
+            <th width="10%"></th>
+            <th width="15%"></th>
+            <th width="10%"></th>
+            <th width="10%"></th>
+            <th width="10%"></th>
+            <th width="10%"></th>
+            <th width="20%"></th>
+        </tr>
+
+		<LOOP name="userlist_{RANK_INDEX}">
+        <tr>
             <td><a href="member.php?{UID}-{USER_NAME}">{USER_NAME}</td>
-            <td>{CLASS}</td>
+            <td><img src="images/newtype/buttons/pm.png" alt="Îòïðàâèòü ëè÷íîå ñîîáùåíèå"> <img src="images/newtype/buttons/icq.gif" alt="âìåñòî àëüòà äîëæåí âûâîäèòüñÿ íîìåð àñüêè. Òàê æå äîëæåí áûòü ñòàòóñ àñüêè... ãäåòî òî ýòîáûëî íà ôîðóìå..."> <img src="images/newtype/buttons/skype.gif" alt="àíàëîãè÷íî àñüêå"></td>
+            <td>{GAME_NICK}</td>
+            <td><div style="color: #C66E00"><img src="images/newtype/swtor/trooper.png" alt="trooper"> {CLASS}</div></td>
+            <td><img src="images/newtype/swtor/mdd.png" alt=""> Melee DD</td>
+            <td>AtmosFear</td>
+            <td><img src="images/newtype/swtor/1.png"> <img src="images/newtype/swtor/1.png"> <img src="images/newtype/swtor/1.png"></td>
             <td>{LAST_SEEN}</td>
         </tr></LOOP name="userlist_{RANK_INDEX}">
     </table>
-</div></LOOP name="rlist"></IF name="show table">]]></template>
+</div>
+</LOOP name="rlist">
+</IF name="show table">]]></template>
 		<template name="vbulletin-chrome.css" templatetype="template" date="1324003529" username="Kai" version="4.1.9"><![CDATA[@charset "UTF-8";
 /* CSS Document */
 
@@ -2629,7 +2687,11 @@ td.cms_table_outer_border_td {
 		<stylevar name="image_large_max" value="YToyOntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjQ6InNpemUiO3M6NDoiMjA0OCI7fQ==" />
 		<stylevar name="imgdir_attach" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjEzOiJpbWFnZXMvYXR0YWNoIjt9" />
 		<stylevar name="imgdir_button" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE0OiJpbWFnZXMvYnV0dG9ucyI7fQ==" />
+		<stylevar name="imgdir_cms" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjExOiIvaW1hZ2VzL2NtcyI7fQ==" />
+		<stylevar name="imgdir_editor" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE0OiIvaW1hZ2VzL2VkaXRvciI7fQ==" />
+		<stylevar name="imgdir_gradients" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE3OiIvaW1hZ2VzL2dyYWRpZW50cyI7fQ==" />
 		<stylevar name="imgdir_misc" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjExOiJpbWFnZXMvbWlzYyI7fQ==" />
+		<stylevar name="imgdir_mobile" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE0OiIvaW1hZ2VzL21vYmlsZSI7fQ==" />
 		<stylevar name="imgdir_pagination" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE3OiJpbWFnZXMvcGFnaW5hdGlvbiI7fQ==" />
 		<stylevar name="imgdir_rating" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjEzOiJpbWFnZXMvcmF0aW5nIjt9" />
 		<stylevar name="imgdir_reputation" value="YToxOntzOjg6ImltYWdlZGlyIjtzOjE3OiJpbWFnZXMvcmVwdXRhdGlvbiI7fQ==" />
@@ -2701,6 +2763,7 @@ td.cms_table_outer_border_td {
 		<stylevar name="postbit_control_background" value="YToxOntzOjU6ImNvbG9yIjtzOjExOiJ0cmFuc3BhcmVudCI7fQ==" />
 		<stylevar name="postbit_control_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
 		<stylevar name="postbit_control_hover_background" value="YToxOntzOjU6ImNvbG9yIjtzOjExOiJ0cmFuc3BhcmVudCI7fQ==" />
+		<stylevar name="postbit_control_hover_border" value="YTo0OntzOjU6InVuaXRzIjtzOjI6InB4IjtzOjU6IndpZHRoIjtzOjE6IjAiO3M6NToic3R5bGUiO3M6NDoibm9uZSI7czo1OiJjb2xvciI7czowOiIiO30=" />
 		<stylevar name="postbit_control_hover_color" value="YToxOntzOjU6ImNvbG9yIjtzOjE4OiJyZ2IoMjA0LCAyMDQsIDIwNCkiO30=" />
 		<stylevar name="postbit_deleted_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6Mzg6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS9hbGVydF9iZy5wbmcpIjtzOjY6InJlcGVhdCI7czo2OiJyZXBlYXQiO3M6MToieCI7czowOiIiO3M6MToieSI7czowOiIiO30=" />
 		<stylevar name="postbit_foot_background" value="YTo2OntzOjU6InVuaXRzIjtzOjA6IiI7czo1OiJjb2xvciI7czowOiIiO3M6NToiaW1hZ2UiO3M6MzY6InVybChpbWFnZXMvbmV3dHlwZS9zdHlsZS90b3BfYmcucG5nKSI7czo2OiJyZXBlYXQiO3M6NjoicmVwZWF0IjtzOjE6IngiO3M6MDoiIjtzOjE6InkiO3M6MDoiIjt9" />
