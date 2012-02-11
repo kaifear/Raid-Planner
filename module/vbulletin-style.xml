@@ -318,7 +318,7 @@
 	{vb:raw footer}
 </body>
 </html>]]></template>
-		<template name="test_template_raid" templatetype="template" date="1327978881" username="Kai2" version="4.1.9"><![CDATA[<style type="text/css">
+		<template name="test_template_raid" templatetype="template" date="1328943224" username="Kai2" version="4.1.9"><![CDATA[<style type="text/css">
 #raid_header {
 background: url("images/newtype/style/selected_bg.png");
 border: 1px solid #C66E00;
@@ -343,6 +343,9 @@ padding: 5px 10px 5px 10px;
 margin: -1px 0 20px auto;
 border-bottom-right-radius: 10px;
 border-bottom-left-radius: 10px;
+}
+
+TD, TH { padding: 5px 0px 0px 5px;
 }
 
 .stat_header {
@@ -393,44 +396,32 @@ border-bottom-left-radius: 10px;
 <IF name="show table">
 <LOOP name="rlist">
 
-    <div class="raid_rank"{DISPLAY}><div style="color: #C66E00; float: left;">{TYPE}: {RANK_NAME}</div>
-   <div style="float:right"><img src="images/newtype/buttons/collapse.png" alt="свернуть"><img src="images/newtype/buttons/collapse_collapsed.png" alt="развернуть"></div>
-  <div style="clear:both"></div>
-	 <table  style="width:100%;">
-        <tr>
+    <div class="raid_rank"{DISPLAY}>
+     <div style="color: #C66E00; float: left;">{TYPE}: {RANK_NAME}</div>
+     <div style="float:right"><img src="images/newtype/buttons/collapse.png" alt="свернуть"><img src="images/newtype/buttons/collapse_collapsed.png" alt="развернуть"></div>
+     <div style="clear:both"></div>
+    </div>
+<div class="raid_members">
+<table style="width:100%;" rules="groups" bordercolor="#C66E00" cellpadding="15" cellspacing="15">
+        <thead><tr>
             <th width="15%">Пользователь</th>
-            <th width="10%">Связаться</th>
-            <th width="15%">Ник и Legacy</th>
+            <th width="10%">Ник и Legacy</th>
             <th width="10%">Класс</th>
             <th width="10%">Основная роль</th>
             <th width="10%">Рейд</th>
             <th width="10%">Навыки</th>
-            <th width="20%">Отсутствовал</th>
-        </tr></table>
-
-	</div>
-<div class="raid_members">
-<table style="width:100%;">
-        <tr>
-            <th width="15%"></th>
-            <th width="10%"></th>
-            <th width="15%"></th>
-            <th width="10%"></th>
-            <th width="10%"></th>
-            <th width="10%"></th>
-            <th width="10%"></th>
-            <th width="20%"></th>
-        </tr>
+            <th width="25%">Отсутствовал</th>
+        </tr></thead>
 
 		<LOOP name="userlist_{RANK_INDEX}">
         <tr>
-            <td><a href="member.php?{UID}-{USER_NAME}">{USER_NAME}</td>
-            <td><img src="images/newtype/buttons/pm.png" alt="Отправить личное сообщение"> <img src="images/newtype/buttons/icq.gif" alt="вместо альта должен выводиться номер аськи. Так же должен быть статус аськи... гдето то этобыло на форуме..."> <img src="images/newtype/buttons/skype.gif" alt="аналогично аське"></td>
+            <td><a href="member.php?{UID}-{USER_NAME}">{USER_NAME}</a>
+            <div style="float:right; margin-right: 5px;"><a href="private.php?do=newpm&u={UID}"><img src="images/newtype/buttons/pm.png" alt="Отправить личное сообщение"></a></div></td>      
             <td>{GAME_NICK}</td>
-            <td><div style="color: #C66E00"><img src="images/newtype/swtor/trooper.png" alt="trooper"> {CLASS}</div></td>
-            <td><img src="images/newtype/swtor/mdd.png" alt=""> Melee DD</td>
+            <td><div style="color: #C66E00"><img src="images/newtype/swtor/class/trooper.png" alt="trooper"> {CLASS}</div></td>
+            <td><img src="images/newtype/swtor/role/mdd.png" alt=""> Melee DD</td>
             <td>AtmosFear</td>
-            <td><img src="images/newtype/swtor/1.png"> <img src="images/newtype/swtor/1.png"> <img src="images/newtype/swtor/1.png"></td>
+            <td><img src="images/newtype/swtor/craft/biochem.png"> <img src="images/newtype/swtor/craft/slicing.png"> <img src="images/newtype/swtor/craft/scavenging.png"></td>
             <td>{LAST_SEEN}</td>
         </tr></LOOP name="userlist_{RANK_INDEX}">
     </table>
