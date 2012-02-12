@@ -318,7 +318,36 @@
 	{vb:raw footer}
 </body>
 </html>]]></template>
-		<template name="test_template_raid" templatetype="template" date="1328943224" username="Kai2" version="4.1.9"><![CDATA[<style type="text/css">
+		<template name="test_template_raid" templatetype="template" date="1329048754" username="Kai2" version="4.1.9"><![CDATA[<style type="text/css">
+#raid_header {
+background: url("images/newtype/style/selected_bg.png");
+border: 1px solid #C66E00;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+padding: 5px 10px 5px 10px;
+margin-top: 20px;
+
+}
+.raid_rank {
+background: url("images/newtype/style/top_bg.png");
+border: 1px solid #C66E00;
+padding: 5px 10px 5px 10px;
+margin: 20px 0 0px auto;
+border-top-right-radius: 5px;
+border-top-left-radius: 5px;
+}
+.raid_members {
+background: url("images/newtype/style/bottom_bg.png");
+border: 1px solid #C66E00;
+padding: 5px 10px 5px 10px;
+margin: -1px 0 20px auto;
+border-bottom-right-radius: 10px;
+border-bottom-left-radius: 10px;
+}
+
+TD, TH { padding: 5px 0px 0px 5px;
+}
+<style type="text/css">
 #raid_header {
 background: url("images/newtype/style/selected_bg.png");
 border: 1px solid #C66E00;
@@ -364,6 +393,7 @@ margin: -1px 0 20px auto;
 border-bottom-right-radius: 10px;
 border-bottom-left-radius: 10px;
 }
+
 </style>
 
 <div id="raid_header">
@@ -391,7 +421,48 @@ border-bottom-left-radius: 10px;
 <div style="float:right;"><img src="images/newtype/buttons/collapse.png" alt="свернуть"><img src="images/newtype/buttons/collapse_collapsed.png" alt="развернуть"></div>
 <div style="clear:both;"></div>
 </div>
-<div class="stat">¬ разработке!</div>
+<div class="stat">
+
+<div id ="stat_summary">¬сего в гильдии 100 игроков, из них 15 (15%) состо€т в рейдах.</div>
+
+<div style="float:left;">—татистика по классам:<br>
+<img src="images/newtype/swtor/class/trooper.png"> Vanguard - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/role/tank.png">, 3<img src="images/newtype/swtor/role/rdd.png">, 2<img src="images/newtype/swtor/role/hybrid.png"><br>
+<img src="images/newtype/swtor/class/trooper.png"> Commando - всего 20 игроков (20%), из них 7<img src="images/newtype/swtor/role/healer.png">, 10<img src="images/newtype/swtor/role/rdd.png">, 3<img src="images/newtype/swtor/role/hybrid.png"><br>
+<img src="images/newtype/swtor/class/knight.png"> Guardian - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/role/tank.png">, 3<img src="images/newtype/swtor/role/rdd.png">, 2<img src="images/newtype/swtor/role/hybrid.png"><br>
+<img src="images/newtype/swtor/class/knight.png"> Sentinel - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/role/tank.png">, 3<img src="images/newtype/swtor/role/rdd.png">, 2<img src="images/newtype/swtor/role/hybrid.png"><br>
+<img src="images/newtype/swtor/class/consular.png"> Sage - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/role/tank.png">, 3<img src="images/newtype/swtor/role/rdd.png">, 2<img src="images/newtype/swtor/role/hybrid.png"><br>
+<img src="images/newtype/swtor/class/Consular.png"> Shadow - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/role/tank.png">, 3<img src="images/newtype/swtor/role/rdd.png">, 2<img src="images/newtype/swtor/role/hybrid.png"><br>
+<img src="images/newtype/swtor/class/smuggler.png"> Scoundrel - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/role/tank.png">, 3<img src="images/newtype/swtor/role/rdd.png">, 2<img src="images/newtype/swtor/role/hybrid.png"><br>
+<img src="images/newtype/swtor/class/smuggler.png"> Gunslinger - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/role/tank.png">, 3<img src="images/newtype/swtor/role/rdd.png">, 2<img src="images/newtype/swtor/role/hybrid.png"><br>
+</div>
+
+<div style="float:right;">—татистика по рол€м:<br>
+<img src="images/newtype/swtor/role/tank.png"> Tank - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/class/trooper.png"> Vanguard, 3<img src="images/newtype/swtor/class/knight.png"> Guardian, 2<img src="images/newtype/swtor/class/consular.png"> Shadow<br>
+<img src="images/newtype/swtor/role/healer.png"> Healer - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/class/trooper.png"> Vanguard, 3<img src="images/newtype/swtor/class/knight.png"> Guardian, 2<img src="images/newtype/swtor/class/consular.png"> Shadow<br>
+<img src="images/newtype/swtor/role/rdd.png"> Ranged DD - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/class/trooper.png"> Vanguard, 3<img src="images/newtype/swtor/class/knight.png"> Guardian, 2<img src="images/newtype/swtor/class/consular.png"> Shadow<br>
+<img src="images/newtype/swtor/role/mdd.png"> Melee DD - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/class/trooper.png"> Vanguard, 3<img src="images/newtype/swtor/class/knight.png"> Guardian, 2<img src="images/newtype/swtor/class/consular.png"> Shadow<br>
+<img src="images/newtype/swtor/role/hybrid.png"> Hybrid - всего 10 игроков (10%), из них 5<img src="images/newtype/swtor/class/trooper.png"> Vanguard, 3<img src="images/newtype/swtor/class/knight.png"> Guardian, 2<img src="images/newtype/swtor/class/consular.png"> Shadow<br>
+</div>
+<div style="clear:both"></div>
+<br>
+<div>—татистика по крафту:<br>
+<img src="images/newtype/swtor/craft/archaeology.png"> Archaeology - 10 (10%), 
+<img src="images/newtype/swtor/craft/armormech.png"> Armormech - 10 (10%),
+<img src="images/newtype/swtor/craft/armstech.png"> Armstech - 10 (10%),
+<img src="images/newtype/swtor/craft/artifice.png"> Artifice - 10 (10%),
+<img src="images/newtype/swtor/craft/bioanalysis.png"> Bioanalysis - 10 (10%),
+<img src="images/newtype/swtor/craft/biochem.png"> Biochem - 10 (10%),
+<img src="images/newtype/swtor/craft/cybertech.png"> Cybertech - 10 (10%),
+<img src="images/newtype/swtor/craft/diplomacy.png"> Diplomacy - 10 (10%),
+<img src="images/newtype/swtor/craft/investigation.png"> Investigation - 10 (10%),
+<img src="images/newtype/swtor/craft/scavenging.png"> Scavenging - 10 (10%),
+<img src="images/newtype/swtor/craft/slicing.png"> Slicing - 10 (10%),
+<img src="images/newtype/swtor/craft/synthweaving.png"> Synthweaving - 10 (10%),
+<img src="images/newtype/swtor/craft/treasurehunting.png"> Treasure Hunting - 10 (10%),
+<img src="images/newtype/swtor/craft/underworldtrading.png"> Underworld Trading - 10 (10%).
+</div>
+
+</div>
 
 <IF name="show table">
 <LOOP name="rlist">
@@ -419,7 +490,7 @@ border-bottom-left-radius: 10px;
             <div style="float:right; margin-right: 5px;"><a href="private.php?do=newpm&u={UID}"><img src="images/newtype/buttons/pm.png" alt="ќтправить личное сообщение"></a></div></td>      
             <td>{GAME_NICK}</td>
             <td><div style="color: #C66E00"><img src="images/newtype/swtor/class/trooper.png" alt="trooper"> {CLASS}</div></td>
-            <td><img src="images/newtype/swtor/role/mdd.png" alt=""> Melee DD</td>
+            <td><img src="images/newtype/swtor/role/mdd.png" alt=""> Melee DD <img src="images/newtype/swtor/role/build.png" alt=""></td>
             <td>AtmosFear</td>
             <td><img src="images/newtype/swtor/craft/biochem.png"> <img src="images/newtype/swtor/craft/slicing.png"> <img src="images/newtype/swtor/craft/scavenging.png"></td>
             <td>{LAST_SEEN}</td>
